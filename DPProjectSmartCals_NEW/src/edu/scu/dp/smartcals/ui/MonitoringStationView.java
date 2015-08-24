@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -19,6 +20,7 @@ import javax.swing.JRadioButton;
 
 
 import javax.swing.JScrollPane;
+import javax.xml.ws.handler.MessageContext.Scope;
 
 import edu.scu.dp.smartcals.admin.AdminOperations;
 import edu.scu.dp.smartcals.admin.AdminOperationsImpl;
@@ -29,6 +31,7 @@ import edu.scu.dp.smartcals.admin.RevenueTableModel;
 import edu.scu.dp.smartcals.constants.VMLocationType;
 import edu.scu.dp.smartcals.exception.AdminOperationsException;
 import edu.scu.dp.smartcals.exception.DatabaseInitializationException;
+import edu.scu.dp.smartcals.test.TestTable;
 import edu.scu.dp.smartcals.vm.LoginCheckPointStrategy;
 import edu.scu.dp.smartcals.vm.Beverage;
 import edu.scu.dp.smartcals.vm.Product;
@@ -156,12 +159,22 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		if (revenueTableController == null)
 			revenueTableController = new RevenueTableController(vmController);
 		
-		// create scrollpane and add Jtable object to it
-		//scrollTable = new JScrollPane(revenueTableController.getView());
-		pnlRevenueStat.setBackground(Color.PINK);
-	 
-//		pnlRevenueStat.setVisible(true);
-	
+		//testing code
+		
+		try {
+			TestTable table = new TestTable();
+			JButton test = new JButton("test"); 
+			pnlRevenueStat.add(test);
+			pnlRevenueStat.revalidate();
+			pnlRevenueStat.setVisible(true);
+			pnlRevenueStat.setBackground(Color.PINK);
+			
+			
+		} catch (DatabaseInitializationException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//end testing code
 		// end - Nisha - 8/23
 	}
 
@@ -1088,9 +1101,12 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 			//start - Nisha - 8/23
 			//pnlRevenueStat.removeAll();
 			scrollTable = new JScrollPane(revenueTableController.getView());
+			scrollTable.setBackground(Color.GREEN);
+			scrollTable.setVisible(true);
 			pnlRevenueStat.add(scrollTable);
-			pnlRevenueStat.revalidate();
-			pnlRevenueStat.setBackground(Color.GREEN);
+			//pnlRevenueStat.revalidate();
+			pnlRevenueStat.setBackground(Color.CYAN);
+			
 			//end - Nisha
 
 		}

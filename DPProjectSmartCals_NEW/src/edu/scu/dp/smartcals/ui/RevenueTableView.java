@@ -26,8 +26,11 @@ public class RevenueTableView extends JTable {
 		
 		// create table and add model to table
 		this.setModel(tblModel);
+		this.setBackground(Color.YELLOW);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		this.setVisible(true);
+		
+		//this.setVisible(true);
+		
 	
 	}
 	

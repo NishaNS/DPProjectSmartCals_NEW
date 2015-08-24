@@ -26,6 +26,7 @@ import edu.scu.dp.smartcals.model.SmartCardModelInterface;
 import edu.scu.dp.smartcals.model.VendingMachineModel;
 import edu.scu.dp.smartcals.payment.PaymentCreator;
 import edu.scu.dp.smartcals.payment.PaymentProduct;
+import edu.scu.dp.smartcals.test.TestTable;
 import edu.scu.dp.smartcals.ui.LoginView;
 import edu.scu.dp.smartcals.ui.MonitoringStationView;
 import edu.scu.dp.smartcals.ui.ProductPaymentPanel;
@@ -117,7 +118,7 @@ public class VMController {
 			this.tabbedView = new TabbedView(this);
 		// end - Nisha - 8/19
 
-		mainWindow.addPanels(vmSelectionView);
+		mainWindow.addPanels(monitoringStationView);
 
 	}
 

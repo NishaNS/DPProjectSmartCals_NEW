@@ -23,6 +23,12 @@ public class RevenueTableController {
 
 		this.vmController = vmController;
 		revenueTableModel = new RevenueTableModel();
+		try {
+			revenueTableModel.getColumnNames();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -39,8 +45,7 @@ public class RevenueTableController {
 	public void selectUserDisplayOption(String option) {
 		if (option == "ALL")
 			try {
-				revenueTableModel.getAllSalesStats("admin");
-				revenueTableModel.getColumnNames();
+				revenueTableModel.getAllSalesStats("admin");				
 				revenueTableView = new RevenueTableView(
 						revenueTableModel.createAndFetchModelData());
 
@@ -51,7 +56,6 @@ public class RevenueTableController {
 			try {
 				
 				revenueTableModel.getVMSalesStats(Long.parseLong(option));
-				revenueTableModel.getColumnNames();
 				revenueTableView = new RevenueTableView(
 						revenueTableModel.createAndFetchModelData());
 			} catch (SQLException e) {
