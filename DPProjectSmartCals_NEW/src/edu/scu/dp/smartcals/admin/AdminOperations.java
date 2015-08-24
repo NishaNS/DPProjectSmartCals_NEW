@@ -28,6 +28,10 @@ public interface AdminOperations {
 	 */
 	public void addNewProduct(Product product) throws SQLException;
 	
+	//code change-Aparna 08/23
+	
+	public void deleteProduct(long productId) throws AdminOperationsException;
+	
 	public List<Product> getBestSellingProduct(long vmId) throws AdminOperationsException;
 }
 
