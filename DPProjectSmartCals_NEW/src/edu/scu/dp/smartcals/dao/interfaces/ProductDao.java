@@ -38,6 +38,14 @@ public interface ProductDao {
 	 */
 	
 	public void updateProduct(ProductModel product) throws SQLException;
+
+	/**
+	 * Delete product from database-Admin
+	 * @param productId
+	 * @throws SQLException 
+	 */
+	public void deleteProduct(long productId) throws SQLException;
+	
 	
 	/**
 	 * List all products under given calorie range
