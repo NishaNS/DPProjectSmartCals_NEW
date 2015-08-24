@@ -41,6 +41,31 @@ public class ProductDaoImpl implements ProductDao {
 		return INSTANCE;
 	}
 
+	/* code change-Aparna 08/23
+	 *delete product from database
+	 */
+	@Override
+	public void deleteProduct(long productId) throws SQLException {
+	
+		PreparedStatement statement = null;
+		Connection connection = databaseFactory.getConnection();
+
+		try {
+			statement = connection
+					.prepareStatement("delete from product where productID =?");
+			statement.setLong(1, productId);
+			int row = statement.executeUpdate();
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			DBUtils.closeStatement(statement);
+			databaseFactory.closeConnection();
+		}
+		
+	}
+	
 	/**
 	 * Returns a product for a given product ID. Connection is opened and closed
 	 * for every DB operation
@@ -124,6 +149,8 @@ public class ProductDaoImpl implements ProductDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	
 
 	
 	

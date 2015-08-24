@@ -300,6 +300,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 
 		prodOpActionListener = new ProductOperationsActionListener();
 		btnAddProd.addActionListener(prodOpActionListener);
+		btnDeleteProd.addActionListener(prodOpActionListener);
 		btnAddProd.setActionCommand("ADD_PRODUCT");
 		btnUpdateProd.setActionCommand("UPDATE_PRODUCT");
 		btnDeleteProd.setActionCommand("DELETE_PRODUCT");
@@ -1186,6 +1187,24 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 					JOptionPane.showMessageDialog(null, "Invalid entry");
 				}
 
+			}
+			
+			if(actionCommand.equals("DELETE_PRODUCT")) {
+				if(!txtProductID.getText().isEmpty()) {
+					long productId = Long.parseLong(txtProductID.getText());
+					try {
+						admin.deleteProduct(productId);
+					} catch (AdminOperationsException e1) {
+							e1.printStackTrace();
+							JOptionPane.showMessageDialog(null, "Unable to delete product id "+productId);
+							return;
+					}
+					JOptionPane.showMessageDialog(null, "Product Deleted !");
+					txtProductID.setText("");
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Invalid entry");
+				}
 			}
 
 		}

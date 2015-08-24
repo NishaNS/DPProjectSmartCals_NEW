@@ -1,5 +1,6 @@
 package edu.scu.dp.smartcals.ui;
 
+import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -197,11 +198,13 @@ public class VMProdCategory extends javax.swing.JPanel {
 				VendingMachine vendingMachine = parentView.getVendingMachine();
 				
 				List<Beverage> beverageList = vendingMachine.getBeverages();
+				GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
 
 				for (Beverage beverage : beverageList) {
 					JPanel prodInfoPanel = new ProductInfoPanel(beverage.getProductID()+ "",beverage.getProductName(),beverage.getProductPrice()+"");
-					viewAllProductsPanel.add(prodInfoPanel);
-					System.out.println(beverage.getProductID());
+					gridBagConstraints.insets = new java.awt.Insets(0, 0, 0,30);
+					viewAllProductsPanel.add(prodInfoPanel,gridBagConstraints);
+					
 				}
 			}
 			 if (actionCommand.equals("Snack")) {
@@ -213,7 +216,7 @@ public class VMProdCategory extends javax.swing.JPanel {
 				for (Snack snack : snackList) {
 					JPanel prodInfoPanel = new ProductInfoPanel(snack.getProductID()+ "",snack.getProductName(),snack.getProductPrice()+"");
 					viewAllProductsPanel.add(prodInfoPanel);
-					System.out.println(snack.getProductID());
+					
 				}
 			}
 			 if (actionCommand.equals("Candy")) {
@@ -225,7 +228,7 @@ public class VMProdCategory extends javax.swing.JPanel {
 				for (Candy candy : candyList) {
 					JPanel prodInfoPanel = new ProductInfoPanel(candy.getProductID()+ "",candy.getProductName(),candy.getProductPrice()+"");
 					viewAllProductsPanel.add(prodInfoPanel);
-					System.out.println(candy.getProductID());
+					
 				}
 			}
 			
