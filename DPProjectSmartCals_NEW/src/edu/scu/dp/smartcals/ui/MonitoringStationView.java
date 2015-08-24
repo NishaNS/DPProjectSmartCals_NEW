@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.ColorModel;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,13 +16,18 @@ import javax.swing.JRadioButton;
 
 //import com.mysql.fabric.xmlrpc.base.Array;
 
+
+
+
 import edu.scu.dp.smartcals.admin.AdminOperations;
 import edu.scu.dp.smartcals.admin.AdminOperationsImpl;
 import edu.scu.dp.smartcals.admin.Alert;
 import edu.scu.dp.smartcals.admin.AlertListener;
 import edu.scu.dp.smartcals.constants.VMLocationType;
 import edu.scu.dp.smartcals.exception.AdminOperationsException;
+import edu.scu.dp.smartcals.vm.Beverage;
 import edu.scu.dp.smartcals.vm.Product;
+import edu.scu.dp.smartcals.vm.Snack;
 import edu.scu.dp.smartcals.vm.VMController;
 import edu.scu.dp.smartcals.vm.VendingMachine;
 
@@ -53,7 +59,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 	private javax.swing.JButton btnDeleteInventory;
 	private javax.swing.JButton btnDeleteNutriInfo;
 	private javax.swing.JButton btnDeleteProd;
-	private javax.swing.JButton btnSearch;
+	private javax.swing.JButton btnSearchProduct;
 	private javax.swing.JButton btnSearchInventory;
 	private javax.swing.JButton btnSearchNutriInfo;
 	private javax.swing.JButton btnUpdateInventory;
@@ -120,6 +126,10 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 	private javax.swing.JTextField txtVendingMachineID;
 
 	private VMRadioButtonActionListener vmButtonActionListener;
+	
+	//code change-Aparna 08/23
+	
+	private ProductOperationsActionListener prodOpActionListener;
 
 	// End of variables declaration
 	/**
@@ -176,7 +186,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		txtProductCategory = new javax.swing.JTextField();
 		txtProductName = new javax.swing.JTextField();
 		txtProductPrice = new javax.swing.JTextField();
-		btnSearch = new javax.swing.JButton();
+		btnSearchProduct = new javax.swing.JButton();
 		btnAddProd = new javax.swing.JButton();
 		btnUpdateProd = new javax.swing.JButton();
 		btnDeleteProd = new javax.swing.JButton();
@@ -249,37 +259,18 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		radioAll.addActionListener(vmButtonActionListener);
 		// dynamically load vending machine radio buttons
 		loadVendingMachinesRadioPanel();
-
-		// commenting Statically loading VM Radio buttons
-
-		/*
-		 * radioBtnGroup.add(radioVM1); radioVM1.setText("VM1");
-		 * 
-		 * radioBtnGroup.add(radioVM2); radioVM2.setText("VM2");
-		 */
-
-		/*
-		 * javax.swing.GroupLayout pnlViewVMLayout = new
-		 * javax.swing.GroupLayout(pnlViewVM);
-		 * pnlViewVM.setLayout(pnlViewVMLayout);
-		 * pnlViewVMLayout.setHorizontalGroup(
-		 * pnlViewVMLayout.createParallelGroup
-		 * (javax.swing.GroupLayout.Alignment.LEADING)
-		 * .addGroup(pnlViewVMLayout.createSequentialGroup() .addContainerGap()
-		 * .addComponent(radioAll) .addGap(56, 56, 56) .addComponent(radioVM1)
-		 * .addGap(63, 63, 63) .addComponent(radioVM2)
-		 * .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
-		 * Short.MAX_VALUE)) ); pnlViewVMLayout.setVerticalGroup(
-		 * pnlViewVMLayout
-		 * .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-		 * .addGroup(pnlViewVMLayout.createSequentialGroup() .addContainerGap()
-		 * .
-		 * addGroup(pnlViewVMLayout.createParallelGroup(javax.swing.GroupLayout.
-		 * Alignment.BASELINE) .addComponent(radioAll) .addComponent(radioVM1)
-		 * .addComponent(radioVM2))
-		 * .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
-		 * Short.MAX_VALUE)) );
-		 */
+		
+		//code change -Aparna 08/23
+		//add actionlistener for add product button
+		
+		prodOpActionListener = new ProductOperationsActionListener();
+		btnAddProd.addActionListener(prodOpActionListener);
+		btnAddProd.setActionCommand("ADD_PRODUCT");
+		btnAddProd.setActionCommand("UPDATE_PRODUCT");
+		btnAddProd.setActionCommand("DELETE_PRODUCT");
+		btnAddProd.setActionCommand("SEARCH_PRODUCT");
+		
+		
 		// --------------------------------aparna -8/22
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 1;
@@ -497,11 +488,11 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlProduct.add(txtProductPrice, gridBagConstraints);
 
-		btnSearch.setText("Search");
+		btnSearchProduct.setText("Search");
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridy = 10;
 		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-		pnlProduct.add(btnSearch, gridBagConstraints);
+		pnlProduct.add(btnSearchProduct, gridBagConstraints);
 
 		btnAddProd.setText("Add Product");
 		gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1061,6 +1052,62 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		}
 
 	}
-	// code change-Aparna -8/22
-}
+	//-------------------------- code change-Aparna -8/22
+	
+	//code change-Aparna 08/23
+	/**
+	 * Generic ActionListener class for all Admin button Action Listener
+	 * related to products
+	 */
+	
+	class ProductOperationsActionListener implements ActionListener {
 
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			String actionCommand = e.getActionCommand();
+			
+			if (actionCommand.equals("ADD_PRODUCT")) {
+				Product product = null;
+				if(txtProductCategory.getText().equalsIgnoreCase("BEVERAGE")) {
+					product = new Beverage();
+					product.setProdCategory(txtProductCategory.getText());
+					product.setProductID(Long.parseLong(txtProductID.getText()));
+					product.setProductName(txtProductName.getText());
+					product.setProductPrice(Double.parseDouble(txtProductPrice.getText()));
+				}
+				else if (txtProductCategory.getText().equalsIgnoreCase("SNACK")) {
+					product = new Snack();
+					product.setProdCategory(txtProductCategory.getText());
+					product.setProductID(Long.parseLong(txtProductID.getText()));
+					product.setProductName(txtProductName.getText());
+					product.setProductPrice(Double.parseDouble(txtProductPrice.getText()));
+				}
+				else if (txtProductCategory.getText().equalsIgnoreCase("CANDY")) {
+					product = new Beverage();
+					product.setProdCategory(txtProductCategory.getText());
+					product.setProductID(Long.parseLong(txtProductID.getText()));
+					product.setProductName(txtProductName.getText());
+					product.setProductPrice(Double.parseDouble(txtProductPrice.getText()));
+				}
+				else {
+					//do nothing
+				}
+				try {
+					admin.addNewProduct(product);
+				} catch (SQLException e1) {
+					
+					e1.printStackTrace();
+				}
+				
+				
+				 
+				
+				
+		}
+		
+	}
+	
+}
+}
