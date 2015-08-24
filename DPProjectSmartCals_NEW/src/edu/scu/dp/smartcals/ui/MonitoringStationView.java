@@ -1342,7 +1342,15 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 							buildNutriInfo();
 					
 					try {
-						admin.addNewNutriInfo(nutriModel.allAttributeValues());
+						boolean addStatus = admin.addNewNutriInfo(nutriModel.listAttributeValues());
+						if(addStatus == true){
+							JOptionPane.showMessageDialog(null, "Nutritional Info Added!");
+							this.clearData();
+						}
+						else{
+							JOptionPane.showMessageDialog(null, "Unable to add nutritional info for " + txtNutriProdID.getText());
+						}
+							
 					} catch (SQLException e1) {
 						e1.printStackTrace();
 					}
@@ -1357,7 +1365,22 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 				return false;
 			}
 			return true;
-
+		}
+		private void clearData(){
+			txtNutriProdID.setText("");
+			txtServingSize.setText("");
+			txtCalories.setText("");
+			txtTotalFat.setText("");
+			txtSaturatedFat.setText("");
+			txtTransFat.setText("");
+			txtCholestrol.setText("");
+			txtSodium.setText("");
+			txtTotalCarbs.setText("");
+			txtDietaryFiber.setText("");
+			txtSugars.setText("");
+			txtProtein.setText("");
+			txtIron.setText("");
+			txtSmartTag.setText("");
 		}
 	}
 

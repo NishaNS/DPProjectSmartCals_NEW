@@ -1,9 +1,15 @@
 package edu.scu.dp.smartcals.dao.impl;
 
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import com.mysql.jdbc.StringUtils;
 
 import edu.scu.dp.smartcals.dao.interfaces.DatabaseFactory;
 import edu.scu.dp.smartcals.dao.interfaces.NutritionalInfoDao;
@@ -65,29 +71,42 @@ public class NutritionalInfoDaoImpl implements NutritionalInfoDao {
 
 
 	@Override
-	public void addNutriInfo(String dataValues) throws SQLException {
+	public boolean addNutriInfo(ArrayList<String> listValues) throws SQLException {
 		Connection connection = databaseFactory.getConnection();
 	
 
 			statement = connection.prepareStatement("INSERT INTO NutritionalInfo (`ProductID`, `ServingSize`, `Calories`, `TotalFat`, "
 					+ "`SaturatedFat`,`TransFat`,`Cholestrol`,`Sodium`,`TotalCarbs`,"
-					+ "`DietaryFiber`,`Sugars`,`Protein`,`Iron`,`SmartTag`) VALUES(?)");
+					+ "`DietaryFiber`,`Sugars`,`Protein`,`Iron`,`SmartTag`) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			
+			//set first element prodID as "long"
+			statement.setLong(1, Long.parseLong(listValues.get(0)));
 			
-			String[] aray = dataValues.split(",");
+			int index = 0;
+			for(String element : listValues){
+				index++;
+				if(index == 1)
+					continue;
+				
+				if(element == null){
+					statement.setString(index, "");
+				}
+				else					
+					statement.setString(index, element);
+				
+			}
+			int status = statement.executeUpdate();
+			if(status != 1){
+				return false;
+			}
 			
-			//statement.setString(1, aray.());
-			
-			System.out.println(statement);
-		
-		
-
+			return true;
 	}
-
+	
 	@Override
 	public void updateNutriInfo(long prodID) throws SQLException {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	//maybe add method to get smart tags
@@ -115,5 +134,7 @@ public class NutritionalInfoDaoImpl implements NutritionalInfoDao {
 				iron(result.getString("Iron")).
 				buildNutriInfo();
 	}
+
+	
 
 }

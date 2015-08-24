@@ -5,6 +5,7 @@
 package edu.scu.dp.smartcals.admin;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.scu.dp.smartcals.exception.AdminOperationsException;
@@ -38,7 +39,7 @@ public interface AdminOperations {
 	//nisha - 8/24
 	public NutritionalInfoModel searchNutriInfo(long productId) throws SQLException;
 	
-	public void addNewNutriInfo(String dataValues) throws SQLException;
+	public boolean addNewNutriInfo(ArrayList<String> dataValues) throws SQLException;
 }
 
 

@@ -1,6 +1,8 @@
 package edu.scu.dp.smartcals.dao.interfaces;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.scu.dp.smartcals.exception.EmptyResultException;
 import edu.scu.dp.smartcals.model.NutritionalInfoModel;
@@ -21,7 +23,7 @@ public interface NutritionalInfoDao {
 	 */
 	public NutritionalInfoModel getNutriInfo(long prodID) throws SQLException, EmptyResultException;
 	
-	public void addNutriInfo(String dataValues) throws SQLException;
+	public boolean addNutriInfo(ArrayList<String> dataValues) throws SQLException;
 	
 	public void updateNutriInfo(long prodID) throws SQLException;
 

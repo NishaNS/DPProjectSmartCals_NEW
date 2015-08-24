@@ -189,9 +189,9 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 	}
 
 	@Override
-	public void addNewNutriInfo(String dataValues) throws SQLException {
+	public boolean addNewNutriInfo(ArrayList<String> dataValues) throws SQLException {
 		
-		nutriDao.addNutriInfo(dataValues);
+		return nutriDao.addNutriInfo(dataValues);
 		
 	}
 

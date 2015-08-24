@@ -1,5 +1,8 @@
 package edu.scu.dp.smartcals.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Nisha Narayanaswamy
  * 
@@ -163,21 +166,25 @@ public class NutritionalInfoModel {
 				+ ", Smart Tag: " + smartTag;
 	}
 	
-	public String allAttributeValues(){
-		return productID + ","	
-				+ servingSize + ","
-				+ calories + ","
-				+ totalFat + ","
-				+ saturatedFat + ","
-				+ transFat + ","
-				+ cholestrol + ","
-				+ sodium + ","
-				+ totalCarbs + ","
-				+  dietaryFiber+ ","
-				+  sugars + ","
-				+ protein + ","
-				+ iron + ","
-				+ smartTag;
+	public ArrayList<String> listAttributeValues(){
+		
+		ArrayList<String> listValues = new ArrayList<String>();
+		listValues.add(String.valueOf(productID));
+		listValues.add(servingSize);
+		listValues.add(calories);
+		listValues.add(totalFat);
+		listValues.add(saturatedFat);
+		listValues.add(transFat);
+		listValues.add(cholestrol);
+		listValues.add(sodium);
+		listValues.add(totalCarbs);
+		listValues.add(dietaryFiber);
+		listValues.add(sugars);
+		listValues.add(protein);
+		listValues.add(iron);
+		listValues.add(smartTag);
+		return listValues;
+	
 	}
 	
 }
