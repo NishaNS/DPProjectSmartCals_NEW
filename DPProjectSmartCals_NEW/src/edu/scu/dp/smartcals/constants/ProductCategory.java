@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package edu.scu.dp.smartcals.constants;
 
 /**
