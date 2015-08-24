@@ -98,7 +98,23 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 		productDao.addProduct(productModel);
 
 	}
-
+	
+	/*
+	 * delete product-Admin
+	 * code change-Aparna 08/23
+	 */
+	@Override
+	public void deleteProduct(long productId) throws AdminOperationsException {
+		try {
+			productDao.deleteProduct(productId);
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+			throw new AdminOperationsException("Error deleteting product with product ID "+ productId,e);
+		}
+		
+	}
+	
 	@Override
 	public void updateOutOfStock(long vmId, long productId) {
 		// notify MonitoringStationView
@@ -155,5 +171,8 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 
 		return products;
 	}
+
+	
+	
 
 }
