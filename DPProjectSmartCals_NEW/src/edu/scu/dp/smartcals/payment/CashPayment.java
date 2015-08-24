@@ -13,15 +13,14 @@ public class CashPayment implements PaymentProduct{
  	double fiveDollar;
 	double tenDollar;
 	double oneDollar;
+	double amtPaying;
 	
-	public CashPayment(double amtPayable){
-		this.amtPayable = amtPayable;
-	}
+
 	@Override
 	public boolean getPaymentStatus(){
-		if (amtPayable > totValue)
+		if (amtPayable > amtPaying)
 			return false;
-		amtToReturn = totValue - amtPayable;	
+		amtToReturn = amtPaying - amtPayable;	
 		return true;
 	}
 
@@ -37,11 +36,9 @@ public class CashPayment implements PaymentProduct{
 		
 	}
 	@Override
-	public void setTotValue(double amt1, double amt2, double amt3) {
-		oneDollar = amt1;
-		fiveDollar = amt2;
-		tenDollar = amt3;
-		totValue = oneDollar * 1 + fiveDollar * 5 + tenDollar * 10;	
+	public void setValues(double amtPayable,double amtPaying) {
+		this.amtPayable = amtPayable;
+		this.amtPaying = amtPaying;
 	}
 
 

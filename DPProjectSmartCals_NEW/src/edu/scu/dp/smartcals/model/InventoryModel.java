@@ -1,5 +1,8 @@
 package edu.scu.dp.smartcals.model;
 
+/**
+ * @author Sharadha Ramaswamy
+ */
 import edu.scu.dp.smartcals.constants.ProductCategory;
 
 public class InventoryModel {

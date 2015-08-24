@@ -1,6 +1,8 @@
 package edu.scu.dp.smartcals.payment;
 
-
+/**
+ * @author Sharadha Ramaswamy
+ */
 public class CoinPayment implements PaymentProduct{
     
 	double amtPayable;
@@ -9,15 +11,13 @@ public class CoinPayment implements PaymentProduct{
  	double quarters;
 	double halfDollar;
 	double oneDollar;
+	double amtPaying;
 	
-	public CoinPayment(double amtPayable){
-		this.amtPayable = amtPayable;
-	}
 	@Override
 	public boolean getPaymentStatus(){
-		if (amtPayable > totValue)
+		if (amtPayable > amtPaying)
 			return false;
-		amtToReturn = totValue - amtPayable;	
+		amtToReturn = amtPaying - amtPayable;	
 		return true;
 	}
 
@@ -33,12 +33,9 @@ public class CoinPayment implements PaymentProduct{
 		
 	}
 	@Override
-	public void setTotValue(double amt1, double amt2, double amt3) {
-		quarters = amt1;
-		halfDollar = amt2;
-		oneDollar = amt3;
-		totValue = quarters * 25 + halfDollar * 50 + oneDollar * 100;
-		totValue = totValue/100;
+	public void setValues(double amtPayable,double amtPaying) {
+		this.amtPayable = amtPayable;
+		this.amtPaying = amtPaying;
 		
 	}
 

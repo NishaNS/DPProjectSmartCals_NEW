@@ -118,7 +118,7 @@ public class VMController {
 			this.tabbedView = new TabbedView(this);
 		// end - Nisha - 8/19
 
-		mainWindow.addPanels(monitoringStationView);
+		mainWindow.addPanels(vmSelectionView);
 
 	}
 
@@ -413,9 +413,14 @@ public class VMController {
 		}
 	}
 
-	public void updateOrder(String PaymentType)
+	public void updateOrder(String PaymentType,long SmartCardNo)
 	{
-		
+		try {
+			orderDao.updateOrderTable(invProduct,PaymentType,SmartCardNo);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	/**
 	 * @param strategy
@@ -425,11 +430,9 @@ public class VMController {
 		this.loginStrategy = loginStrategy;
 	}
 
-	
 	public static void main(String[] args) {
 		VMController vmController = new VMController();
 		vmController.initComponents();
 	}
 
-	
 }
