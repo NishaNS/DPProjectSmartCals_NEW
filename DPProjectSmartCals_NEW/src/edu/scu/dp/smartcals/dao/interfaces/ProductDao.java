@@ -23,7 +23,8 @@ public interface ProductDao {
 	public ProductModel getProductById(long id) throws SQLException, EmptyResultException;
 	
 	/**
-	 * Add a new product to the database
+	 * code change-Aparna 08/23
+	 * Add a new product to the database-Admin
 	 * @param product
 	 * @throws SQLException
 	 */
