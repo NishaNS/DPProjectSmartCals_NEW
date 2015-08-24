@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -31,6 +33,7 @@ import edu.scu.dp.smartcals.admin.RevenueTableModel;
 import edu.scu.dp.smartcals.constants.VMLocationType;
 import edu.scu.dp.smartcals.exception.AdminOperationsException;
 import edu.scu.dp.smartcals.exception.DatabaseInitializationException;
+import edu.scu.dp.smartcals.model.NutritionalInfoModel;
 import edu.scu.dp.smartcals.test.TestTable;
 import edu.scu.dp.smartcals.vm.LoginCheckPointStrategy;
 import edu.scu.dp.smartcals.vm.Beverage;
@@ -137,12 +140,16 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 
 	// start - Nisha - 8/23
 	private RevenueTableController revenueTableController;
-
 	// end - Nisha - 8/23
 
 	// code change-Aparna 08/23
 
 	private ProductOperationsActionListener prodOpActionListener;
+	
+	
+	//nisha - 8/24
+	private NutriInfoOperationsActionListener nutriOpActionListener;
+	//end -Nisha
 
 	// End of variables declaration
 	/**
@@ -308,6 +315,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		//code change-Aparna 08/23
 
 		// --------------------------------aparna -8/22
+		
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
@@ -959,7 +967,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.ipady = 5;
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlNutriInfo.add(btnSearchNutriInfo, gridBagConstraints);
-
+		
 		btnAddNutriInfo.setText("Add Nutritional Info");
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridy = 15;
@@ -986,6 +994,20 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.ipady = 5;
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlNutriInfo.add(btnDeleteNutriInfo, gridBagConstraints);
+		
+		//start - Nisha - 8/24
+		//add action listeners for Nutri InFo operations
+		nutriOpActionListener = new NutriInfoOperationsActionListener();
+		btnSearchNutriInfo.addActionListener(nutriOpActionListener);
+		btnAddNutriInfo.addActionListener(nutriOpActionListener);
+		btnUpdateNutriInfo.addActionListener(nutriOpActionListener);
+		btnDeleteNutriInfo.addActionListener(nutriOpActionListener);
+		btnSearchNutriInfo.setActionCommand("SEARCH_NUTRI");
+		btnAddNutriInfo.setActionCommand("ADD_NUTRI");
+		btnUpdateNutriInfo.setActionCommand("UPDATE_NUTRI");
+		btnDeleteNutriInfo.setActionCommand("DELETE_NUTRI");
+		//end- nisha
+		
 
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 0;
@@ -1220,5 +1242,125 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		}
 	
 	}
+	
+	// start - Nisha - 8/24
+	class NutriInfoOperationsActionListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			String actionCommand = e.getActionCommand();
+
+			if(validateData()){
+
+				if(actionCommand.equals("SEARCH_NUTRI")) {
+
+					try {
+						String allNutriValues = admin.searchNutriInfo(Long.parseLong(txtNutriProdID.getText())).formatData();
+						String[] splitNutriValues = allNutriValues.trim().split(", ");
+						for(String element : splitNutriValues){
+							if(element.startsWith("Product")){
+								int start = element.indexOf(":");
+								txtNutriProdID.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Serving")){
+								int start = element.indexOf(":");
+								txtServingSize.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Calorie")){
+								int start = element.indexOf(":");
+								txtCalories.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Total Fat")){
+								int start = element.indexOf(":");
+								txtTotalFat.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Saturated Fat")){
+								int start = element.indexOf(":");
+								txtSaturatedFat.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Trans Fat")){
+								int start = element.indexOf(":");
+								txtTransFat.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Cholestrol")){
+								int start = element.indexOf(":");
+								txtCholestrol.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Sodium")){
+								int start = element.indexOf(":");
+								txtSodium.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Total Carbs")){
+								int start = element.indexOf(":");
+								txtTotalCarbs.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Dietary Fiber")){
+								int start = element.indexOf(":");
+								txtDietaryFiber.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Sugar")){
+								int start = element.indexOf(":");
+								txtSugars.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Protein")){
+								int start = element.indexOf(":");
+								txtProtein.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Iron")){
+								int start = element.indexOf(":");
+								txtIron.setText(element.substring(start + 2, element.length()));
+							}							
+							else if(element.startsWith("Smart Tag")){
+								int start = element.indexOf(":");
+								txtSmartTag.setText(element.substring(start + 2, element.length()));
+							}
+
+						}
+
+					} catch (NumberFormatException e1) {
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
+
+				if(actionCommand.equals("ADD_NUTRI")){
+					NutritionalInfoModel nutriModel = new NutritionalInfoModel.
+							NutriBuilder(Long.parseLong(txtNutriProdID.getText()), txtCalories.getText(),  txtSmartTag.getText()).
+							servingSize(txtServingSize.getText()).
+							totalFat(txtTotalFat.getText()).
+							saturatedFat(txtSaturatedFat.getText()).
+							transFat(txtTransFat.getText()).
+							cholestrol(txtCholestrol.getText()).
+							sodium(txtSodium.getText()).
+							totalCarbs(txtTotalCarbs.getText()).
+							dietaryFiber(txtDietaryFiber.getText()).
+							sugars(txtSugars.getText()).
+							protein(txtProtein.getText()).
+							iron(txtIron.getText()).
+							buildNutriInfo();
+					
+					try {
+						admin.addNewNutriInfo(nutriModel.allAttributeValues());
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+
+
+		}
+
+		private boolean validateData(){
+			if(txtNutriProdID.getText().equals("")){
+				return false;
+			}
+			return true;
+
+		}
+	}
+
+	//end - nisha - 8/24
 }
 

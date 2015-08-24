@@ -21,7 +21,7 @@ public interface NutritionalInfoDao {
 	 */
 	public NutritionalInfoModel getNutriInfo(long prodID) throws SQLException, EmptyResultException;
 	
-	public void addNutriInfo(long prodID) throws SQLException;
+	public void addNutriInfo(String dataValues) throws SQLException;
 	
 	public void updateNutriInfo(long prodID) throws SQLException;
 

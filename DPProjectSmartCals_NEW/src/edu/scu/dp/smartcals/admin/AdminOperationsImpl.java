@@ -12,10 +12,12 @@ import edu.scu.dp.smartcals.constants.ProductCategory;
 import edu.scu.dp.smartcals.constants.VMLocationType;
 import edu.scu.dp.smartcals.dao.impl.DaoFactory;
 import edu.scu.dp.smartcals.dao.impl.OrderHistoryDaoImpl;
+import edu.scu.dp.smartcals.dao.interfaces.NutritionalInfoDao;
 import edu.scu.dp.smartcals.dao.interfaces.OrderHistoryDao;
 import edu.scu.dp.smartcals.dao.interfaces.ProductDao;
 import edu.scu.dp.smartcals.dao.interfaces.VendingMachineDao;
 import edu.scu.dp.smartcals.exception.AdminOperationsException;
+import edu.scu.dp.smartcals.model.NutritionalInfoModel;
 import edu.scu.dp.smartcals.model.ProductModel;
 import edu.scu.dp.smartcals.model.VendingMachineModel;
 import edu.scu.dp.smartcals.vm.Beverage;
@@ -41,6 +43,9 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 
 	// code change-Aparna 08/23
 	private ProductDao productDao;
+	
+	//nisha - 8/24
+	private NutritionalInfoDao nutriDao;
 
 	public AdminOperationsImpl() {
 		alertListeners = new ArrayList<>();
@@ -49,6 +54,9 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 
 		// code change-Aparna 08/23
 		productDao = DaoFactory.getProductDao();
+		
+		//nisha - 8/24
+		nutriDao = DaoFactory.getNutritionalInfoDao();
 
 	}
 
@@ -170,6 +178,21 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 		}
 
 		return products;
+	}
+
+	//nisha - 8/24
+	@Override
+	public NutritionalInfoModel searchNutriInfo(long productId) throws SQLException {
+		NutritionalInfoModel nutriInfo = nutriDao.getNutriInfo(productId);
+		return nutriInfo;
+		
+	}
+
+	@Override
+	public void addNewNutriInfo(String dataValues) throws SQLException {
+		
+		nutriDao.addNutriInfo(dataValues);
+		
 	}
 
 	

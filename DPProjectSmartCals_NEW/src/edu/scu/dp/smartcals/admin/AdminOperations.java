@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import edu.scu.dp.smartcals.exception.AdminOperationsException;
+import edu.scu.dp.smartcals.model.NutritionalInfoModel;
 import edu.scu.dp.smartcals.model.ProductModel;
 import edu.scu.dp.smartcals.vm.Product;
 import edu.scu.dp.smartcals.vm.VendingMachine;
@@ -33,6 +34,11 @@ public interface AdminOperations {
 	public void deleteProduct(long productId) throws AdminOperationsException;
 	
 	public List<Product> getBestSellingProduct(long vmId) throws AdminOperationsException;
+	
+	//nisha - 8/24
+	public NutritionalInfoModel searchNutriInfo(long productId) throws SQLException;
+	
+	public void addNewNutriInfo(String dataValues) throws SQLException;
 }
 
 

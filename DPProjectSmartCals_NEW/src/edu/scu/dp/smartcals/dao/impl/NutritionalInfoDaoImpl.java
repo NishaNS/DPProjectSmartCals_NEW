@@ -65,8 +65,22 @@ public class NutritionalInfoDaoImpl implements NutritionalInfoDao {
 
 
 	@Override
-	public void addNutriInfo(long prodID) throws SQLException {
-		// TODO Auto-generated method stub
+	public void addNutriInfo(String dataValues) throws SQLException {
+		Connection connection = databaseFactory.getConnection();
+	
+
+			statement = connection.prepareStatement("INSERT INTO NutritionalInfo (`ProductID`, `ServingSize`, `Calories`, `TotalFat`, "
+					+ "`SaturatedFat`,`TransFat`,`Cholestrol`,`Sodium`,`TotalCarbs`,"
+					+ "`DietaryFiber`,`Sugars`,`Protein`,`Iron`,`SmartTag`) VALUES(?)");
+			
+			
+			String[] aray = dataValues.split(",");
+			
+			//statement.setString(1, aray.());
+			
+			System.out.println(statement);
+		
+		
 
 	}
 

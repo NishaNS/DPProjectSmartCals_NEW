@@ -130,21 +130,54 @@ public class NutritionalInfoModel {
 	@Override
 	public String toString(){
 		
-		//later on remove productID from display. 
-		//there is no need to display Smart Tag
-		
-		return "<html>\nProductID: " + productID 		
-		+ "\n<br> Serving Size: " + servingSize
-		+ "\n, Calories: " + calories
-		+ "\n, Total Fat: " + totalFat
-		+ "\n, Saturated Fat: " + saturatedFat
-		+ "\n<br> Trans Fat: " + transFat
-		+ "\n, Cholestrol: " + cholestrol
-		+ "\n, Sodium: " + sodium
-		+ "\n, Total Carbs: " + totalCarbs
-		+ "\n, Dietary Fiber: " +  dietaryFiber
-		+ "\n<br> Sugars: " +  sugars
-		+ "\n, Protein: " + protein
-		+ "\n, Iron: </html>" + iron;
+		return "<html>ProductID: " + productID 		
+		+ "<br> Serving Size: " + servingSize
+		+ ", Calories: " + calories
+		+ ", Total Fat: " + totalFat
+		+ ", Saturated Fat: " + saturatedFat
+		+ "<br> Trans Fat: " + transFat
+		+ ", Cholestrol: " + cholestrol
+		+ ", Sodium: " + sodium
+		+ ", Total Carbs: " + totalCarbs
+		+ ", Dietary Fiber: " +  dietaryFiber
+		+ "<br> Sugars: " +  sugars
+		+ ", Protein: " + protein
+		+ ", Iron: " + iron
+		+ ", Smart Tag: </html>" + smartTag;
 	}
+	
+	public String formatData(){
+		return "ProductID: " + productID 		
+				+ ", Serving Size: " + servingSize
+				+ ", Calories: " + calories
+				+ ", Total Fat: " + totalFat
+				+ ", Saturated Fat: " + saturatedFat
+				+ ", Trans Fat: " + transFat
+				+ ", Cholestrol: " + cholestrol
+				+ ", Sodium: " + sodium
+				+ ", Total Carbs: " + totalCarbs
+				+ ", Dietary Fiber: " +  dietaryFiber
+				+ ", Sugars: " +  sugars
+				+ ", Protein: " + protein
+				+ ", Iron: " + iron
+				+ ", Smart Tag: " + smartTag;
+	}
+	
+	public String allAttributeValues(){
+		return productID + ","	
+				+ servingSize + ","
+				+ calories + ","
+				+ totalFat + ","
+				+ saturatedFat + ","
+				+ transFat + ","
+				+ cholestrol + ","
+				+ sodium + ","
+				+ totalCarbs + ","
+				+  dietaryFiber+ ","
+				+  sugars + ","
+				+ protein + ","
+				+ iron + ","
+				+ smartTag;
+	}
+	
 }
