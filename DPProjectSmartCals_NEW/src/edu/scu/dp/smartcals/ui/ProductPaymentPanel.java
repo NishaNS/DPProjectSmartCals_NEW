@@ -1,6 +1,9 @@
 package edu.scu.dp.smartcals.ui;
 
+import java.sql.SQLException;
+
 import edu.scu.dp.smartcals.model.InventoryModel;
+import edu.scu.dp.smartcals.model.SmartCardModelInterface;
 import edu.scu.dp.smartcals.payment.ConcretePaymentCreator;
 import edu.scu.dp.smartcals.payment.PaymentCreator;
 import edu.scu.dp.smartcals.payment.PaymentProduct;
@@ -13,7 +16,7 @@ import edu.scu.dp.smartcals.payment.PaymentProduct;
 
 /**
  *
- * @author Thenu
+ * @author Sharadha Ramaswamy
  */
 public class ProductPaymentPanel extends javax.swing.JPanel {
 
@@ -313,9 +316,10 @@ public class ProductPaymentPanel extends javax.swing.JPanel {
     	double halfDollar;
     	double oneDollar;
     	double amtPayable;
+    	double amtPaying;
     	
-    	parentView.getVMDetails_View().lblDisplay.setText("SmartCals Vending Machine");
-    	parentView.getVMDetails_View().lblCoinDispense.setText("Dispense Coin:");
+    	parentView.getVMDetails_View().getLblDisplay().setText("SmartCals Vending Machine");
+    	parentView.getVMDetails_View().getLblCoinDispense().setText("Dispense Coin:");
     	PaymentCreator pc = new ConcretePaymentCreator();
     	PaymentProduct p = null;
     	if((txtQuarters.getText().isEmpty()) || (txtHalfDollar.getText().isEmpty()) || (txtOneDollar.getText().isEmpty()))
@@ -327,15 +331,17 @@ public class ProductPaymentPanel extends javax.swing.JPanel {
     		quarters = Double.parseDouble(txtQuarters.getText());
 			halfDollar = Double.parseDouble(txtHalfDollar.getText());
 			oneDollar = Double.parseDouble(txtOneDollar.getText());
-    		p = pc.makePayment("Coin",amtPayable);
-			p.setTotValue(quarters,halfDollar,oneDollar);
+			amtPaying = quarters * 25 + halfDollar * 50 + oneDollar * 100;
+			amtPaying = amtPaying/100;
+    		p = pc.makePayment("Coin",0);
+			p.setValues(amtPayable,amtPaying);
     	}
     	if(p.getPaymentStatus()){
     		parentView.getVMController().updateInv();
-    		parentView.getVMController().updateOrder("Coin");
+    		parentView.getVMController().updateOrder("Coin",0);
     		this.setVisible(false);
-    		parentView.getVMDetails_View().lblDisplay.setText("Payment Successful");
-    	    parentView.getVMDetails_View().lblCoinDispense.setText("Dispense Coin:" + Double.toString(p.getAmtToReturn()));	
+    		parentView.getVMDetails_View().getLblDisplay().setText("Payment Successful");
+    	    parentView.getVMDetails_View().getLblCoinDispense().setText("Dispense Coin:" + Double.toString(p.getAmtToReturn()));	
     	}
     	else{
     		lblPayUnsuccess.setText("Not Enough Cash");
@@ -344,16 +350,80 @@ public class ProductPaymentPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnCoinActionPerformed
 
     private void btnCashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCashActionPerformed
-        // TODO add your handling code here:
+    	double amtPayable;
+    	double tenDollar;
+    	double fiveDollar;
+    	double oneDollar;
+    	double amtPaying;
+    	
+    	parentView.getVMDetails_View().getLblDisplay().setText("SmartCals Vending Machine");
+    	parentView.getVMDetails_View().getLblCashDispense().setText("Dispense Cash:");
+    	PaymentCreator pc = new ConcretePaymentCreator();
+    	PaymentProduct p = null;
+    	
+    	if((txtAmtPayable.getText().isEmpty()) || (txtOneDollarCash.getText().isEmpty()) || (txtFiveDollar.getText().isEmpty()) || (txtTenDollar.getText().isEmpty()))
+    	{
+    		p = pc.makePayment("NullCash",0);
+    	}
+    	else{
+    		amtPayable = Double.parseDouble(txtAmtPayable.getText());
+    		oneDollar = Double.parseDouble(txtOneDollarCash.getText());
+			fiveDollar = Double.parseDouble(txtFiveDollar.getText());
+			tenDollar = Double.parseDouble(txtTenDollar.getText());
+			amtPaying= oneDollar * 1 + fiveDollar * 5 + tenDollar * 10;	
+			p = pc.makePayment("Cash",0);
+			p.setValues(amtPayable,amtPaying);
+    	}
+    	if(p.getPaymentStatus()){
+    		parentView.getVMController().updateInv();
+    		parentView.getVMController().updateOrder("Cash",0);
+    		this.setVisible(false);
+    		parentView.getVMDetails_View().getLblDisplay().setText("Payment Successful");
+    		parentView.getVMDetails_View().getLblCashDispense().setText("Dispense Cash:" + Double.toString(p.getAmtToReturn()));	
+    	}
+    	else{
+    		lblPayUnsuccess.setText("Not Enough Cash");
+    	}
     }//GEN-LAST:event_btnCashActionPerformed
 
     private void btnSmartCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSmartCardActionPerformed
-        // TODO add your handling code here:
+        PaymentCreator pc = new ConcretePaymentCreator();
+    	PaymentProduct p = null;
+    	SmartCardModelInterface smct = null;
+    	double amtPayable;
+    	
+    	parentView.getVMDetails_View().getLblDisplay().setText("SmartCals Vending Machine");
+    	parentView.getVMDetails_View().getLblCardDispense().setText("Card:");
+    	
+    	amtPayable = Double.parseDouble(txtAmtPayable.getText());
+    	if(txtSmartCard.getText().isEmpty())
+    		p = pc.makePayment("NullSmartCard",0);
+    	else{
+    		try {
+				smct = parentView.getVMController().checkCardValidation(txtSmartCard.getText());
+				p = pc.makePayment("SmartCard",smct.getSmartCard());
+				p.setValues(amtPayable,smct.getBalance());
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	if(p.getPaymentStatus())
+    	{
+    		parentView.getVMController().updateInv();
+    		parentView.getVMController().updateOrder("SmartCard",smct.getSmartCard());
+    		this.setVisible(false);
+    		parentView.getVMDetails_View().getLblDisplay().setText("Payment Successful");
+    		parentView.getVMDetails_View().getLblCardDispense().setText("Card Balance:" + Double.toString(p.getAmtToReturn()));		
+    	}
+    	else{
+    		lblPayUnsuccess.setText("Not Enough Cash");
+    	}
+    	
     }//GEN-LAST:event_btnSmartCardActionPerformed
 
  
     public void setAmtPayable(InventoryModel invProduct){
-    	//lblPayUnsuccess.setVisible(false);
     	txtAmtPayable.setText(Double.toString(invProduct.getProductPrice()));
     	txtAmtPayable.setEditable(false);
     }

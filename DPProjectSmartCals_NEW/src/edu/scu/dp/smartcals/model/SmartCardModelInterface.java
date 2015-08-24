@@ -1,6 +1,6 @@
 package edu.scu.dp.smartcals.model;
 /**
- * Sharadha Ramaswamy
+ * @author Sharadha Ramaswamy
  */
 
 public interface SmartCardModelInterface {

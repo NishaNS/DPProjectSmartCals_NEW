@@ -12,11 +12,11 @@ import edu.scu.dp.smartcals.model.ProductModel;
 
 /**
  * @author Aparna Ganesh
- *
+ * @author Sharadha Ramaswamy
  */
 public interface OrderHistoryDao {
 	
 	public List<ProductModel> getBestSellingProduct(long vmId) throws SQLException;
-	public void updateOrderTable(InventoryModel invProd,String PaymentType);
+	public void updateOrderTable(InventoryModel invProd,String PaymentType,long SmartCalCardNo) throws SQLException;
 
 }

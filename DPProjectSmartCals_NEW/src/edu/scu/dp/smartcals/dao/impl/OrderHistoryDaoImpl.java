@@ -20,6 +20,7 @@ import edu.scu.dp.smartcals.model.VendingMachineModel;
 
 /**
  * @author Aparna Ganesh
+ * @author Sharadha Ramaswamy
  *Order History - To get best selling product
  */
 public class OrderHistoryDaoImpl implements OrderHistoryDao{
@@ -79,7 +80,34 @@ public class OrderHistoryDaoImpl implements OrderHistoryDao{
 		
 	}
 
-	public void updateOrderTable(InventoryModel invProd,String PaymentType){
+	public void updateOrderTable(InventoryModel invProd,String PaymentType,long SmartCalCardNo) throws SQLException{
+		PreparedStatement statement = null;
+		String query;
+		Connection connection = databaseFactory.getConnection();
+		try {
+				
+				
+				query = "insert into orderdetails(SmartCalCardNumber,PaymentType,SKU,LineItemPrice,LineItemQuantity,TotalAmount,OrderStatus,ProductId,VendingMachineId) values(?,?,?,?,?,?,?,?,?)";
+				statement = connection.prepareStatement(query);
+				statement.setLong(1,SmartCalCardNo);
+				statement.setString(2,PaymentType);
+				statement.setLong(3,invProd.getskuId());
+				statement.setDouble(4,invProd.getProductPrice());
+				statement.setInt(5,1);
+				statement.setDouble(6,invProd.getProductPrice());
+				statement.setString(7,"Paid");
+				statement.setLong(8,invProd.getProductId());
+				statement.setLong(9,invProd.getVendingMachineId());
+				statement.executeUpdate();
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+				throw e;
+			} 
+			finally {
+				DBUtils.closeStatement(statement);
+				databaseFactory.closeConnection();
+			}
 		
 	}
 }

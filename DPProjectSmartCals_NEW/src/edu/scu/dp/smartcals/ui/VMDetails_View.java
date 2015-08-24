@@ -525,7 +525,28 @@ public class VMDetails_View extends javax.swing.JPanel {
     	return scPanel;
     }
     
-    // Variables declaration - do not modify                     
+    public javax.swing.JLabel getLblCardDispense() {
+		return lblCardDispense;
+	}
+    
+    public javax.swing.JLabel getLblDisplay() {
+		return lblDisplay;
+	}
+
+	public javax.swing.JLabel getLblCoinDispense() {
+		return lblCoinDispense;
+	}
+
+	
+
+	public javax.swing.JLabel getLblCashDispense() {
+		return lblCashDispense;
+	}
+
+
+
+
+	// Variables declaration - do not modify                     
     private javax.swing.JButton btnBuy;
     private javax.swing.JButton btnBuySmartCard;
     private javax.swing.JButton btnFilter;
@@ -539,9 +560,9 @@ public class VMDetails_View extends javax.swing.JPanel {
     private javax.swing.JCheckBox chkLowSugar;
     private javax.swing.JLabel lblCalorieRange;
     private javax.swing.JLabel lblCardDispense;
-    public javax.swing.JLabel lblCashDispense;
-    public javax.swing.JLabel lblCoinDispense;
-    public javax.swing.JLabel lblDisplay;
+    private javax.swing.JLabel lblCashDispense;
+    private javax.swing.JLabel lblCoinDispense;
+    private javax.swing.JLabel lblDisplay;
     private javax.swing.JLabel lblEnterProdID;
     private javax.swing.JLabel lblItemDispense;
     private javax.swing.JPanel pnlDispenser;

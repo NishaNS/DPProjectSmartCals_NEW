@@ -1,5 +1,7 @@
 package edu.scu.dp.smartcals.dao.interfaces;
-
+/**
+ * @author Sharadha Ramaswamy
+ */
 import java.sql.SQLException;
 
 import edu.scu.dp.smartcals.exception.EmptyResultException;

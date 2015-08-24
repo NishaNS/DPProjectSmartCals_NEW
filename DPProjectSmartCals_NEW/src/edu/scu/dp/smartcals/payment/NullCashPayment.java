@@ -1,5 +1,7 @@
 package edu.scu.dp.smartcals.payment;
-
+/**
+ * @author Sharadha Ramaswmay
+ */
 public class NullCashPayment implements PaymentProduct{
 	
 	double amtPayable = 0.0;
@@ -20,10 +22,10 @@ public class NullCashPayment implements PaymentProduct{
 		return amtPayable;
 	}
 	@Override
-	public void setTotValue(double amt1, double amt2, double amt3) {
+	public void setValues(double amtPayable, double amtPaying) {
 		// TODO Auto-generated method stub
 		
 	}
-	
+
 
 }
