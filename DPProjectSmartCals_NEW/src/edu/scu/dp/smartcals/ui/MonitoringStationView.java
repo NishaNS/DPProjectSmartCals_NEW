@@ -1,6 +1,6 @@
-
 package edu.scu.dp.smartcals.ui;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,12 +15,19 @@ import javax.swing.JRadioButton;
 
 //import com.mysql.fabric.xmlrpc.base.Array;
 
+
+import javax.swing.JScrollPane;
+
 import edu.scu.dp.smartcals.admin.AdminOperations;
 import edu.scu.dp.smartcals.admin.AdminOperationsImpl;
 import edu.scu.dp.smartcals.admin.Alert;
 import edu.scu.dp.smartcals.admin.AlertListener;
+import edu.scu.dp.smartcals.admin.RevenueTableController;
+import edu.scu.dp.smartcals.admin.RevenueTableModel;
 import edu.scu.dp.smartcals.constants.VMLocationType;
 import edu.scu.dp.smartcals.exception.AdminOperationsException;
+import edu.scu.dp.smartcals.exception.DatabaseInitializationException;
+import edu.scu.dp.smartcals.vm.LoginCheckPointStrategy;
 import edu.scu.dp.smartcals.vm.Product;
 import edu.scu.dp.smartcals.vm.VMController;
 import edu.scu.dp.smartcals.vm.VendingMachine;
@@ -42,7 +49,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 
 	// aparna - start-8/22
 	private AdminOperations admin;
-	
+
 	private List<Long> vmIds;
 	// aparna - end
 
@@ -95,7 +102,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 	private javax.swing.JRadioButton radioVM1;
 	private javax.swing.JRadioButton radioVM2;
 	private javax.swing.JScrollPane scrollTable;
-	private javax.swing.JTable tblRevenue;
+	// private javax.swing.JTable tblRevenue;
 	private javax.swing.JTextField txtCalories;
 	private javax.swing.JTextField txtCholestrol;
 	private javax.swing.JTextField txtDietaryFiber;
@@ -121,6 +128,11 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 
 	private VMRadioButtonActionListener vmButtonActionListener;
 
+	// start - Nisha - 8/23
+	private RevenueTableController revenueTableController;
+
+	// end - Nisha - 8/23
+
 	// End of variables declaration
 	/**
 	 * Creates new form MonitoringStationDashboard
@@ -131,6 +143,18 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		admin = new AdminOperationsImpl();
 		// aparna - end
 		initComponents();
+
+		// start - Nisha - 8/23
+		if (revenueTableController == null)
+			revenueTableController = new RevenueTableController(vmController);
+		
+		// create scrollpane and add Jtable object to it
+		//scrollTable = new JScrollPane(revenueTableController.getView());
+		pnlRevenueStat.setBackground(Color.PINK);
+	 
+//		pnlRevenueStat.setVisible(true);
+	
+		// end - Nisha - 8/23
 	}
 
 	/**
@@ -164,7 +188,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		lblAlerts = new javax.swing.JLabel();
 		pnlRevenueStat = new javax.swing.JPanel();
 		scrollTable = new javax.swing.JScrollPane();
-		tblRevenue = new javax.swing.JTable();
+		// tblRevenue = new javax.swing.JTable();
 		pnlOtherStats = new javax.swing.JPanel();
 		lblOtherStats = new javax.swing.JLabel();
 		pnlProduct = new javax.swing.JPanel();
@@ -330,22 +354,22 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 				new java.awt.Font("Tahoma", 1, 14), new java.awt.Color(0, 0,
 						153))); // NOI18N
 
-		scrollTable.setName("scrollTable"); // NOI18N
-
-		tblRevenue.setModel(new javax.swing.table.DefaultTableModel(
-				new Object[][] { { "test", "test", "test", "test" },
-						{ null, null, null, null }, { null, null, null, null },
-						{ null, null, null, null } }, new String[] {
-						"Rmv table and add through code", "Title 2", "Title 3",
-						"Title 4" }));
-		tblRevenue.setName("Revenue"); // NOI18N
-		scrollTable.setViewportView(tblRevenue);
-		if (tblRevenue.getColumnModel().getColumnCount() > 0) {
-			tblRevenue.getColumnModel().getColumn(0).setResizable(false);
-			tblRevenue.getColumnModel().getColumn(1).setResizable(false);
-			tblRevenue.getColumnModel().getColumn(2).setResizable(false);
-			tblRevenue.getColumnModel().getColumn(3).setResizable(false);
-		}
+		
+		 scrollTable.setName("scrollTable"); // NOI18N
+		 
+		 /*
+		 * tblRevenue.setModel(new javax.swing.table.DefaultTableModel( new
+		 * Object[][] { { "test", "test", "test", "test" }, { null, null, null,
+		 * null }, { null, null, null, null }, { null, null, null, null } }, new
+		 * String[] { "Rmv table and add through code", "Title 2", "Title 3",
+		 * "Title 4" })); tblRevenue.setName("Revenue"); // NOI18N
+		 * scrollTable.setViewportView(tblRevenue); if
+		 * (tblRevenue.getColumnModel().getColumnCount() > 0) {
+		 * tblRevenue.getColumnModel().getColumn(0).setResizable(false);
+		 * tblRevenue.getColumnModel().getColumn(1).setResizable(false);
+		 * tblRevenue.getColumnModel().getColumn(2).setResizable(false);
+		 * tblRevenue.getColumnModel().getColumn(3).setResizable(false); }
+		 */
 
 		javax.swing.GroupLayout pnlRevenueStatLayout = new javax.swing.GroupLayout(
 				pnlRevenueStat);
@@ -353,25 +377,25 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		pnlRevenueStatLayout.setHorizontalGroup(pnlRevenueStatLayout
 				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(
-						pnlRevenueStatLayout
-								.createSequentialGroup()
+						pnlRevenueStatLayout.createSequentialGroup()
 								.addContainerGap()
-								.addComponent(scrollTable,
-										javax.swing.GroupLayout.PREFERRED_SIZE,
-										660,
-										javax.swing.GroupLayout.PREFERRED_SIZE)
+								/*
+								 * .addComponent(scrollTable,
+								 * javax.swing.GroupLayout.PREFERRED_SIZE, 660,
+								 * javax.swing.GroupLayout.PREFERRED_SIZE)
+								 */
 								.addContainerGap(114, Short.MAX_VALUE)));
 		pnlRevenueStatLayout.setVerticalGroup(pnlRevenueStatLayout
 				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(
 						javax.swing.GroupLayout.Alignment.TRAILING,
-						pnlRevenueStatLayout
-								.createSequentialGroup()
+						pnlRevenueStatLayout.createSequentialGroup()
 								.addContainerGap(16, Short.MAX_VALUE)
-								.addComponent(scrollTable,
-										javax.swing.GroupLayout.PREFERRED_SIZE,
-										267,
-										javax.swing.GroupLayout.PREFERRED_SIZE)
+								/*
+								 * .addComponent(scrollTable,
+								 * javax.swing.GroupLayout.PREFERRED_SIZE, 267,
+								 * javax.swing.GroupLayout.PREFERRED_SIZE)
+								 */
 								.addContainerGap()));
 
 		gridBagConstraints = new java.awt.GridBagConstraints();
@@ -972,6 +996,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 
 	/**
 	 * Generating Radio button dynamically
+	 * 
 	 * @param vmText
 	 * @param vmIdActionCommand
 	 */
@@ -993,7 +1018,8 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		for (VendingMachine vm : vendingMachines) {
 			vmIds.add(vm.getVendingMachineId());
 			String vmText = vm.getLocationType() + "@" + vm.getLocation();
-			addToVendingMachineRadioGroupPanel(vmText, vm.getVendingMachineId()+ "");
+			addToVendingMachineRadioGroupPanel(vmText, vm.getVendingMachineId()
+					+ "");
 		}
 	}
 
@@ -1013,6 +1039,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 
 	/**
 	 * Loads best selling products for a given VMId
+	 * 
 	 * @param vmIds
 	 */
 	// code change-Aparna -8/22
@@ -1027,15 +1054,14 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 				e.printStackTrace();
 				return;
 			}
-			
+
 			for (Product product : products) {
 				bestSellingBuilder.append("<br>VM ID: " + vmId
 						+ " Product ID :" + product.getProductID() + " Name: "
 						+ product.getProductName() + "("
 						+ product.getProdCategory() + ")");
 			}
-			
-			
+
 		}
 		bestSellingBuilder.append("</html>");
 		lblOtherStats.setText(bestSellingBuilder.toString());
@@ -1053,14 +1079,32 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 				// machines
 				loadBestSellingPanel(vmIds);
 				
+				//start  - Nisha - 8/23
+				//load Revenue Stats for all VM for logged in user
+				revenueTableController.selectUserDisplayOption("ALL");	
+				
+				//end - Nisha
 
 			} else {
-				loadBestSellingPanel(Arrays.asList(new Long(Long.parseLong(actionCommand))));
+				loadBestSellingPanel(Arrays.asList(new Long(Long
+						.parseLong(actionCommand))));
+				
+				//start  - Nisha - 8/23
+				//load Revenue Stats for particular VM for logged in user
+				revenueTableController.selectUserDisplayOption(actionCommand);	
+				
+				//end - Nisha
 			}
+			//start - Nisha - 8/23
+			//pnlRevenueStat.removeAll();
+			scrollTable = new JScrollPane(revenueTableController.getView());
+			pnlRevenueStat.add(scrollTable);
+			pnlRevenueStat.revalidate();
+			pnlRevenueStat.setBackground(Color.GREEN);
+			//end - Nisha
 
 		}
 
 	}
 	// code change-Aparna -8/22
 }
-

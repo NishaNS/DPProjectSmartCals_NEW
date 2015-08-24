@@ -115,8 +115,7 @@ public class SalesSummaryDaoImpl implements SalesSummaryDao {
 
 		SalesSummaryModel model = new SalesSummaryModel();
 		model.setVendingMachineID(result.getLong("VendingMachineID"));
-		model.setDailySalesAmount(result.getDouble("DailySalesAmount"));
-		model.setTotalSalesAmount(result.getDouble("TotalSales"));
+		model.setTotalSalesAmount(result.getDouble("TotalSalesUSD"));
 		model.setLastModifiedTime(result.getString("LastModifiedTimestamp"));
 
 		// add model to sales summary list

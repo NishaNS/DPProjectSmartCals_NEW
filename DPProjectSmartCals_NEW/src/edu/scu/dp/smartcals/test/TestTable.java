@@ -27,7 +27,6 @@ public class TestTable extends JPanel {
 
 	private JTable tblRevenue;
 	private JScrollPane scrollPane;
-
 	private static SalesSummaryDao salesSummaryDao;
 
 	public TestTable() throws DatabaseInitializationException, SQLException {
@@ -37,24 +36,20 @@ public class TestTable extends JPanel {
 		List<SalesSummaryModel> salesSummaryData;
 
 		// get column name from DB table
-		
-			List<String> columnName = salesSummaryDao.getColumnNames();
-	
+		List<String> columnName = salesSummaryDao.getColumnNames();
 
 		// get all VM data for a given user login
-		salesSummaryData = salesSummaryDao.getAllSalesStatistics("admin");
-		
-		// get VM specific data values
-		//salesSummaryData = salesSummaryDao.getVMSalesStatistics(2000);
+		// salesSummaryData = salesSummaryDao.getAllSalesStatistics("admin");
 
-			
+		// get VM specific data values
+		 salesSummaryData = salesSummaryDao.getVMSalesStatistics(1000);
+
 		// convert List of type SalesSUmmary to Vector of type Object
 		Vector<Object> vectorSales = new Vector<Object>();
-		
+
 		for (SalesSummaryModel element : salesSummaryData) {
 			Vector<Object> row = new Vector<Object>();
 			row.addElement(element.getVendingMachineID());
-			row.addElement(element.getDailySalesAmount());
 			row.addElement(element.getTotalSalesAmount());
 			row.addElement(element.getLastModifiedTime());
 			vectorSales.addElement(row);
@@ -62,19 +57,17 @@ public class TestTable extends JPanel {
 
 		// convert column name to Vector type
 		Vector<Object> allColumnNames = new Vector<Object>();
-		for(String colName : columnName){
+		for (String colName : columnName) {
 			allColumnNames.addElement(colName);
 		}
-	
+
 		// create data model
 		DefaultTableModel tblModel = new DefaultTableModel(vectorSales,
 				allColumnNames);
 
-
 		// create table and add model to table
 		tblRevenue = new JTable(tblModel);
 		tblRevenue.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		
 
 		// create scrollpane and add table to it
 		scrollPane = new JScrollPane(tblRevenue);
@@ -85,8 +78,6 @@ public class TestTable extends JPanel {
 		this.setBackground(Color.PINK);
 
 	}
-	
-	
 
 	public static void main(String[] args) {
 		JFrame window = new JFrame("Test JTable");

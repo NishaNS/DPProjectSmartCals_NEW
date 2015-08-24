@@ -10,9 +10,8 @@ import java.sql.Timestamp;
  */
 public class SalesSummaryModel {
 
-	private double dailySalesAmount;
-	private double totalSalesAmount;
 	private long vendingMachineID;
+	private double totalSalesAmount;
 	private String lastModifiedTime;
 
 	public long getVendingMachineID() {
@@ -23,14 +22,6 @@ public class SalesSummaryModel {
 		this.vendingMachineID = vendingMachineID;
 	}
 
-	public double getDailySalesAmount() {
-		return dailySalesAmount;
-	}
-
-	public void setDailySalesAmount(double dailySalesAmount) {
-		this.dailySalesAmount = dailySalesAmount;
-	}
-
 	public double getTotalSalesAmount() {
 		return totalSalesAmount;
 	}
@@ -38,7 +29,7 @@ public class SalesSummaryModel {
 	public void setTotalSalesAmount(double totalSalesAmount) {
 		this.totalSalesAmount = totalSalesAmount;
 	}
-	
+
 	public String getLastModifiedTime() {
 		return lastModifiedTime;
 	}
@@ -46,11 +37,11 @@ public class SalesSummaryModel {
 	public void setLastModifiedTime(String lastModifiedTime) {
 		this.lastModifiedTime = lastModifiedTime;
 	}
-	
-	public void resetModel(){
+
+	public void resetModel() {
 		this.vendingMachineID = 0;
-		this.dailySalesAmount = 0;
 		this.totalSalesAmount = 0;
+		this.lastModifiedTime = null;
 	}
 
 }

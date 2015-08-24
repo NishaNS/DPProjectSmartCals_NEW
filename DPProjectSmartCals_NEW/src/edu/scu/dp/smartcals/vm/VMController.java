@@ -424,9 +424,11 @@ public class VMController {
 		this.loginStrategy = loginStrategy;
 	}
 
+	
 	public static void main(String[] args) {
 		VMController vmController = new VMController();
 		vmController.initComponents();
 	}
 
+	
 }
