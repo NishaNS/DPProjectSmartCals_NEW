@@ -1,4 +1,3 @@
-
 package edu.scu.dp.smartcals.ui;
 
 import java.awt.FlowLayout;
@@ -11,13 +10,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 //import com.mysql.fabric.xmlrpc.base.Array;
-
-
-
 
 import edu.scu.dp.smartcals.admin.AdminOperations;
 import edu.scu.dp.smartcals.admin.AdminOperationsImpl;
@@ -48,7 +45,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 
 	// aparna - start-8/22
 	private AdminOperations admin;
-	
+
 	private List<Long> vmIds;
 	// aparna - end
 
@@ -126,9 +123,9 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 	private javax.swing.JTextField txtVendingMachineID;
 
 	private VMRadioButtonActionListener vmButtonActionListener;
-	
-	//code change-Aparna 08/23
-	
+
+	// code change-Aparna 08/23
+
 	private ProductOperationsActionListener prodOpActionListener;
 
 	// End of variables declaration
@@ -259,18 +256,18 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		radioAll.addActionListener(vmButtonActionListener);
 		// dynamically load vending machine radio buttons
 		loadVendingMachinesRadioPanel();
-		
-		//code change -Aparna 08/23
-		//add actionlistener for add product button
-		
+
+		// code change -Aparna 08/23
+		// add actionlistener for add product button
+
 		prodOpActionListener = new ProductOperationsActionListener();
 		btnAddProd.addActionListener(prodOpActionListener);
 		btnAddProd.setActionCommand("ADD_PRODUCT");
-		btnAddProd.setActionCommand("UPDATE_PRODUCT");
-		btnAddProd.setActionCommand("DELETE_PRODUCT");
-		btnAddProd.setActionCommand("SEARCH_PRODUCT");
-		
-		
+		btnUpdateProd.setActionCommand("UPDATE_PRODUCT");
+		btnDeleteProd.setActionCommand("DELETE_PRODUCT");
+		btnSearchProduct.setActionCommand("SEARCH_PRODUCT");
+		//code change-Aparna 08/23
+
 		// --------------------------------aparna -8/22
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 1;
@@ -963,6 +960,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 
 	/**
 	 * Generating Radio button dynamically
+	 * 
 	 * @param vmText
 	 * @param vmIdActionCommand
 	 */
@@ -984,7 +982,8 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		for (VendingMachine vm : vendingMachines) {
 			vmIds.add(vm.getVendingMachineId());
 			String vmText = vm.getLocationType() + "@" + vm.getLocation();
-			addToVendingMachineRadioGroupPanel(vmText, vm.getVendingMachineId()+ "");
+			addToVendingMachineRadioGroupPanel(vmText, vm.getVendingMachineId()
+					+ "");
 		}
 	}
 
@@ -1004,6 +1003,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 
 	/**
 	 * Loads best selling products for a given VMId
+	 * 
 	 * @param vmIds
 	 */
 	// code change-Aparna -8/22
@@ -1018,15 +1018,14 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 				e.printStackTrace();
 				return;
 			}
-			
+
 			for (Product product : products) {
 				bestSellingBuilder.append("<br>VM ID: " + vmId
 						+ " Product ID :" + product.getProductID() + " Name: "
 						+ product.getProductName() + "("
 						+ product.getProdCategory() + ")");
 			}
-			
-			
+
 		}
 		bestSellingBuilder.append("</html>");
 		lblOtherStats.setText(bestSellingBuilder.toString());
@@ -1043,71 +1042,101 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 				// TODO populate values in appropriate panels for all vending
 				// machines
 				loadBestSellingPanel(vmIds);
-				
 
 			} else {
-				loadBestSellingPanel(Arrays.asList(new Long(Long.parseLong(actionCommand))));
+				loadBestSellingPanel(Arrays.asList(new Long(Long
+						.parseLong(actionCommand))));
 			}
 
 		}
 
 	}
-	//-------------------------- code change-Aparna -8/22
-	
-	//code change-Aparna 08/23
-	/**
-	 * Generic ActionListener class for all Admin button Action Listener
-	 * related to products
-	 */
-	
-	class ProductOperationsActionListener implements ActionListener {
 
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			
-			String actionCommand = e.getActionCommand();
-			
-			if (actionCommand.equals("ADD_PRODUCT")) {
-				Product product = null;
-				if(txtProductCategory.getText().equalsIgnoreCase("BEVERAGE")) {
-					product = new Beverage();
-					product.setProdCategory(txtProductCategory.getText());
-					product.setProductID(Long.parseLong(txtProductID.getText()));
-					product.setProductName(txtProductName.getText());
-					product.setProductPrice(Double.parseDouble(txtProductPrice.getText()));
-				}
-				else if (txtProductCategory.getText().equalsIgnoreCase("SNACK")) {
-					product = new Snack();
-					product.setProdCategory(txtProductCategory.getText());
-					product.setProductID(Long.parseLong(txtProductID.getText()));
-					product.setProductName(txtProductName.getText());
-					product.setProductPrice(Double.parseDouble(txtProductPrice.getText()));
-				}
-				else if (txtProductCategory.getText().equalsIgnoreCase("CANDY")) {
-					product = new Beverage();
-					product.setProdCategory(txtProductCategory.getText());
-					product.setProductID(Long.parseLong(txtProductID.getText()));
-					product.setProductName(txtProductName.getText());
-					product.setProductPrice(Double.parseDouble(txtProductPrice.getText()));
-				}
-				else {
-					//do nothing
-				}
-				try {
-					admin.addNewProduct(product);
-				} catch (SQLException e1) {
-					
-					e1.printStackTrace();
-				}
-				
-				
-				 
-				
-				
-		}
+	// -------------------------- code change-Aparna -8/22
+
+	// code change-Aparna 08/23
+	
+	private void cleanPanelContents() {
+		txtProductCategory.setText("");
+		txtProductName.setText("");
+		txtProductPrice.setText("");
+		txtProductID.setText("");
 		
 	}
-	
-}
+	/**
+	 * Generic ActionListener class for all Admin button Action Listener related
+	 * to products
+	 */
+
+	class ProductOperationsActionListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			String actionCommand = e.getActionCommand();
+
+			if (actionCommand.equals("ADD_PRODUCT")) {
+				Product product = null;
+
+				if (validate()) {
+
+					if (txtProductCategory.getText().equalsIgnoreCase(
+							"BEVERAGE")) {
+						product = new Beverage();
+						product.setProdCategory(txtProductCategory.getText());
+						product.setProductID(Long.parseLong(txtProductID
+								.getText()));
+						product.setProductName(txtProductName.getText());
+						product.setProductPrice(Double
+								.parseDouble(txtProductPrice.getText()));
+					} else if (txtProductCategory.getText().equalsIgnoreCase(
+							"SNACK")) {
+						product = new Snack();
+						product.setProdCategory(txtProductCategory.getText());
+						product.setProductID(Long.parseLong(txtProductID
+								.getText()));
+						product.setProductName(txtProductName.getText());
+						product.setProductPrice(Double
+								.parseDouble(txtProductPrice.getText()));
+					} else if (txtProductCategory.getText().equalsIgnoreCase(
+							"CANDY")) {
+						product = new Beverage();
+						product.setProdCategory(txtProductCategory.getText());
+						product.setProductID(Long.parseLong(txtProductID
+								.getText()));
+						product.setProductName(txtProductName.getText());
+						product.setProductPrice(Double
+								.parseDouble(txtProductPrice.getText()));
+					} else {
+						// do nothing
+					}
+					try {
+						admin.addNewProduct(product);
+					} catch (SQLException e1) {
+
+						e1.printStackTrace();
+					}
+
+					JOptionPane.showMessageDialog(null,
+							"Product Added successfully!");
+					cleanPanelContents();
+				} else {
+					JOptionPane.showMessageDialog(null, "Invalid entry");
+				}
+
+			}
+
+		}
+
+		private boolean validate() {
+			if (txtProductCategory.getText().equals("")
+					|| txtProductID.getText().equals("")
+					|| txtProductPrice.getText().equals("")
+					|| txtProductName.getText().equals("")) {
+				return false;
+			}
+			return true;
+		}
+	}
+
 }
