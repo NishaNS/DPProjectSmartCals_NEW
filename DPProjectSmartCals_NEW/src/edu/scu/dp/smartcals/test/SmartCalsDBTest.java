@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import edu.scu.dp.smartcals.constants.ProductCategory;
 import edu.scu.dp.smartcals.dao.impl.DaoFactory;
 import edu.scu.dp.smartcals.dao.interfaces.ProductDao;
 import edu.scu.dp.smartcals.dao.interfaces.VendingMachineDao;
@@ -37,7 +38,7 @@ public class SmartCalsDBTest {
 		
 	}
 
-	@Test
+	/*@Test
 	public void testGetProductsById() throws SQLException, EmptyResultException {
 		
 
@@ -45,7 +46,7 @@ public class SmartCalsDBTest {
 		ProductModel product = productDao.getProductById(101);
 		assertTrue( product.getProductId() == 101);
 
-	}
+	}*/
 	/**
 	 * Test case to display all products from Vending Machine table
 	 * @throws SQLException
@@ -71,6 +72,20 @@ public class SmartCalsDBTest {
 	 * @throws EmptyResultException
 	 */
 	@Test
+	public void testInsertProduct() throws SQLException {
+		
+		ProductModel productModel = new ProductModel();
+		productModel.setCategory(ProductCategory.SNACK);
+		productModel.setProductId(500);
+		productModel.setProductName("Kettle Pop");
+		productModel.setProductPrice(5.99);
+		
+		productDao.addProduct(productModel);
+		
+		
+	}
+	
+	/*@Test
 	public void testGetProductsByVMId() throws SQLException, EmptyResultException {
 		
 		
@@ -82,6 +97,9 @@ public class SmartCalsDBTest {
 		assertTrue(products.size() != 0);
 
 
-	}
+	}*/
+	
+	
+	
 
 }
