@@ -90,8 +90,7 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 
 		// get from Product and set to ProductModel and send it to DB
 		ProductModel productModel = new ProductModel();
-		productModel.setCategory(ProductCategory.valueOf(product
-				.getProdCategory()));
+		productModel.setCategory(ProductCategory.valueOf(product.getProdCategory().toUpperCase()));
 		productModel.setProductId(product.getProductID());
 		productModel.setProductName(product.getProductName());
 		productModel.setProductPrice(product.getProductPrice());
