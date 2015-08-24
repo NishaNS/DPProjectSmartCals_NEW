@@ -20,7 +20,13 @@ public interface AdminOperations {
 
 	public void reStockProduct(long vmId,long productId,int quantity);
 	
-	public void addNewProduct(Product product,long vmId);
+	/**
+	 * code change-Aparna 08/23
+	 * Add new product -By Admin
+	 * @param product
+	 * @throws SQLException 
+	 */
+	public void addNewProduct(Product product) throws SQLException;
 	
 	public List<Product> getBestSellingProduct(long vmId) throws AdminOperationsException;
 }

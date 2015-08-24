@@ -74,10 +74,36 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		return product;
 	}
-
+/**
+ * Add product to database -Admin
+ * code change-Aparna 08/23
+ * @throws SQLException 
+ */
 	@Override
-	public void addProduct(ProductModel product) {
-		// TODO Auto-generated method stub
+	public void addProduct(ProductModel product) throws SQLException {
+		
+		
+		PreparedStatement statement = null;
+		Connection connection = databaseFactory.getConnection();
+
+		try {
+			statement = connection
+					.prepareStatement("insert into product(ProductID,ProductName,Category,Price) values(?,?,?,?) ");
+			statement.setLong(1, product.getProductId());
+			statement.setString(2, product.getProductName());
+			statement.setString(3, product.getCategory().toString());
+			statement.setDouble(4, product.getProductPrice());
+			
+			int rs = statement.executeUpdate();
+			
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			DBUtils.closeStatement(statement);
+			databaseFactory.closeConnection();
+		}
 
 	}
 
