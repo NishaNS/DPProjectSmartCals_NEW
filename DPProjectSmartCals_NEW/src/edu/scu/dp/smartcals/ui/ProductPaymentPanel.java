@@ -2,6 +2,9 @@ package edu.scu.dp.smartcals.ui;
 
 import java.sql.SQLException;
 
+import javax.swing.JOptionPane;
+
+import edu.scu.dp.smartcals.exception.OutOfStockException;
 import edu.scu.dp.smartcals.model.InventoryModel;
 import edu.scu.dp.smartcals.model.SmartCardModelInterface;
 import edu.scu.dp.smartcals.payment.ConcretePaymentCreator;
@@ -337,7 +340,14 @@ public class ProductPaymentPanel extends javax.swing.JPanel {
 			p.setValues(amtPayable,amtPaying);
     	}
     	if(p.getPaymentStatus()){
-    		parentView.getVMController().updateInv();
+    		try {
+				parentView.getVMController().updateInv();
+			} catch (OutOfStockException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e.getMessage());
+				return;
+			}
     		parentView.getVMController().updateOrder("Coin",0);
     		this.setVisible(false);
     		parentView.getVMDetails_View().getLblDisplay().setText("Payment Successful");
@@ -375,7 +385,14 @@ public class ProductPaymentPanel extends javax.swing.JPanel {
 			p.setValues(amtPayable,amtPaying);
     	}
     	if(p.getPaymentStatus()){
-    		parentView.getVMController().updateInv();
+    		try {
+				parentView.getVMController().updateInv();
+			} catch (OutOfStockException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e.getMessage());
+				return;
+			}
     		parentView.getVMController().updateOrder("Cash",0);
     		this.setVisible(false);
     		parentView.getVMDetails_View().getLblDisplay().setText("Payment Successful");
@@ -410,7 +427,14 @@ public class ProductPaymentPanel extends javax.swing.JPanel {
     	}
     	if(p.getPaymentStatus())
     	{
-    		parentView.getVMController().updateInv();
+    		try {
+				parentView.getVMController().updateInv();
+			} catch (OutOfStockException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e.getMessage());
+				return;
+			}
     		parentView.getVMController().updateOrder("SmartCard",smct.getSmartCard());
     		this.setVisible(false);
     		parentView.getVMDetails_View().getLblDisplay().setText("Payment Successful");
