@@ -3,6 +3,7 @@ package edu.scu.dp.smartcals.ui;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.CharConversionException;
 
 import edu.scu.dp.smartcals.vm.VMController;
 
@@ -43,7 +44,7 @@ public class LoginView extends javax.swing.JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {			
 			//authenticate user
-			vmController.authenticateUser(txtUserName.getText(), txtPassword.getText());			
+			vmController.authenticateUser(txtUserName.getText(), String.valueOf(jPassword.getPassword()));		
 		}		
 	}
 	//end - Nisha - 8/17
@@ -68,10 +69,10 @@ public class LoginView extends javax.swing.JPanel {
         lblUserName = new javax.swing.JLabel();
         txtUserName = new javax.swing.JTextField();
         lblPassword = new javax.swing.JLabel();
-        txtPassword = new javax.swing.JTextField();
         btnLogin = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
         lblMessage = new javax.swing.JLabel();
+        jPassword = new javax.swing.JPasswordField();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -111,17 +112,6 @@ public class LoginView extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(38, 0, 0, 0);
         pnlLogin.add(lblPassword, gridBagConstraints);
 
-        txtPassword.setColumns(6);
-        txtPassword.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.ipadx = 63;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new java.awt.Insets(35, 0, 3, 0);
-        pnlLogin.add(txtPassword, gridBagConstraints);
-
         btnLogin.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLogin.setText("Login");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -142,10 +132,8 @@ public class LoginView extends javax.swing.JPanel {
         gridBagConstraints.weightx = 0.5;
         pnlLogin.add(btnCancel, gridBagConstraints);
 
-        lblMessage.setText("");
+        lblMessage.setText("m");
         lblMessage.setToolTipText("");
-        lblMessage.setFont(new  java.awt.Font("Tahoma", 0, 9));
-        lblMessage.setForeground(Color.RED);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
@@ -153,6 +141,18 @@ public class LoginView extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         pnlLogin.add(lblMessage, gridBagConstraints);
+
+        jPassword.setColumns(6);
+        jPassword.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jPassword.setText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 63;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new java.awt.Insets(35, 0, 3, 0);
+        pnlLogin.add(jPassword, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
@@ -167,11 +167,11 @@ public class LoginView extends javax.swing.JPanel {
     // Variables declaration - do not modify                     
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnLogin;
+    private javax.swing.JPasswordField jPassword;
     private javax.swing.JLabel lblMessage;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblUserName;
     private javax.swing.JPanel pnlLogin;
-    private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtUserName;
     // End of variables declaration                   
 }
