@@ -21,7 +21,7 @@ public class TestBestSellingMain {
 	public static void main(String args[]) throws SQLException, DatabaseInitializationException, AdminOperationsException {
 
 		DaoFactory.initialize();
-		AdminOperations admin = new AdminOperationsImpl();
+		AdminOperations admin = AdminOperationsImpl.getInstance();
 		List<Product> products = admin.getBestSellingProduct(2000);
 
 		for (Product product: products) {
