@@ -1,4 +1,4 @@
-package edu.scu.dp.smartcals.ui;
+/*package edu.scu.dp.smartcals.ui;
 
 import java.awt.Color;
 import java.util.Vector;
@@ -10,18 +10,16 @@ import javax.swing.table.DefaultTableModel;
 
 import edu.scu.dp.smartcals.admin.RevenueTableModel;
 
-/**
+*//**
  * @author Nisha Narayanaswamy
  * 
  *         RevenueTableView creates a JTable
  *
- */
+ *//*
 public class RevenueTableView extends JTable {
 
 	private JTable tblRevenue;
-	private JScrollPane scrollPane;
-
-
+	
 	public RevenueTableView(RevenueTableModel tblModel) {
 		
 		// create table and add model to table
@@ -35,3 +33,4 @@ public class RevenueTableView extends JTable {
 	}
 	
 }
+*/

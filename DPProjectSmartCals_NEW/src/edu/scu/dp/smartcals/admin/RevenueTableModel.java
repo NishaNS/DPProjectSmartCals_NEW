@@ -20,11 +20,9 @@ import edu.scu.dp.smartcals.model.SalesSummaryModel;
  */
 public class RevenueTableModel extends DefaultTableModel {
 
-	private static SalesSummaryDao salesSummaryDao;
+	private SalesSummaryDao salesSummaryDao;
 	private Vector<Object> vectorSales;
-	Vector<Object> vectorAllColumnNames;
-
-	// private DefaultTableModel tblModel;
+	private Vector<Object> vectorAllColumnNames;
 
 	public RevenueTableModel() {
 		try {
@@ -52,7 +50,7 @@ public class RevenueTableModel extends DefaultTableModel {
 	 * @return Column names of the DB table
 	 * @throws SQLException
 	 */
-	public Vector<Object> getColumnNames() throws SQLException {
+	public void setColumnNames() throws SQLException {
 		// get column name from DB table
 		List<String> columnName = salesSummaryDao.getColumnNames();
 
@@ -61,8 +59,6 @@ public class RevenueTableModel extends DefaultTableModel {
 		for (String colName : columnName) {
 			vectorAllColumnNames.addElement(colName);
 		}
-
-		return vectorAllColumnNames;
 	}
 
 	/**
@@ -73,15 +69,13 @@ public class RevenueTableModel extends DefaultTableModel {
 	 * @return
 	 * @throws SQLException
 	 */
-	public Vector<Object> getAllSalesStats(String username) throws SQLException {
+	public void setAllSalesStats(String username) throws SQLException {
 		// get all VM data for a given user login
-		List<SalesSummaryModel> salesSummaryData;
-		salesSummaryData = salesSummaryDao.getAllSalesStatistics(username);
+		List<SalesSummaryModel> salesSummaryData = salesSummaryDao.getAllSalesStatistics(username);
 
 		// convert List of type SalesSUmmary to Vector of type Object and pass
 		// it as parameter for
 		// default table model
-
 		for (SalesSummaryModel element : salesSummaryData) {
 			Vector<Object> row = new Vector<Object>();
 			row.addElement(element.getVendingMachineID());
@@ -90,7 +84,7 @@ public class RevenueTableModel extends DefaultTableModel {
 			vectorSales.addElement(row);
 		}
 
-		return vectorSales;
+		// return vectorSales;
 	}
 
 	/**
@@ -100,17 +94,13 @@ public class RevenueTableModel extends DefaultTableModel {
 	 * @return
 	 * @throws SQLException
 	 */
-	public Vector<Object> getVMSalesStats(long vendingMachineID)
-			throws SQLException {
+	public void setVMSalesStats(long vendingMachineID) throws SQLException {
 		// get all VM data for a given user login
-		List<SalesSummaryModel> salesSummaryData;
-		salesSummaryData = salesSummaryDao
-				.getVMSalesStatistics(vendingMachineID);
+		List<SalesSummaryModel> salesSummaryData = salesSummaryDao.getVMSalesStatistics(vendingMachineID);
 
 		// convert List of type SalesSUmmary to Vector of type Object and pass
 		// it as parameter for
 		// default table model
-
 		for (SalesSummaryModel element : salesSummaryData) {
 			Vector<Object> row = new Vector<Object>();
 			row.addElement(element.getVendingMachineID());
@@ -119,7 +109,16 @@ public class RevenueTableModel extends DefaultTableModel {
 			vectorSales.addElement(row);
 		}
 
-		return vectorSales;
+		// return vectorSales;
+	}
+
+	/**
+	 * Reset model to have 0 rows of data
+	 */
+	public void resetModel() {
+		this.setRowCount(0);
+		vectorSales.clear();
+		
 	}
 
 }
