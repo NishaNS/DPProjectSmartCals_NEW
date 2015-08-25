@@ -17,6 +17,7 @@ import edu.scu.dp.smartcals.dao.interfaces.OrderHistoryDao;
 import edu.scu.dp.smartcals.dao.interfaces.ProductDao;
 import edu.scu.dp.smartcals.dao.interfaces.VendingMachineDao;
 import edu.scu.dp.smartcals.exception.AdminOperationsException;
+import edu.scu.dp.smartcals.exception.EmptyResultException;
 import edu.scu.dp.smartcals.model.NutritionalInfoModel;
 import edu.scu.dp.smartcals.model.ProductModel;
 import edu.scu.dp.smartcals.model.VendingMachineModel;
@@ -40,6 +41,8 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 	private OrderHistoryDao orderHistoryDao;
 
 	private VendingMachineDao vendingMachineDao;
+	
+	private static AdminOperationsImpl INSTANCE;
 
 	// code change-Aparna 08/23
 	private ProductDao productDao;
@@ -47,7 +50,7 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 	//nisha - 8/24
 	private NutritionalInfoDao nutriDao;
 
-	public AdminOperationsImpl() {
+	private AdminOperationsImpl() {
 		alertListeners = new ArrayList<>();
 		orderHistoryDao = DaoFactory.getOrderHistoryDao();
 		vendingMachineDao = DaoFactory.getVendingMachineDao();
@@ -58,6 +61,13 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 		//nisha - 8/24
 		nutriDao = DaoFactory.getNutritionalInfoDao();
 
+	}
+	
+	public static AdminOperationsImpl getInstance() {
+		if(INSTANCE == null) {
+			INSTANCE = new AdminOperationsImpl();
+		}
+		return INSTANCE;
 	}
 
 	public void addAlertListeners(AlertListener alertListener) {
@@ -106,7 +116,14 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 		productDao.addProduct(productModel);
 
 	}
-	
+
+	//code change-Aparna -08/24 similar to Add??
+	@Override
+	public void updateProduct(Product product) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	/*
 	 * delete product-Admin
 	 * code change-Aparna 08/23
@@ -123,6 +140,20 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 		
 	}
 	
+	//code change-Aparna 08/24
+	@Override
+	public ProductModel getProduct(long productId) throws AdminOperationsException {
+		ProductModel productModel = null;
+		try {
+			productModel = productDao.getProductById(productId);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return productModel;
+	}
+	
+	//----------------------------------------------
 	@Override
 	public void updateOutOfStock(long vmId, long productId) {
 		// notify MonitoringStationView
@@ -208,6 +239,10 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 		
 		return nutriDao.deleteNutriInfo(productID);
 	}//end - nisha - 8/24
+
+	
+	
+	
 
 	
 	
