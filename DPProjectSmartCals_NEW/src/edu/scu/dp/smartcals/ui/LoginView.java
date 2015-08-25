@@ -132,7 +132,7 @@ public class LoginView extends javax.swing.JPanel {
         gridBagConstraints.weightx = 0.5;
         pnlLogin.add(btnCancel, gridBagConstraints);
 
-        lblMessage.setText("m");
+        lblMessage.setText("");
         lblMessage.setToolTipText("");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
