@@ -38,7 +38,7 @@ public class TestObserverUI extends JFrame{
 		VendingMachine vendingMachine = vendingMachineFactory.createVendingMachine(vmModel);
 		
 		//Add in Admin controller------------------------------
-		AdminOperationsImpl admin = new AdminOperationsImpl();
+		AdminOperationsImpl admin = AdminOperationsImpl.getInstance();
 		admin.addAlertListeners(view);
 		//------------------------------------------------------
 		
