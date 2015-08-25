@@ -34,6 +34,7 @@ import edu.scu.dp.smartcals.constants.VMLocationType;
 import edu.scu.dp.smartcals.exception.AdminOperationsException;
 import edu.scu.dp.smartcals.exception.DatabaseInitializationException;
 import edu.scu.dp.smartcals.model.NutritionalInfoModel;
+import edu.scu.dp.smartcals.model.ProductModel;
 import edu.scu.dp.smartcals.test.TestTable;
 import edu.scu.dp.smartcals.vm.LoginCheckPointStrategy;
 import edu.scu.dp.smartcals.vm.Beverage;
@@ -63,6 +64,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 	private List<Long> vmIds;
 	// aparna - end
 
+	private List<Alert> alerts;
 	// Variables declaration - do not modify
 	private javax.swing.JButton btnAddInventory;
 	private javax.swing.JButton btnAddNutriInfo;
@@ -158,7 +160,12 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 	public MonitoringStationView(VMController vmController) {
 		this.vmController = vmController;
 		// aparna - start 8/22
-		admin = new AdminOperationsImpl();
+		admin = AdminOperationsImpl.getInstance();
+
+		//aparna -08/24
+		admin.addAlertListeners(this);
+		alerts = new ArrayList<>();
+		
 		// aparna - end
 		initComponents();
 
@@ -192,7 +199,13 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 	@Override
 	public void update(Alert alert) {
 		// TODO set the label with the alert received
-		lblAlerts.setText(alert.getMessage());
+		alerts.add(alert);
+		StringBuilder strBuilder = new StringBuilder();
+		strBuilder.append("<html>");
+		for(Alert alrt : alerts) {
+			strBuilder.append("<br>" + alrt.getMessage());
+		}
+		lblAlerts.setText(strBuilder.toString());
 		// lblAlerts.setForeground(ColorModel.getRGBdefault().getRed());
 
 	}
@@ -308,6 +321,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		prodOpActionListener = new ProductOperationsActionListener();
 		btnAddProd.addActionListener(prodOpActionListener);
 		btnDeleteProd.addActionListener(prodOpActionListener);
+		btnSearchProduct.addActionListener(prodOpActionListener);
 		btnAddProd.setActionCommand("ADD_PRODUCT");
 		btnUpdateProd.setActionCommand("UPDATE_PRODUCT");
 		btnDeleteProd.setActionCommand("DELETE_PRODUCT");
@@ -1210,6 +1224,31 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 				}
 
 			}
+	//TODO SEARCH PRODUCT BY ID
+			if(actionCommand.equals("SEARCH_PRODUCT")) {
+				if(!txtProductID.getText().isEmpty()) {
+					long productId = Long.parseLong(txtProductID.getText());
+					try {
+						ProductModel productModel = admin.getProduct(productId);
+						txtProductCategory.setText(productModel.getCategory().toString());
+						txtProductName.setText(productModel.getProductName());
+						txtProductPrice.setText(Double.toString(productModel.getProductPrice()));
+						
+					} catch (AdminOperationsException e1) {
+							e1.printStackTrace();
+							JOptionPane.showMessageDialog(null, "Unable to fetch product id "+productId);
+							return;
+					}
+					
+					
+				}
+				
+				else {
+					JOptionPane.showMessageDialog(null, "Invalid entry");
+				}
+			}
+			
+			
 			
 			if(actionCommand.equals("DELETE_PRODUCT")) {
 				if(!txtProductID.getText().isEmpty()) {
@@ -1393,8 +1432,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 							.iron(txtIron.getText()).buildNutriInfo();
 
 					try {
-						boolean addStatus = admin.updateNewNutriInfo(nutriModel
-								.listAttributeValues());
+						boolean addStatus = admin.updateNewNutriInfo(nutriModel.listAttributeValues());
 						if (addStatus == true) {
 							JOptionPane.showMessageDialog(null,
 									"Nutritional Info updated!");
