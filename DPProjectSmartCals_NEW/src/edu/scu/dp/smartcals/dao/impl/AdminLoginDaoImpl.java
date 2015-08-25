@@ -46,7 +46,7 @@ public class AdminLoginDaoImpl implements AdminLoginDao {
 		try {
 			Connection connection = databaseFactory.getConnection();
 			statement = connection
-					.prepareStatement("Select * From AdministratorLogin Where UserName = ? And Password = ?");
+					.prepareStatement("Select * From AdministratorLogin Where UserName = ? And Password = sha(?)");
 			statement.setString(1, username);
 			statement.setString(2, password);
 			ResultSet result = statement.executeQuery();
