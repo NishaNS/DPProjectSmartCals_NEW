@@ -57,13 +57,13 @@ public class OrderHistoryDaoImpl implements OrderHistoryDao{
 		List<ProductModel> bestSellingProducts = new ArrayList<>();
 		
 		try {
-			statement = connection.prepareStatement("select count(*) product_count,product_id from orderdetails group by product_id,vm_id having vm_id=? order by product_count desc limit 3");
+			statement = connection.prepareStatement("select count(*) product_count,ProductId from orderdetails group by ProductId,VendingMachineId having VendingMachineId=? order by product_count desc limit 3");
 			statement.setLong(1, vmId);
 			ResultSet rs = statement.executeQuery();
 			 
 			while (rs.next()) {
 				
-				long productId = rs.getLong("product_id");
+				long productId = rs.getLong("ProductId");
 				bestSellingProducts.add(productDao.getProductById(productId));
 
 			}
