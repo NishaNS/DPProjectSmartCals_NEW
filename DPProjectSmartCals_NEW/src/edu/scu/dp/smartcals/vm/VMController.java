@@ -17,6 +17,7 @@ import edu.scu.dp.smartcals.dao.interfaces.SmartCardDao;
 import edu.scu.dp.smartcals.dao.interfaces.VendingMachineDao;
 import edu.scu.dp.smartcals.exception.DatabaseInitializationException;
 import edu.scu.dp.smartcals.exception.EmptyResultException;
+import edu.scu.dp.smartcals.exception.OutOfStockException;
 import edu.scu.dp.smartcals.model.AdminLoginModel;
 import edu.scu.dp.smartcals.model.InventoryModel;
 import edu.scu.dp.smartcals.model.NullSmartCardModel;
@@ -118,7 +119,7 @@ public class VMController {
 			this.tabbedView = new TabbedView(this);
 		// end - Nisha - 8/19
 
-		mainWindow.addPanels(monitoringStationView);
+		mainWindow.addPanels(vmSelectionView);
 
 	}
 
@@ -205,10 +206,8 @@ public class VMController {
 
 		for (VendingMachineModel vmModel : vendingMachineModels) {
 
-			VendingMachineFactory vendingMachineFactory = VendingMachineFactory
-					.getFactory(vmModel.getType());
-			VendingMachine vendingMachine = vendingMachineFactory
-					.createVendingMachine(vmModel);
+			VendingMachineFactory vendingMachineFactory = VendingMachineFactory.getFactory(vmModel.getType());
+			VendingMachine vendingMachine = vendingMachineFactory.createVendingMachine(vmModel);
 			vendingMachines.add(vendingMachine);
 		}
 		return vendingMachines;
@@ -401,8 +400,17 @@ public class VMController {
 		prodPayPanel.setAmtPayable(invProduct);
 	}
 	
-	public void updateInv()
+	public void updateInv() throws OutOfStockException
 	{
+		//aparna--08/24
+		int existingQuantity = invProduct.getqty();
+		long productId = invProduct.getProductId();
+		long vmId = invProduct.getVendingMachineId();
+		if(existingQuantity == 0) {
+			//notify outOfStock
+			vendingMachineView.getVendingMachine().notifyOutOfStock(productId,vmId);
+			throw new OutOfStockException(productId,vmId);
+		}
 		invProduct.setqty(invProduct.getqty() - 1); 
 		System.out.println(invProduct.getqty());
 		try {
