@@ -112,7 +112,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 	private javax.swing.JRadioButton radioVM1;
 	private javax.swing.JRadioButton radioVM2;
 	private javax.swing.JScrollPane scrollTable;
-	// private javax.swing.JTable tblRevenue;
+	private javax.swing.JTable tblRevenue;
 	private javax.swing.JTextField txtCalories;
 	private javax.swing.JTextField txtCholestrol;
 	private javax.swing.JTextField txtDietaryFiber;
@@ -162,27 +162,10 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		// aparna - end
 		initComponents();
 
-		// start - Nisha - 8/23
+		// Nisha - 8/24
 		if (revenueTableController == null)
 			revenueTableController = new RevenueTableController(vmController);
 		
-		//testing code
-		
-		try {
-			TestTable table = new TestTable();
-			JButton test = new JButton("test"); 
-			pnlRevenueStat.add(test);
-			pnlRevenueStat.revalidate();
-			pnlRevenueStat.setVisible(true);
-			pnlRevenueStat.setBackground(Color.PINK);
-			
-			
-		} catch (DatabaseInitializationException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		//end testing code
-		// end - Nisha - 8/23
 	}
 
 	/**
@@ -216,7 +199,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		lblAlerts = new javax.swing.JLabel();
 		pnlRevenueStat = new javax.swing.JPanel();
 		scrollTable = new javax.swing.JScrollPane();
-		// tblRevenue = new javax.swing.JTable();
+		tblRevenue = new javax.swing.JTable();
 		pnlOtherStats = new javax.swing.JPanel();
 		lblOtherStats = new javax.swing.JLabel();
 		pnlProduct = new javax.swing.JPanel();
@@ -366,48 +349,34 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 						153))); // NOI18N
 
 		
-		 scrollTable.setName("scrollTable"); // NOI18N
-		 
-		 /*
-		 * tblRevenue.setModel(new javax.swing.table.DefaultTableModel( new
-		 * Object[][] { { "test", "test", "test", "test" }, { null, null, null,
-		 * null }, { null, null, null, null }, { null, null, null, null } }, new
-		 * String[] { "Rmv table and add through code", "Title 2", "Title 3",
-		 * "Title 4" })); tblRevenue.setName("Revenue"); // NOI18N
-		 * scrollTable.setViewportView(tblRevenue); if
-		 * (tblRevenue.getColumnModel().getColumnCount() > 0) {
-		 * tblRevenue.getColumnModel().getColumn(0).setResizable(false);
-		 * tblRevenue.getColumnModel().getColumn(1).setResizable(false);
-		 * tblRevenue.getColumnModel().getColumn(2).setResizable(false);
-		 * tblRevenue.getColumnModel().getColumn(3).setResizable(false); }
-		 */
+		//start - nisha - 8/24
+		scrollTable.setName("scrollTable"); // NOI18N
+		tblRevenue.setName("Revenue"); // NOI18N
+		scrollTable.setViewportView(tblRevenue);		
+		//end - Nisha - 8/24
 
-		javax.swing.GroupLayout pnlRevenueStatLayout = new javax.swing.GroupLayout(
-				pnlRevenueStat);
-		pnlRevenueStat.setLayout(pnlRevenueStatLayout);
-		pnlRevenueStatLayout.setHorizontalGroup(pnlRevenueStatLayout
-				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(
-						pnlRevenueStatLayout.createSequentialGroup()
-								.addContainerGap()
-								/*
-								 * .addComponent(scrollTable,
-								 * javax.swing.GroupLayout.PREFERRED_SIZE, 660,
-								 * javax.swing.GroupLayout.PREFERRED_SIZE)
-								 */
-								.addContainerGap(114, Short.MAX_VALUE)));
-		pnlRevenueStatLayout.setVerticalGroup(pnlRevenueStatLayout
-				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(
-						javax.swing.GroupLayout.Alignment.TRAILING,
-						pnlRevenueStatLayout.createSequentialGroup()
-								.addContainerGap(16, Short.MAX_VALUE)
-								/*
-								 * .addComponent(scrollTable,
-								 * javax.swing.GroupLayout.PREFERRED_SIZE, 267,
-								 * javax.swing.GroupLayout.PREFERRED_SIZE)
-								 */
-								.addContainerGap()));
+		 javax.swing.GroupLayout pnlRevenueStatLayout = new javax.swing.GroupLayout(
+				 pnlRevenueStat);
+		 pnlRevenueStat.setLayout(pnlRevenueStatLayout);
+		 pnlRevenueStatLayout.setHorizontalGroup(pnlRevenueStatLayout
+				 .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				 .addGroup(
+						 pnlRevenueStatLayout.createSequentialGroup()
+						 .addContainerGap()
+						 .addComponent(scrollTable,
+								 javax.swing.GroupLayout.PREFERRED_SIZE, 660,
+								 javax.swing.GroupLayout.PREFERRED_SIZE)
+								 .addContainerGap(114, Short.MAX_VALUE)));
+		 pnlRevenueStatLayout.setVerticalGroup(pnlRevenueStatLayout
+				 .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				 .addGroup(
+						 javax.swing.GroupLayout.Alignment.TRAILING,
+						 pnlRevenueStatLayout.createSequentialGroup()
+						 .addContainerGap(16, Short.MAX_VALUE)
+						 .addComponent(scrollTable,
+								 javax.swing.GroupLayout.PREFERRED_SIZE, 267,
+								 javax.swing.GroupLayout.PREFERRED_SIZE)
+								 .addContainerGap()));
 
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 1;
@@ -429,7 +398,6 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 				new java.awt.Font("Tahoma", 1, 14))); // NOI18N
 
 		lblOtherStats.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		// lblOtherStats.setText("Show other stats like Best Seller here");
 		lblOtherStats.setName("OtherStats"); // NOI18N
 
 		javax.swing.GroupLayout pnlOtherStatsLayout = new javax.swing.GroupLayout(
@@ -1104,36 +1072,35 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 				// machines
 				loadBestSellingPanel(vmIds);
 				
-				//start  - Nisha - 8/23
+				//start  - Nisha - 8/24
 				//load Revenue Stats for all VM for logged in user
 				revenueTableController.selectUserDisplayOption("ALL");	
-				
+				try {
+					tblRevenue.setModel(revenueTableController.getModel().createAndFetchModelData());
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				//end - Nisha
 
 			} else {
 				loadBestSellingPanel(Arrays.asList(new Long(Long
 						.parseLong(actionCommand))));
 				
-				//start  - Nisha - 8/23
+				//nisha - 8/24
 				//load Revenue Stats for particular VM for logged in user
 				revenueTableController.selectUserDisplayOption(actionCommand);	
-				
+				try {
+					
+					tblRevenue.setModel(revenueTableController.getModel().createAndFetchModelData());
+					
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}				
 				//end - Nisha
-
-			}
-			//start - Nisha - 8/23
-			//pnlRevenueStat.removeAll();
-			scrollTable = new JScrollPane(revenueTableController.getView());
-			scrollTable.setBackground(Color.GREEN);
-			scrollTable.setVisible(true);
-			pnlRevenueStat.add(scrollTable);
-			//pnlRevenueStat.revalidate();
-			pnlRevenueStat.setBackground(Color.CYAN);
-			
-			//end - Nisha
-
+			}		
 		}
-
 	}
 
 
@@ -1403,9 +1370,9 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 
 					} catch (SQLException e1) {
 						e1.printStackTrace();
-						/*JOptionPane.showMessageDialog(null,
+						JOptionPane.showMessageDialog(null,
 								"Unable to update nutritional info for "
-										+ txtNutriProdID.getText() + "\n" + e1.getMessage());*/
+										+ txtNutriProdID.getText() + "\n" + e1.getMessage());
 					}
 				}
 			}
