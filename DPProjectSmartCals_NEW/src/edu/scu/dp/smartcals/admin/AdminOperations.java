@@ -22,6 +22,17 @@ public interface AdminOperations {
 
 	public void reStockProduct(long vmId,long productId,int quantity);
 	
+	//code change-Aparna 08/24
+	
+	public ProductModel getProduct(long productId) throws AdminOperationsException;
+	
+	
+	//code change-Aparna 08/24
+	
+	 public void addAlertListeners(AlertListener alertListener);
+	 
+	public void updateProduct(Product product);
+	//---------------------------------------------------
 	/**
 	 * code change-Aparna 08/23
 	 * Add new product -By Admin
