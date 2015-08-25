@@ -18,6 +18,7 @@ import edu.scu.dp.smartcals.model.NutritionalInfoModel;
 
 /**
  * Class to perform operations from NutritionalInfo table
+ * 
  * @author Nisha Narayanaswamy
  *
  */
@@ -28,113 +29,165 @@ public class NutritionalInfoDaoImpl implements NutritionalInfoDao {
 	private NutritionalInfoModel nutriInfo;
 	private static NutritionalInfoDao INSTANCE;
 
-	private NutritionalInfoDaoImpl(DatabaseFactory databaseFactory) {		
-		this.databaseFactory = databaseFactory;		
+	private NutritionalInfoDaoImpl(DatabaseFactory databaseFactory) {
+		this.databaseFactory = databaseFactory;
 	}
 
 	/**
-	 * Implementation of Singleton pattern as there should be only one NutritionalInfoDao for 
-	 * the entire application
+	 * Implementation of Singleton pattern as there should be only one
+	 * NutritionalInfoDao for the entire application
+	 * 
 	 * @param databaseFactory
 	 * @return
 	 */
 	public static NutritionalInfoDao getInstance(DatabaseFactory databaseFactory) {
-		if(INSTANCE == null){
+		if (INSTANCE == null) {
 			INSTANCE = new NutritionalInfoDaoImpl(databaseFactory);
 		}
 		return INSTANCE;
 	}
 
 	@Override
-	public NutritionalInfoModel getNutriInfo(long prodID) throws SQLException, EmptyResultException {
+	public NutritionalInfoModel getNutriInfo(long prodID) throws SQLException,
+	EmptyResultException {
 
 		Connection connection = databaseFactory.getConnection();
 		try {
 
-			statement = connection.prepareStatement("Select * From NutritionalInfo Where ProductID = ?");		
+			statement = connection
+					.prepareStatement("Select * From NutritionalInfo Where ProductID = ?");
 			statement.setLong(1, prodID);
 			ResultSet result = statement.executeQuery();
-			if(result.next()){
+			if (result.next()) {
 				mapRow(result);
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
-		}
-		finally{
+		} finally {
 			DBUtils.closeStatement(statement);
 			databaseFactory.closeConnection();
 		}
 		return nutriInfo;
 	}
 
+	@Override
+	public boolean addNutriInfo(ArrayList<String> listValues)
+			throws SQLException {
+		Connection connection = databaseFactory.getConnection();
+
+		statement = connection
+				.prepareStatement("INSERT INTO NutritionalInfo (`ProductID`, `ServingSize`, `Calories`, `TotalFat`, "
+						+ "`SaturatedFat`,`TransFat`,`Cholestrol`,`Sodium`,`TotalCarbs`,"
+						+ "`DietaryFiber`,`Sugars`,`Protein`,`Iron`,`SmartTag`) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+
+		// set first element prodID as "long"
+		statement.setLong(1, Long.parseLong(listValues.get(0)));
+
+		int index = 0;
+		for (String element : listValues) {
+			index++;
+			if (index == 1)
+				continue;
+
+			if (element == null) {
+				statement.setString(index, "");
+			} else
+				statement.setString(index, element);
+		}
+		int status = statement.executeUpdate();
+		if (status != 1) {
+			return false;
+		}
+
+		return true;
+	}
 
 	@Override
-	public boolean addNutriInfo(ArrayList<String> listValues) throws SQLException {
+	public boolean deleteNutriInfo(long productID) throws SQLException {
 		Connection connection = databaseFactory.getConnection();
-	
 
-			statement = connection.prepareStatement("INSERT INTO NutritionalInfo (`ProductID`, `ServingSize`, `Calories`, `TotalFat`, "
-					+ "`SaturatedFat`,`TransFat`,`Cholestrol`,`Sodium`,`TotalCarbs`,"
-					+ "`DietaryFiber`,`Sugars`,`Protein`,`Iron`,`SmartTag`) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-			
-			//set first element prodID as "long"
-			statement.setLong(1, Long.parseLong(listValues.get(0)));
-			
-			int index = 0;
-			for(String element : listValues){
-				index++;
-				if(index == 1)
-					continue;
-				
-				if(element == null){
-					statement.setString(index, "");
-				}
-				else					
-					statement.setString(index, element);
-				
-			}
+		try {
+			statement = connection
+					.prepareStatement("DELETE FROM NutritionalInfo WHERE PRODUCTID = ?");
+			statement.setLong(1, productID);
 			int status = statement.executeUpdate();
-			if(status != 1){
+			if (status != 1) {
 				return false;
 			}
-			
-			return true;
-	}
-	
-	@Override
-	public void updateNutriInfo(long prodID) throws SQLException {
-		// TODO Auto-generated method stub
-		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return true;
 	}
 
-	//maybe add method to get smart tags
+	@Override
+	public boolean updateNutriInfo(ArrayList<String> listValues)
+			throws SQLException {
+
+		Connection connection = databaseFactory.getConnection();
+
+		statement = connection.prepareStatement("UPDATE NutritionalInfo SET "
+				+ "`ProductID` = ? ," + "`ServingSize` = ? ,"
+				+ "`Calories` = ? ," + "`TotalFat` = ? ,"
+				+ "`SaturatedFat` = ? ," + "`TransFat` = ? ,"
+				+ "`Cholestrol` = ? ," + "`Sodium` = ? ,"
+				+ "`TotalCarbs` = ? ," + "`DietaryFiber` = ? ,"
+				+ "`Sugars` = ? ," + "`Protein` = ? ," + "`Iron` = ? ,"
+				+ "`SmartTag` = ? " + "WHERE `ProductID` = ?");
+
+		// set first element prodID as "long"
+		statement.setLong(1, Long.parseLong(listValues.get(0)));
+
+		int index = 0;
+		for (String element : listValues) {
+			index++;
+			if (index == 1)
+				continue;
+
+			if (element == null) {
+				statement.setString(index, "");
+			} else
+				statement.setString(index, element);
+
+			// set last index for prodID as "long"
+			statement.setLong(15, Long.parseLong(listValues.get(0)));
+		}
+
+		int status = statement.executeUpdate();
+		if (status != 1) {
+			return false;
+		}
+
+		return true;
+	}
+
+	// maybe add method to get smart tags
 
 	/**
 	 * Map the result set data to the model object
+	 * 
 	 * @param result
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
 	private void mapRow(ResultSet result) throws SQLException {
 
-		//set all attributes from DB result set
-		nutriInfo = new NutritionalInfoModel.
-				NutriBuilder(result.getLong("ProductID"), result.getString("Calories"), result.getString("SmartTag")).
-				servingSize(result.getString("ServingSize")).
-				totalFat(result.getString("TotalFat")).
-				saturatedFat(result.getString("SaturatedFat")).
-				transFat(result.getString("TransFat")).
-				cholestrol(result.getString("Cholestrol")).
-				sodium(result.getString("Sodium")).
-				totalCarbs(result.getString("TotalCarbs")).
-				dietaryFiber(result.getString("DietaryFiber")).
-				sugars(result.getString("Sugars")).
-				protein(result.getString("Protein")).
-				iron(result.getString("Iron")).
-				buildNutriInfo();
+		// set all attributes from DB result set
+		nutriInfo = new NutritionalInfoModel.NutriBuilder(
+				result.getLong("ProductID"), result.getString("Calories"),
+				result.getString("SmartTag"))
+		.servingSize(result.getString("ServingSize"))
+		.totalFat(result.getString("TotalFat"))
+		.saturatedFat(result.getString("SaturatedFat"))
+		.transFat(result.getString("TransFat"))
+		.cholestrol(result.getString("Cholestrol"))
+		.sodium(result.getString("Sodium"))
+		.totalCarbs(result.getString("TotalCarbs"))
+		.dietaryFiber(result.getString("DietaryFiber"))
+		.sugars(result.getString("Sugars"))
+		.protein(result.getString("Protein"))
+		.iron(result.getString("Iron")).buildNutriInfo();
 	}
-
-	
 
 }

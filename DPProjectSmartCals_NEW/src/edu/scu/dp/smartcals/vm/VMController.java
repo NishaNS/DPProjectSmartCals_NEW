@@ -118,7 +118,7 @@ public class VMController {
 			this.tabbedView = new TabbedView(this);
 		// end - Nisha - 8/19
 
-		mainWindow.addPanels(vmSelectionView);
+		mainWindow.addPanels(monitoringStationView);
 
 	}
 

@@ -40,6 +40,10 @@ public interface AdminOperations {
 	public NutritionalInfoModel searchNutriInfo(long productId) throws SQLException;
 	
 	public boolean addNewNutriInfo(ArrayList<String> dataValues) throws SQLException;
+	
+	public boolean updateNewNutriInfo(ArrayList<String> dataValues) throws SQLException;
+	
+	public boolean deleteNutriInfo(long productID) throws SQLException;
 }
 
 

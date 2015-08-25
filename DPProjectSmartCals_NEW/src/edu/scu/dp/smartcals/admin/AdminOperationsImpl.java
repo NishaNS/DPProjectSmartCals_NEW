@@ -194,6 +194,20 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 		return nutriDao.addNutriInfo(dataValues);
 		
 	}
+	
+	
+	@Override
+	public boolean updateNewNutriInfo(ArrayList<String> dataValues) throws SQLException {
+		
+		return nutriDao.updateNutriInfo(dataValues);
+		
+	}
+
+	@Override
+	public boolean deleteNutriInfo(long productID) throws SQLException {
+		
+		return nutriDao.deleteNutriInfo(productID);
+	}//end - nisha - 8/24
 
 	
 	

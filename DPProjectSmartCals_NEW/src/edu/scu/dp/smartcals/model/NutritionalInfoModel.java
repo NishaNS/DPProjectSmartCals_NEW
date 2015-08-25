@@ -6,15 +6,15 @@ import java.util.List;
 /**
  * @author Nisha Narayanaswamy
  * 
- * NutritionalInfo Model
+ *         NutritionalInfo Model
  *
  */
 public class NutritionalInfoModel {
-	
-	//Builder design Pattern to be applied
-	//only getter methods added so far ****** setter methods required for Admin
-	
-	private final long productID;		
+
+	// Builder design Pattern to be applied
+	// only getter methods added so far ****** setter methods required for Admin
+
+	private final long productID;
 	private final String servingSize;
 	private final String calories;
 	private final String totalFat;
@@ -28,15 +28,15 @@ public class NutritionalInfoModel {
 	private final String protein;
 	private final String iron;
 	private final String smartTag;
-	
-	public static class NutriBuilder{
-		
-		//Required parameters
+
+	public static class NutriBuilder {
+
+		// Required parameters
 		private final long productID;
 		private final String calories;
 		private final String smartTag;
-		
-		//optional parameters	
+
+		// optional parameters
 		private String servingSize = "0";
 		private String totalFat = "0";
 		private String saturatedFat = "0";
@@ -48,75 +48,83 @@ public class NutritionalInfoModel {
 		private String sugars = "0";
 		private String protein = "0";
 		private String iron = "0";
-		
-		public  NutriBuilder(long productID, String calories, String smartTag){
+
+		public NutriBuilder(long productID, String calories, String smartTag) {
 			this.productID = productID;
 			this.calories = calories;
-			this.smartTag = smartTag;			
+			this.smartTag = smartTag;
 		}
 
 		public NutriBuilder servingSize(String value) {
 			this.servingSize = value;
-			return this;			
+			return this;
 		}
-		
+
 		public NutriBuilder totalFat(String value) {
 			this.totalFat = value;
-			return this;			
+			return this;
 		}
-		
+
 		public NutriBuilder saturatedFat(String value) {
 			this.saturatedFat = value;
-			return this;			
+			return this;
 		}
+
 		public NutriBuilder transFat(String value) {
 			this.transFat = value;
-			return this;			
+			return this;
 		}
+
 		public NutriBuilder cholestrol(String value) {
 			this.cholestrol = value;
-			return this;			
+			return this;
 		}
+
 		public NutriBuilder sodium(String value) {
 			this.sodium = value;
-			return this;			
+			return this;
 		}
+
 		public NutriBuilder totalCarbs(String value) {
 			this.totalCarbs = value;
-			return this;			
+			return this;
 		}
+
 		public NutriBuilder dietaryFiber(String value) {
 			this.dietaryFiber = value;
-			return this;			
+			return this;
 		}
+
 		public NutriBuilder sugars(String value) {
 			this.sugars = value;
-			return this;			
+			return this;
 		}
+
 		public NutriBuilder protein(String value) {
 			this.protein = value;
-			return this;			
+			return this;
 		}
+
 		public NutriBuilder iron(String value) {
 			this.iron = value;
-			return this;			
+			return this;
 		}
-	
+
 		/**
 		 * @return A builder object
 		 */
-		public NutritionalInfoModel buildNutriInfo(){
-			return new NutritionalInfoModel(this);			
+		public NutritionalInfoModel buildNutriInfo() {
+			return new NutritionalInfoModel(this);
 		}
-		
+
 	}
-	
+
 	private NutritionalInfoModel(NutriBuilder nutriBuilder) {
-		
-		productID = nutriBuilder.productID;		
+
+		productID = nutriBuilder.productID;
 		servingSize = nutriBuilder.servingSize;
-		calories  = nutriBuilder.calories;
-		totalFat  = nutriBuilder.totalFat;
+		calories = nutriBuilder.calories;
+		totalFat = nutriBuilder.totalFat;
 		saturatedFat = nutriBuilder.saturatedFat;
 		transFat = nutriBuilder.transFat;
 		cholestrol = nutriBuilder.cholestrol;
@@ -127,47 +135,34 @@ public class NutritionalInfoModel {
 		protein = nutriBuilder.protein;
 		iron = nutriBuilder.iron;
 		smartTag = nutriBuilder.smartTag;
-		
+
 	}
-	
+
 	@Override
-	public String toString(){
-		
-		return "<html>ProductID: " + productID 		
-		+ "<br> Serving Size: " + servingSize
-		+ ", Calories: " + calories
-		+ ", Total Fat: " + totalFat
-		+ ", Saturated Fat: " + saturatedFat
-		+ "<br> Trans Fat: " + transFat
-		+ ", Cholestrol: " + cholestrol
-		+ ", Sodium: " + sodium
-		+ ", Total Carbs: " + totalCarbs
-		+ ", Dietary Fiber: " +  dietaryFiber
-		+ "<br> Sugars: " +  sugars
-		+ ", Protein: " + protein
-		+ ", Iron: " + iron
-		+ ", Smart Tag: </html>" + smartTag;
+	public String toString() {
+
+		return "<html>ProductID: " + productID + "<br> Serving Size: "
+				+ servingSize + ", Calories: " + calories + ", Total Fat: "
+				+ totalFat + ", Saturated Fat: " + saturatedFat
+				+ "<br> Trans Fat: " + transFat + ", Cholestrol: " + cholestrol
+				+ ", Sodium: " + sodium + ", Total Carbs: " + totalCarbs
+				+ ", Dietary Fiber: " + dietaryFiber + "<br> Sugars: " + sugars
+				+ ", Protein: " + protein + ", Iron: " + iron
+				+ ", Smart Tag: </html>" + smartTag;
 	}
-	
-	public String formatData(){
-		return "ProductID: " + productID 		
-				+ ", Serving Size: " + servingSize
-				+ ", Calories: " + calories
-				+ ", Total Fat: " + totalFat
-				+ ", Saturated Fat: " + saturatedFat
-				+ ", Trans Fat: " + transFat
-				+ ", Cholestrol: " + cholestrol
-				+ ", Sodium: " + sodium
-				+ ", Total Carbs: " + totalCarbs
-				+ ", Dietary Fiber: " +  dietaryFiber
-				+ ", Sugars: " +  sugars
-				+ ", Protein: " + protein
-				+ ", Iron: " + iron
-				+ ", Smart Tag: " + smartTag;
+
+	public String formatData() {
+		return "ProductID: " + productID + ", Serving Size: " + servingSize
+				+ ", Calories: " + calories + ", Total Fat: " + totalFat
+				+ ", Saturated Fat: " + saturatedFat + ", Trans Fat: "
+				+ transFat + ", Cholestrol: " + cholestrol + ", Sodium: "
+				+ sodium + ", Total Carbs: " + totalCarbs + ", Dietary Fiber: "
+				+ dietaryFiber + ", Sugars: " + sugars + ", Protein: "
+				+ protein + ", Iron: " + iron + ", Smart Tag: " + smartTag;
 	}
-	
-	public ArrayList<String> listAttributeValues(){
-		
+
+	public ArrayList<String> listAttributeValues() {
+
 		ArrayList<String> listValues = new ArrayList<String>();
 		listValues.add(String.valueOf(productID));
 		listValues.add(servingSize);
@@ -184,7 +179,7 @@ public class NutritionalInfoModel {
 		listValues.add(iron);
 		listValues.add(smartTag);
 		return listValues;
-	
+
 	}
-	
+
 }

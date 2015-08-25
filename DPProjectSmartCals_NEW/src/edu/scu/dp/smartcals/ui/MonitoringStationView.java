@@ -1325,34 +1325,87 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 					}
 				}
 
-				if(actionCommand.equals("ADD_NUTRI")){
-					NutritionalInfoModel nutriModel = new NutritionalInfoModel.
-							NutriBuilder(Long.parseLong(txtNutriProdID.getText()), txtCalories.getText(),  txtSmartTag.getText()).
-							servingSize(txtServingSize.getText()).
-							totalFat(txtTotalFat.getText()).
-							saturatedFat(txtSaturatedFat.getText()).
-							transFat(txtTransFat.getText()).
-							cholestrol(txtCholestrol.getText()).
-							sodium(txtSodium.getText()).
-							totalCarbs(txtTotalCarbs.getText()).
-							dietaryFiber(txtDietaryFiber.getText()).
-							sugars(txtSugars.getText()).
-							protein(txtProtein.getText()).
-							iron(txtIron.getText()).
-							buildNutriInfo();
-					
+				if (actionCommand.equals("ADD_NUTRI")) {
+					NutritionalInfoModel nutriModel = new NutritionalInfoModel.NutriBuilder(
+							Long.parseLong(txtNutriProdID.getText()),
+							txtCalories.getText(), txtSmartTag.getText())
+							.servingSize(txtServingSize.getText())
+							.totalFat(txtTotalFat.getText())
+							.saturatedFat(txtSaturatedFat.getText())
+							.transFat(txtTransFat.getText())
+							.cholestrol(txtCholestrol.getText())
+							.sodium(txtSodium.getText())
+							.totalCarbs(txtTotalCarbs.getText())
+							.dietaryFiber(txtDietaryFiber.getText())
+							.sugars(txtSugars.getText())
+							.protein(txtProtein.getText())
+							.iron(txtIron.getText()).buildNutriInfo();
+
 					try {
-						boolean addStatus = admin.addNewNutriInfo(nutriModel.listAttributeValues());
-						if(addStatus == true){
-							JOptionPane.showMessageDialog(null, "Nutritional Info Added!");
+						boolean addStatus = admin.addNewNutriInfo(nutriModel
+								.listAttributeValues());
+						if (addStatus == true) {
+							JOptionPane.showMessageDialog(null,
+									"Nutritional Info Added!");
+							this.clearData();
+						} 
+
+					} catch (SQLException e1) {
+						JOptionPane.showMessageDialog(null,
+								"Unable to add nutritional info for "
+										+ txtNutriProdID.getText() + "\n" + e1.getMessage());
+					}
+				}
+				
+				if (actionCommand.equals("DELETE_NUTRI")) {
+
+					try {
+						boolean addStatus = admin.deleteNutriInfo(Long
+								.parseLong(txtNutriProdID.getText()));
+						if (addStatus == true) {
+							JOptionPane.showMessageDialog(null,
+									"Nutritional Info deleted!");
 							this.clearData();
 						}
-						else{
-							JOptionPane.showMessageDialog(null, "Unable to add nutritional info for " + txtNutriProdID.getText());
-						}
-							
+						
+
+					} catch (SQLException e1) {
+						JOptionPane.showMessageDialog(null,
+								"Unable to delete nutritional info for "
+										+ txtNutriProdID.getText() + "\n" + e1.getMessage());
+						
+					}
+				}
+				
+				if(actionCommand.equals("UPDATE_NUTRI")){
+					NutritionalInfoModel nutriModel = new NutritionalInfoModel.
+							NutriBuilder(Long.parseLong(txtNutriProdID.getText()),txtCalories.getText(), txtSmartTag.getText())
+							.servingSize(txtServingSize.getText())
+							.totalFat(txtTotalFat.getText())
+							.saturatedFat(txtSaturatedFat.getText())
+							.transFat(txtTransFat.getText())
+							.cholestrol(txtCholestrol.getText())
+							.sodium(txtSodium.getText())
+							.totalCarbs(txtTotalCarbs.getText())
+							.dietaryFiber(txtDietaryFiber.getText())
+							.sugars(txtSugars.getText())
+							.protein(txtProtein.getText())
+							.iron(txtIron.getText()).buildNutriInfo();
+
+					try {
+						boolean addStatus = admin.updateNewNutriInfo(nutriModel
+								.listAttributeValues());
+						if (addStatus == true) {
+							JOptionPane.showMessageDialog(null,
+									"Nutritional Info updated!");
+							this.clearData();
+						} 
+
 					} catch (SQLException e1) {
 						e1.printStackTrace();
+						/*JOptionPane.showMessageDialog(null,
+								"Unable to update nutritional info for "
+										+ txtNutriProdID.getText() + "\n" + e1.getMessage());*/
 					}
 				}
 			}
@@ -1362,8 +1415,11 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 
 		private boolean validateData(){
 			if(txtNutriProdID.getText().equals("")){
+				txtNutriProdID.setBackground(Color.YELLOW);
+				txtNutriProdID.setToolTipText("Enter ProductID");
 				return false;
 			}
+			
 			return true;
 		}
 		private void clearData(){
