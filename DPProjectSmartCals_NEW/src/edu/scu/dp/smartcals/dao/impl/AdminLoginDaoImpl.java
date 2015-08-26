@@ -89,8 +89,8 @@ public class AdminLoginDaoImpl implements AdminLoginDao {
 			statement.setString(1, username);
 			int updateStatus = statement.executeUpdate();
 			// $$$$$$$$$$$$$$ add logger fucntionality here $$$$$$$$$$$$
-			if (updateStatus != 1)
-				System.out.println("Could not udpate DB with login timestamp");
+			/*if (updateStatus != 1)
+				System.out.println("Could not udpate DB with login timestamp");*/
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;

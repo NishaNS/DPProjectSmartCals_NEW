@@ -52,18 +52,24 @@ CREATE TABLE IF NOT EXISTS OrderDetails (
   VendingMachineId int(11)
 );
 
-CREATE TABLE IF NOT EXISTS SalesSummary (
-	OrderNumber INT,
-    FOREIGN KEY(OrderNumber) REFERENCES OrderDetails(OrderNumber) ON DELETE CASCADE,
-	DailySalesAmount DOUBLE,
-    LastModifiedTimestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE SalesSummary (
+ VendingMachineID int(11) DEFAULT NULL,
+ TotalSalesUSD double DEFAULT NULL,
+ LastModifiedTimestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  KEY VendingMachineID_idx (`VendingMachineID`),
+  CONSTRAINT VendingMachineID FOREIGN KEY (VendingMachineID) REFERENCES vendingmachine (VendingMachineID) ON DELETE CASCADE
 );
+
 
 CREATE TABLE IF NOT EXISTS AdministratorLogin (
 	VendingMachineID INT,
     UserName varchar(30),
-	Password varchar(30),
+	Password varchar(150),
     Location varchar(100),
+    LoginAttempts int,
+	Status varchar (100),
+    LoginTimeStamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (UserName, VendingMachineID),
     FOREIGN KEY (VendingMachineID) REFERENCES VendingMachine(VendingMachineID) ON DELETE CASCADE
 );
 
