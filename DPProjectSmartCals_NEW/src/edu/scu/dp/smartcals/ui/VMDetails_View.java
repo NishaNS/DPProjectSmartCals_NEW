@@ -182,7 +182,7 @@ public class VMDetails_View extends javax.swing.JPanel {
         gridBagConstraints.weighty = 0.7;
         add(pnlSelectOrder, gridBagConstraints);
 
-        pnlDisplay.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(255, 102, 204)));
+        pnlDisplay.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(0, 0, 0)));
         pnlDisplay.setName("pnlDisplay"); // NOI18N
 
         lblDisplay.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

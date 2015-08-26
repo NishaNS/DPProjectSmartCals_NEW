@@ -379,9 +379,10 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 						 pnlRevenueStatLayout.createSequentialGroup()
 						 .addContainerGap()
 						 .addComponent(scrollTable,
-								 javax.swing.GroupLayout.PREFERRED_SIZE, 660,
+								 javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,	
 								 javax.swing.GroupLayout.PREFERRED_SIZE)
 								 .addContainerGap(114, Short.MAX_VALUE)));
+		 //original[660, 267]
 		 pnlRevenueStatLayout.setVerticalGroup(pnlRevenueStatLayout
 				 .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				 .addGroup(
@@ -398,12 +399,12 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.gridy = 1;
 		gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
 		gridBagConstraints.gridheight = java.awt.GridBagConstraints.RELATIVE;
-		gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+		//gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 		gridBagConstraints.ipadx = 3;
 		gridBagConstraints.ipady = 3;
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-		gridBagConstraints.weightx = 0.5;
-		gridBagConstraints.weighty = 0.5;
+		gridBagConstraints.weightx = 0.2;
+		gridBagConstraints.weighty = 0.3;
 		add(pnlRevenueStat, gridBagConstraints);
 
 		pnlOtherStats.setBorder(javax.swing.BorderFactory.createTitledBorder(
@@ -713,12 +714,12 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 0;
-		gridBagConstraints.ipadx = 5;
-		gridBagConstraints.ipady = 5;
+		gridBagConstraints.ipadx = 4;	
+		gridBagConstraints.ipady = 4;	
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlNutriInfo.add(lblNutriProdID, gridBagConstraints);
 
-		txtNutriProdID.setColumns(10);
+		txtNutriProdID.setColumns(4);
 		txtNutriProdID.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				txtNutriProdIDActionPerformed(evt);
@@ -768,7 +769,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlNutriInfo.add(lblSaturatedFat, gridBagConstraints);
 
-		txtServingSize.setColumns(10);
+		txtServingSize.setColumns(4);
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 5;
 		gridBagConstraints.gridy = 2;
@@ -777,7 +778,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlNutriInfo.add(txtServingSize, gridBagConstraints);
 
-		txtCalories.setColumns(10);
+		txtCalories.setColumns(4);
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 5;
 		gridBagConstraints.gridy = 5;
@@ -786,7 +787,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlNutriInfo.add(txtCalories, gridBagConstraints);
 
-		txtTotalFat.setColumns(10);
+		txtTotalFat.setColumns(4);
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 5;
 		gridBagConstraints.gridy = 8;
@@ -795,7 +796,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlNutriInfo.add(txtTotalFat, gridBagConstraints);
 
-		txtSaturatedFat.setColumns(10);
+		txtSaturatedFat.setColumns(4);
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 5;
 		gridBagConstraints.gridy = 11;
@@ -849,7 +850,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlNutriInfo.add(lblDietaryFiber, gridBagConstraints);
 
-		txtTransFat.setColumns(10);
+		txtTransFat.setColumns(4);
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 10;
 		gridBagConstraints.gridy = 0;
@@ -858,7 +859,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlNutriInfo.add(txtTransFat, gridBagConstraints);
 
-		txtCholestrol.setColumns(10);
+		txtCholestrol.setColumns(4);
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 10;
 		gridBagConstraints.gridy = 2;
@@ -867,7 +868,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlNutriInfo.add(txtCholestrol, gridBagConstraints);
 
-		txtSodium.setColumns(10);
+		txtSodium.setColumns(4);
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 10;
 		gridBagConstraints.gridy = 5;
@@ -876,7 +877,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlNutriInfo.add(txtSodium, gridBagConstraints);
 
-		txtTotalCarbs.setColumns(10);
+		txtTotalCarbs.setColumns(4);
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 10;
 		gridBagConstraints.gridy = 8;
@@ -885,7 +886,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlNutriInfo.add(txtTotalCarbs, gridBagConstraints);
 
-		txtDietaryFiber.setColumns(10);
+		txtDietaryFiber.setColumns(4);
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 10;
 		gridBagConstraints.gridy = 11;
@@ -931,7 +932,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlNutriInfo.add(lblSmartTag, gridBagConstraints);
 
-		txtSugars.setColumns(10);
+		txtSugars.setColumns(4);
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 17;
 		gridBagConstraints.gridy = 0;
@@ -940,7 +941,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlNutriInfo.add(txtSugars, gridBagConstraints);
 
-		txtProtein.setColumns(10);
+		txtProtein.setColumns(4);
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 17;
 		gridBagConstraints.gridy = 2;
@@ -949,7 +950,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlNutriInfo.add(txtProtein, gridBagConstraints);
 
-		txtIron.setColumns(10);
+		txtIron.setColumns(4);
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 17;
 		gridBagConstraints.gridy = 5;
@@ -958,7 +959,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlNutriInfo.add(txtIron, gridBagConstraints);
 
-		txtSmartTag.setColumns(10);
+		txtSmartTag.setColumns(4);
 		txtSmartTag.setToolTipText("Please provide comma seperated values");
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 17;
