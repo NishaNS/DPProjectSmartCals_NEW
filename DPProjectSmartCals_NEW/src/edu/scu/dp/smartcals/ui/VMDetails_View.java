@@ -1,10 +1,15 @@
 package edu.scu.dp.smartcals.ui;
 
 import java.awt.Color;
+import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
+import java.util.List;
 
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 
 import edu.scu.dp.smartcals.dao.impl.DaoFactory;
 import edu.scu.dp.smartcals.dao.interfaces.InventoryDao;
@@ -12,6 +17,7 @@ import edu.scu.dp.smartcals.dao.interfaces.ProductDao;
 import edu.scu.dp.smartcals.exception.EmptyResultException;
 import edu.scu.dp.smartcals.model.InventoryModel;
 import edu.scu.dp.smartcals.model.ProductModel;
+import edu.scu.dp.smartcals.ui.VMProdCategory.ProductInfoPanel;
 import edu.scu.dp.smartcals.vm.VMController;
 import edu.scu.dp.smartcals.vm.VendingMachine;
 
@@ -19,6 +25,7 @@ import edu.scu.dp.smartcals.vm.VendingMachine;
 /**
  *@author Aparna Ganesh
  * @author Nisha
+ * @author Sharadha Ramaswamy
  */
 public class VMDetails_View extends javax.swing.JPanel {
 	
@@ -251,6 +258,12 @@ public class VMDetails_View extends javax.swing.JPanel {
 
         btnFilter.setText("Filter Products");
         btnFilter.setName("btnFilter"); // NOI18N
+        btnFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	btnFilterActionPerformed(evt);
+            }
+        });
+
 
         chkLowFat.setText("Low Fat");
         chkLowFat.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -263,17 +276,17 @@ public class VMDetails_View extends javax.swing.JPanel {
             }
         });
 
-        chkLowSugar.setText("Low Sugar");
+        chkLowSugar.setText("Low Sodium");
         chkLowSugar.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         chkLowSugar.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         chkLowSugar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        chkLowSugar.setName("chkLowSugar"); // NOI18N
+        chkLowSugar.setName("chkLowSodium"); // NOI18N
 
-        chkLowCarb.setText("Low Carb");
+        chkLowCarb.setText("Low Calorie");
         chkLowCarb.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         chkLowCarb.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         chkLowCarb.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        chkLowCarb.setName("chkLowCarb"); // NOI18N
+        chkLowCarb.setName("chkLowCalorie"); // NOI18N
 
         chkHighProtein.setText("High Protein");
         chkHighProtein.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -287,12 +300,19 @@ public class VMDetails_View extends javax.swing.JPanel {
         chkGlutenFree.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         chkGlutenFree.setName("chkGlutenFree"); // NOI18N
 
-        sliderCalorie.setMaximum(1000);
-        sliderCalorie.setMinorTickSpacing(100);
+        sliderCalorie.setMaximum(600);
+        sliderCalorie.setMinorTickSpacing(25);
+        sliderCalorie.setMajorTickSpacing(100);
         sliderCalorie.setPaintLabels(true);
         sliderCalorie.setPaintTicks(true);
         sliderCalorie.setSnapToTicks(true);
         sliderCalorie.setBorder(javax.swing.BorderFactory.createTitledBorder("Select Calorie Range"));
+        
+        sliderCalorie.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+            	sliderCalorieStateChanged(evt);
+            }
+        });
 
         lblCalorieRange.setText("You selected");
 
@@ -430,7 +450,29 @@ public class VMDetails_View extends javax.swing.JPanel {
     }// </editor-fold>                        
 
     
+    //Sharadha - Start
   
+    private void sliderCalorieStateChanged(javax.swing.event.ChangeEvent evt) {                                      
+    	int pos;
+    	List<ProductModel> newProductModels;
+    	JPanel viewAllProductsPanel;
+        JSlider source = (JSlider)evt.getSource();
+        if (!source.getValueIsAdjusting()) {
+            pos = (int)source.getValue();
+            newProductModels = parentView.getVMController().queryCalFilterProd(pos);
+    		viewAllProductsPanel = parentView.getVMProdCategory().getAllProdPanel();
+    		viewAllProductsPanel.removeAll();
+    		viewAllProductsPanel.repaint();
+    		for (ProductModel productModel : newProductModels){
+    			GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
+    			JPanel filterProdPanel = new FilterProductPanel(productModel.getProductId()+ "",productModel.getProductName(),productModel.getProductPrice()+"");
+    			gridBagConstraints.insets = new java.awt.Insets(0, 0, 0,30);
+    			viewAllProductsPanel.add(filterProdPanel,gridBagConstraints);
+    		}
+    		viewAllProductsPanel.revalidate();
+        }
+    }     
+    
     protected void btnLoadCardActionPerformed(ActionEvent evt) {     
         scPanel = new SmartCardPanel(parentView);
 		this.addDynamicChildPanels(scPanel);		
@@ -440,26 +482,16 @@ public class VMDetails_View extends javax.swing.JPanel {
 	private void btnOKActionPerformed(java.awt.event.ActionEvent evt) { 
 		   long prodId;
 		   String data;
-			//productDao = DaoFactory.getProductDao();
-			//invDao =  DaoFactory.getInventoryDao();
+		   lblCardDispense.setText("Card:");
+		   lblCashDispense.setText("Cash:");
+		   lblCoinDispense.setText("Coin:");
+		   lblItemDispense.setText("Item Dispenser:");
 			if(txtEnterProdID.getText().isEmpty())
 				lblDisplay.setText("Product Id Empty");
 			else{
 				prodId = Long.parseLong(txtEnterProdID.getText());
 				data = parentView.getVMController().getInventoryInfo(prodId);
 				lblDisplay.setText(data);
-				/*try {
-					product = productDao.getProductById(prodId);
-					invProduct = invDao.getProductById(prodId);
-					if(invProduct.getqty() > 0)
-					{
-						String data = "<html><body>Product ID:" + product.getProductId() + "<br> Product Name:" + product.getProductName() + "<br> Product Price:" + product.getProductPrice() + "</body></html>";
-						lblDisplay.setText(data);
-					}
-				} catch (SQLException e) {
-					lblDisplay.setText("Product Not Available");
-					e.printStackTrace();
-				}*/	
 			}
     }         
 	
@@ -468,25 +500,31 @@ public class VMDetails_View extends javax.swing.JPanel {
 		if(data.matches("(.*)Product ID:(.*)"))
 		{
 			prodIdToBuy = Long.parseLong(data.substring(23,26));
-			
-			//prodIdToBuy = Long.parseLong(data.substring(23,26));
 			prodPayPanel = new ProductPaymentPanel(parentView);
 			parentView.getVMController().setProdPaymentPanel(prodPayPanel);
 			this.addDynamicChildPanels(prodPayPanel);	
-		/*	invDao =  DaoFactory.getInventoryDao();
-			try {
-				invProduct = invDao.getProductById(id);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (EmptyResultException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
 		}
 		
 	}
 	
+	private void btnFilterActionPerformed(java.awt.event.ActionEvent evt){
+		List<ProductModel> newProductModels = parentView.getVMController().queryFilterProd(chkGlutenFree.isSelected(),chkHighProtein.isSelected(),chkLowCarb.isSelected(),chkLowFat.isSelected(),chkLowSugar.isSelected());
+		JPanel viewAllProductsPanel = parentView.getVMProdCategory().getAllProdPanel();
+		viewAllProductsPanel.removeAll();
+		viewAllProductsPanel.repaint();
+		for (ProductModel productModel : newProductModels){
+			GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
+			JPanel filterProdPanel = new FilterProductPanel(productModel.getProductId()+ "",productModel.getProductName(),productModel.getProductPrice()+"");
+			gridBagConstraints.insets = new java.awt.Insets(0, 0, 0,30);
+			viewAllProductsPanel.add(filterProdPanel,gridBagConstraints);
+		}
+		viewAllProductsPanel.revalidate();
+	}
+	
+	public void setItemDispenserLabel(){
+		lblItemDispense.setText("Item Dispenser:" +prodIdToBuy);
+	}
+	//Sharadha - end
 
     //start - Nisha - 8/20 - method body defined
 	/**
@@ -519,7 +557,7 @@ public class VMDetails_View extends javax.swing.JPanel {
 
 	}
     
-    //Sharadha
+    //Sharadha start
     public SmartCardPanel getSCPanel()
     {
     	return scPanel;
@@ -543,6 +581,7 @@ public class VMDetails_View extends javax.swing.JPanel {
 		return lblCashDispense;
 	}
 
+	//Sharadha - end
 
 
 

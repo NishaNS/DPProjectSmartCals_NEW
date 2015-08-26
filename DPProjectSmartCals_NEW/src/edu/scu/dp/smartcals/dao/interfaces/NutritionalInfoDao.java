@@ -24,5 +24,9 @@ public interface NutritionalInfoDao {
 	public void addNutriInfo(long prodID) throws SQLException;
 	
 	public void updateNutriInfo(long prodID) throws SQLException;
+	
+	public String getSmartTag(long prodID) throws SQLException, EmptyResultException;
+	
+	public String getCalories(long prodId) throws SQLException,EmptyResultException;
 
 }

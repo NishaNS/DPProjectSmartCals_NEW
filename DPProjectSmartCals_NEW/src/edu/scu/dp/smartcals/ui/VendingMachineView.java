@@ -93,4 +93,7 @@ public class VendingMachineView extends JPanel {
 		return vmDetailsView;
 	}
 
+	public VMProdCategory getVMProdCategory(){
+		return vmProdCategory;
+	}
 }

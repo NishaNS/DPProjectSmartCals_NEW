@@ -102,4 +102,52 @@ public class NutritionalInfoDaoImpl implements NutritionalInfoDao {
 				buildNutriInfo();
 	}
 
+	@Override
+	public String getSmartTag(long prodID) throws SQLException, EmptyResultException {
+		Connection connection = databaseFactory.getConnection();
+		String tag = "";
+		try {
+
+			statement = connection.prepareStatement("Select SmartTag From NutritionalInfo Where ProductID = ?");		
+			statement.setLong(1, prodID);
+			ResultSet result = statement.executeQuery();
+			if(result.next()){
+				tag = result.getString("SmartTag");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+		finally{
+			DBUtils.closeStatement(statement);
+			databaseFactory.closeConnection();
+		}
+		return tag;
+	}
+
+	@Override
+	public String getCalories(long prodId) throws SQLException,
+			EmptyResultException {
+		Connection connection = databaseFactory.getConnection();
+		String cal = "";
+		try {
+			statement = connection.prepareStatement("Select Calories From NutritionalInfo Where ProductID = ?");		
+			statement.setLong(1, prodId);
+			ResultSet result = statement.executeQuery();
+			if(result.next()){
+				cal = result.getString("Calories");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+		finally{
+			DBUtils.closeStatement(statement);
+			databaseFactory.closeConnection();
+		}
+		return cal;
+	}
+
 }

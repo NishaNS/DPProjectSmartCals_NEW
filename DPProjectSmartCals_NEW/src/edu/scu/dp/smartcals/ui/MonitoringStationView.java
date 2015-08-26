@@ -31,6 +31,7 @@ import edu.scu.dp.smartcals.admin.RevenueTableModel;
 import edu.scu.dp.smartcals.constants.VMLocationType;
 import edu.scu.dp.smartcals.exception.AdminOperationsException;
 import edu.scu.dp.smartcals.exception.DatabaseInitializationException;
+import edu.scu.dp.smartcals.model.InventoryModel;
 import edu.scu.dp.smartcals.test.TestTable;
 import edu.scu.dp.smartcals.vm.LoginCheckPointStrategy;
 import edu.scu.dp.smartcals.vm.Beverage;
@@ -614,28 +615,29 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlInventory.add(txtVendingMachineID, gridBagConstraints);
 
-		txtQuantity.setColumns(14);
-		txtQuantity.addActionListener(new java.awt.event.ActionListener() {
+		txtInvenPrice.setColumns(14);
+		/*txtQuantity.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				txtQuantityActionPerformed(evt);
 			}
-		});
+		});*/
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 4;
 		gridBagConstraints.ipadx = 5;
 		gridBagConstraints.ipady = 5;
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-		pnlInventory.add(txtQuantity, gridBagConstraints);
+		pnlInventory.add(txtInvenPrice, gridBagConstraints);
 
-		txtInvenPrice.setColumns(14);
+		
+		txtQuantity.setColumns(14);
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 6;
 		gridBagConstraints.ipadx = 5;
 		gridBagConstraints.ipady = 5;
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-		pnlInventory.add(txtInvenPrice, gridBagConstraints);
+		pnlInventory.add(txtQuantity, gridBagConstraints);
 
 		lblQuantity.setText("Quantity");
 		gridBagConstraints = new java.awt.GridBagConstraints();
@@ -653,6 +655,12 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlInventory.add(btnSearchInventory, gridBagConstraints);
+		
+		btnSearchInventory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	btnSearchInventoryActionPerformed(evt);
+            }
+        });
 
 		btnAddInventory.setText("Add Inventory");
 		gridBagConstraints = new java.awt.GridBagConstraints();
@@ -660,6 +668,12 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlInventory.add(btnAddInventory, gridBagConstraints);
+		
+		btnAddInventory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	btnAddInventoryActionPerformed(evt);
+            }
+        });
 
 		btnUpdateInventory.setText("Update Inventory");
 		gridBagConstraints = new java.awt.GridBagConstraints();
@@ -667,6 +681,12 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlInventory.add(btnUpdateInventory, gridBagConstraints);
+		
+		btnUpdateInventory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	btnUpdateInventoryActionPerformed(evt);
+            }
+        });
 
 		btnDeleteInventory.setText("Delete Inventory");
 		gridBagConstraints = new java.awt.GridBagConstraints();
@@ -674,6 +694,13 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlInventory.add(btnDeleteInventory, gridBagConstraints);
+		
+		btnDeleteInventory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	btnDeleteInventoryActionPerformed(evt);
+            }
+        });
+
 
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 0;
@@ -1026,11 +1053,82 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		}
 	}
 
+	private void btnSearchInventoryActionPerformed(java.awt.event.ActionEvent evt) {
+		InventoryModel invProduct;
+		//System.out.println(lblInvenProdID.getText());
+		if(!txtInvenProdID.getText().isEmpty()){
+			long prodId = Long.parseLong(txtInvenProdID.getText());
+			invProduct = vmController.searchInventory(prodId);
+			txtInvenPrice.setText(Double.toString(invProduct.getProductPrice()));
+			txtQuantity.setText(Integer.toString(invProduct.getqty()));
+			txtVendingMachineID.setText(Long.toString(invProduct.getVendingMachineId()));
+			txtInvenProdID.setEditable(false);
+		}
+		else
+			JOptionPane.showMessageDialog(null, "Product Id Empty");
+	}
+	
+	private void btnUpdateInventoryActionPerformed(java.awt.event.ActionEvent evt){
+	
+		long prodId = Long.parseLong(txtInvenProdID.getText());
+		double price = Double.parseDouble(txtInvenPrice.getText());
+		int vendMachId = Integer.parseInt(txtVendingMachineID.getText());
+		int qty = Integer.parseInt(txtQuantity.getText());
+		boolean status = vmController.modifyInventory(prodId,price,vendMachId,qty);
+		if(status)
+		{
+			JOptionPane.showMessageDialog(null, "Updated Successfully!");
+			txtInvenProdID.setText("");
+			txtInvenPrice.setText("");
+			txtVendingMachineID.setText("");
+			txtQuantity.setText("");
+			txtInvenProdID.setEditable(true);
+		}
+		else
+			JOptionPane.showMessageDialog(null, "Not Successful,Try again");
+	}
+	
+	private void btnDeleteInventoryActionPerformed(java.awt.event.ActionEvent evt){
+		if(!txtInvenProdID.getText().isEmpty()){
+			long prodId = Long.parseLong(txtInvenProdID.getText());
+			boolean status = vmController.deleteInventory(prodId);
+			if(status)
+			{
+				JOptionPane.showMessageDialog(null, "Deleted Successfully!");
+				txtInvenProdID.setText("");
+				txtInvenPrice.setText("");
+				txtVendingMachineID.setText("");
+				txtQuantity.setText("");
+			}
+			else
+				JOptionPane.showMessageDialog(null, "Not Successful,Try again");
+		}
+	}
+	
+	private void btnAddInventoryActionPerformed(java.awt.event.ActionEvent evt){
+		if((!txtInvenProdID.getText().isEmpty()) && (!txtInvenPrice.getText().isEmpty()) && (!txtVendingMachineID.getText().isEmpty()) && (!txtQuantity.getText().isEmpty())){
+			int prodId = Integer.parseInt(txtInvenProdID.getText());
+			double price = Double.parseDouble(txtInvenPrice.getText());
+			int vendMachId = Integer.parseInt(txtVendingMachineID.getText());
+			int qty = Integer.parseInt(txtQuantity.getText());
+			boolean result = vmController.addInventoryData(prodId,price,vendMachId,qty);
+			if(result)
+			{
+				JOptionPane.showMessageDialog(null, "Inserted Successfully!");
+				txtInvenProdID.setText("");
+				txtInvenPrice.setText("");
+				txtVendingMachineID.setText("");
+				txtQuantity.setText("");
+			}
+			else
+				JOptionPane.showMessageDialog(null, "Not Successful,Try again");
+		}
+	}
 	// -----------------code change-Aparna -8/22
 
-	private void txtQuantityActionPerformed(java.awt.event.ActionEvent evt) {
+/*	private void txtQuantityActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
-	}
+	}*/
 
 	private void txtNutriProdIDActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:

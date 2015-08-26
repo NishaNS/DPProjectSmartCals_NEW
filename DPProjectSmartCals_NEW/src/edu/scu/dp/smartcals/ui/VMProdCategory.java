@@ -24,7 +24,7 @@ import edu.scu.dp.smartcals.vm.VendingMachine;
 
 /**
  *
- * @author Thenu
+ * @author Sharadha Ramaswamy
  */
 public class VMProdCategory extends javax.swing.JPanel {
 	
@@ -173,11 +173,15 @@ public class VMProdCategory extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 0.5;
         
+        
         add(viewAllProductsPanel,gridBagConstraints);
         
     }// </editor-fold>                        
 
-        
+     
+    public JPanel getAllProdPanel(){
+    	return viewAllProductsPanel;
+    }
     
     /**
 	 * On button click of Beverage,Snack,Candy products shuold be displayed

@@ -194,4 +194,40 @@ public class SmartCardDaoImpl implements SmartCardDao{
 		}
 	return sc;
 	}
+
+	@Override
+	public SmartCardModelInterface updateSmartCard(long SmartCalCardNumber,double balance) throws SQLException, EmptyResultException {
+		
+		ResultSet rs;
+		Connection connection = databaseFactory.getConnection();
+		try{
+			query = "update smartcalcarddetails set CardBalance = '"+balance+"' where SmartCalCardNumber = '"+SmartCalCardNumber+"'";
+		    statement = connection.prepareStatement(query);
+		    statement.executeUpdate();
+		    query = "select * from smartcalcarddetails where SmartCalCardNumber = '"+SmartCalCardNumber+"'";
+		    statement = connection.prepareStatement(query);
+		   
+		    rs = statement.executeQuery();
+			if(rs.next()) 
+			{
+				sc = new SmartCardModel(rs.getLong("SmartCalCardNumber"),rs.getDouble("cardBalance"));
+			}
+			else 
+			{
+				throw new EmptyResultException();
+		    }
+		}
+		catch(SQLException e) 
+		{
+			e.printStackTrace();
+			throw e;
+		}
+		finally 
+		{
+			DBUtils.closeStatement(statement);
+			databaseFactory.closeConnection();
+		}
+		
+		return sc;
+	}
 }

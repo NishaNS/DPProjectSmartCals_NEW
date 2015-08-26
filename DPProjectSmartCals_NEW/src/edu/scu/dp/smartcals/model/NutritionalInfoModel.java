@@ -147,4 +147,5 @@ public class NutritionalInfoModel {
 		+ "\n, Protein: " + protein
 		+ "\n, Iron: </html>" + iron;
 	}
+	
 }
