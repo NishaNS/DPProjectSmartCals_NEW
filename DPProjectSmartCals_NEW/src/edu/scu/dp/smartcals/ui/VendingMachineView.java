@@ -1,8 +1,10 @@
 package edu.scu.dp.smartcals.ui;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -32,6 +34,13 @@ public class VendingMachineView extends JPanel {
 		this.vmController = vmController;
 		gridLayout = new GridBagLayout();
 		gridConstraints = new GridBagConstraints();
+		
+		//test code-Aparna 08/25
+		gridConstraints.gridwidth = 2;
+		gridConstraints.weightx = 1.0;
+		setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+		//----------------------------------
+		
 		//code change in Aparna
 		vmProdCategory = new VMProdCategory(this);	
 		vmDetailsView = new VMDetails_View(this);
