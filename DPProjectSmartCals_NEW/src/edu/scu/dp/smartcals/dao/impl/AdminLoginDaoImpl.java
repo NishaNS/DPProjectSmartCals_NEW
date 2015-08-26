@@ -1,3 +1,4 @@
+
 package edu.scu.dp.smartcals.dao.impl;
 
 import java.sql.Connection;
@@ -46,7 +47,7 @@ public class AdminLoginDaoImpl implements AdminLoginDao {
 		try {
 			Connection connection = databaseFactory.getConnection();
 			statement = connection
-					.prepareStatement("Select * From AdministratorLogin Where UserName = ? And Password = ?");
+					.prepareStatement("Select * From AdministratorLogin Where UserName = ? And Password = sha(?)");
 			statement.setString(1, username);
 			statement.setString(2, password);
 			ResultSet result = statement.executeQuery();
@@ -88,8 +89,8 @@ public class AdminLoginDaoImpl implements AdminLoginDao {
 			statement.setString(1, username);
 			int updateStatus = statement.executeUpdate();
 			// $$$$$$$$$$$$$$ add logger fucntionality here $$$$$$$$$$$$
-			if (updateStatus != 1)
-				System.out.println("Could not udpate DB with login timestamp");
+			/*if (updateStatus != 1)
+				System.out.println("Could not udpate DB with login timestamp");*/
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;

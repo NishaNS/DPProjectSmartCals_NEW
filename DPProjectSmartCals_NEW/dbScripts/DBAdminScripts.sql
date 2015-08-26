@@ -6,4 +6,4 @@ ALTER TABLE administratorlogin ADD PRIMARY KEY(UserName);
 ALTER TABLE administratorlogin ADD Status varchar (100);
 ALTER TABLE administratorlogin ADD Role varchar (100);
 
-INSERT INTO administratorlogin (VendingMachineID, UserName, Password, Location, Status, Role) VALUES (1000, 'admin', 'test123', 'santa clara', 'ACTIVE', 'ADMIN');
+INSERT INTO administratorlogin (VendingMachineID, UserName, Password, Location, Status, Role) VALUES (1000, 'admin', sha('test123'), 'santa clara', 'ACTIVE', 'ADMIN');
