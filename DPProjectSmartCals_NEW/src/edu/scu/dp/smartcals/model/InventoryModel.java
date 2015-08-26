@@ -13,10 +13,8 @@ public class InventoryModel {
 	private double productPrice;
 	private int qty;
 	private String inventoryStatus;
-	
 
 	
-
 	public double getProductPrice() {
 		return productPrice;
 	}

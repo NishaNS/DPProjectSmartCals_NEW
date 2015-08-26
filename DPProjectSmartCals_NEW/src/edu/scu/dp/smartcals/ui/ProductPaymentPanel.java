@@ -2,6 +2,9 @@ package edu.scu.dp.smartcals.ui;
 
 import java.sql.SQLException;
 
+import javax.swing.JOptionPane;
+
+import edu.scu.dp.smartcals.exception.OutOfStockException;
 import edu.scu.dp.smartcals.model.InventoryModel;
 import edu.scu.dp.smartcals.model.SmartCardModelInterface;
 import edu.scu.dp.smartcals.payment.ConcretePaymentCreator;
@@ -337,11 +340,19 @@ public class ProductPaymentPanel extends javax.swing.JPanel {
 			p.setValues(amtPayable,amtPaying);
     	}
     	if(p.getPaymentStatus()){
-    		parentView.getVMController().updateInv();
+    		try {
+				parentView.getVMController().updateInvQty();
+			} catch (OutOfStockException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e.getMessage());
+				return;
+			}
     		parentView.getVMController().updateOrder("Coin",0);
     		this.setVisible(false);
     		parentView.getVMDetails_View().getLblDisplay().setText("Payment Successful");
-    	    parentView.getVMDetails_View().getLblCoinDispense().setText("Dispense Coin:" + Double.toString(p.getAmtToReturn()));	
+    	    parentView.getVMDetails_View().getLblCoinDispense().setText("Dispense Coin:" + Double.toString(p.getAmtToReturn()));
+    	    parentView.getVMDetails_View().setItemDispenserLabel();
     	}
     	else{
     		lblPayUnsuccess.setText("Not Enough Cash");
@@ -375,11 +386,19 @@ public class ProductPaymentPanel extends javax.swing.JPanel {
 			p.setValues(amtPayable,amtPaying);
     	}
     	if(p.getPaymentStatus()){
-    		parentView.getVMController().updateInv();
+    		try {
+				parentView.getVMController().updateInvQty();
+			} catch (OutOfStockException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e.getMessage());
+				return;
+			}
     		parentView.getVMController().updateOrder("Cash",0);
     		this.setVisible(false);
     		parentView.getVMDetails_View().getLblDisplay().setText("Payment Successful");
-    		parentView.getVMDetails_View().getLblCashDispense().setText("Dispense Cash:" + Double.toString(p.getAmtToReturn()));	
+    		parentView.getVMDetails_View().getLblCashDispense().setText("Dispense Cash:" + Double.toString(p.getAmtToReturn()));
+    	    parentView.getVMDetails_View().setItemDispenserLabel();
     	}
     	else{
     		lblPayUnsuccess.setText("Not Enough Cash");
@@ -410,11 +429,20 @@ public class ProductPaymentPanel extends javax.swing.JPanel {
     	}
     	if(p.getPaymentStatus())
     	{
-    		parentView.getVMController().updateInv();
+    		smct = parentView.getVMController().updateSmartCardBalance(smct.getSmartCard(),smct.getBalance() - amtPayable);
+    		try {
+				parentView.getVMController().updateInvQty();
+			} catch (OutOfStockException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e.getMessage());
+				return;
+			}
     		parentView.getVMController().updateOrder("SmartCard",smct.getSmartCard());
     		this.setVisible(false);
     		parentView.getVMDetails_View().getLblDisplay().setText("Payment Successful");
-    		parentView.getVMDetails_View().getLblCardDispense().setText("Card Balance:" + Double.toString(p.getAmtToReturn()));		
+    		parentView.getVMDetails_View().getLblCardDispense().setText("Card Balance:" + smct.getBalance());
+    	    parentView.getVMDetails_View().setItemDispenserLabel();
     	}
     	else{
     		lblPayUnsuccess.setText("Not Enough Cash");

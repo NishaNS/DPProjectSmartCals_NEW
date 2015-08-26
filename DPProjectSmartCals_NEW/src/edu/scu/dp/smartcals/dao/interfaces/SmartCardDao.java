@@ -16,6 +16,8 @@ public interface SmartCardDao {
 	
 	public SmartCardModelInterface loadSmartCard(long SmartCalCardNumber,double balance) throws SQLException,EmptyResultException;
 	
+	public SmartCardModelInterface updateSmartCard(long SmartCalCardNumber,double balance) throws SQLException,EmptyResultException;
+	
 	public void checkBalance(SmartCardModel smtcd) throws SQLException;
 	
 	public SmartCardModelInterface checkValidity(Long SmartCalCardNumber) throws SQLException, EmptyResultException;

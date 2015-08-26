@@ -37,7 +37,7 @@ public interface ProductDao {
 	 * @throws SQLException
 	 */
 	
-	public void updateProduct(ProductModel product) throws SQLException;
+	public void updateProduct(ProductModel productModel,long productId) throws SQLException;
 
 	/**
 	 * Delete product from database-Admin

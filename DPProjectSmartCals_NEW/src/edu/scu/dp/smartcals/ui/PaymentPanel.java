@@ -275,7 +275,7 @@ public class PaymentPanel extends javax.swing.JPanel {
     	PaymentCreator pc = new ConcretePaymentCreator();
     	PaymentProduct p = null;
     	
-    	if((txtAmtPayable.getText().isEmpty()) || (txtOneDollarCash.getText().isEmpty()) || (txtFiveDollar.getText().isEmpty()) || (txtTenDollar.getText().isEmpty()))
+    	if((txtAmtPayable.getText().isEmpty()) || ((txtOneDollarCash.getText().isEmpty()) && (txtFiveDollar.getText().isEmpty()) && (txtTenDollar.getText().isEmpty())))
     	{
     		p = pc.makePayment("NullCash",0);
     	}
@@ -283,9 +283,18 @@ public class PaymentPanel extends javax.swing.JPanel {
     		amtPayable = Double.parseDouble(txtAmtPayable.getText());
     		if((amtPayable == 10)||(amtPayable == 20)||(amtPayable == 50))
     		{
-    			oneDollar = Double.parseDouble(txtOneDollarCash.getText());
-    			fiveDollar = Double.parseDouble(txtFiveDollar.getText());
-    			tenDollar = Double.parseDouble(txtTenDollar.getText());
+    			if(txtOneDollarCash.getText().isEmpty())
+    				oneDollar = 0;
+    			else
+    				oneDollar = Double.parseDouble(txtOneDollarCash.getText());
+    			if(txtFiveDollar.getText().isEmpty())
+    				fiveDollar = 0;
+    			else
+    				fiveDollar = Double.parseDouble(txtFiveDollar.getText());
+    			if(txtTenDollar.getText().isEmpty())
+    				tenDollar = 0;
+    			else
+    				tenDollar = Double.parseDouble(txtTenDollar.getText());
     			p = pc.makePayment("Cash",0);
     			amtPaying= oneDollar * 1 + fiveDollar * 5 + tenDollar * 10;	
     			p.setValues(amtPayable,amtPaying);
@@ -320,7 +329,7 @@ public class PaymentPanel extends javax.swing.JPanel {
     		
     	PaymentCreator pc = new ConcretePaymentCreator();
     	PaymentProduct p = null;
-    	if((txtAmtPayable.getText().isEmpty()) || (txtQuarters.getText().isEmpty()) || (txtHalfDollar.getText().isEmpty()) || (txtOneDollar.getText().isEmpty()))
+    	if((txtAmtPayable.getText().isEmpty()) || ((txtQuarters.getText().isEmpty()) && (txtHalfDollar.getText().isEmpty()) && (txtOneDollar.getText().isEmpty())))
     	{
     		p = pc.makePayment("NullCoin",0);
     	}
@@ -328,9 +337,18 @@ public class PaymentPanel extends javax.swing.JPanel {
     		amtPayable = Double.parseDouble(txtAmtPayable.getText());
     		if((amtPayable == 10)||(amtPayable == 20)||(amtPayable == 50))
     		{
-    			quarters = Double.parseDouble(txtQuarters.getText());
-    			halfDollar = Double.parseDouble(txtHalfDollar.getText());
-    			oneDollar = Double.parseDouble(txtOneDollar.getText());
+    			if(txtQuarters.getText().isEmpty())
+    				quarters = 0;
+    			else
+    				quarters = Double.parseDouble(txtQuarters.getText());
+    			if(txtHalfDollar.getText().isEmpty())
+    				halfDollar = 0;
+    		    else
+    				halfDollar = Double.parseDouble(txtHalfDollar.getText());
+    		    if(txtOneDollar.getText().isEmpty())
+    				oneDollar = 0;
+    			else
+    				oneDollar = Double.parseDouble(txtOneDollar.getText());
     			p = pc.makePayment("Coin",0);
     			amtPaying = quarters * 25 + halfDollar * 50 + oneDollar * 100;
     			amtPaying = amtPaying/100;

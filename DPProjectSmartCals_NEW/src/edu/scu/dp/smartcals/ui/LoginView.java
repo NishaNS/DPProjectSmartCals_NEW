@@ -1,3 +1,4 @@
+
 package edu.scu.dp.smartcals.ui;
 
 import java.awt.Color;
