@@ -31,7 +31,8 @@ public interface AdminOperations {
 	
 	 public void addAlertListeners(AlertListener alertListener);
 	 
-	public void updateProduct(Product product);
+	 //code change-Aparna 08/25
+	 public void updateProduct(Product product,long productId) throws SQLException;
 	//---------------------------------------------------
 	/**
 	 * code change-Aparna 08/23
