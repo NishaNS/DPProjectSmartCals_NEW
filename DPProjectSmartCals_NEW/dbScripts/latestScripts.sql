@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS SmartCalCardDetails (
 ALTER TABLE SmartCalCardDetails AUTO_INCREMENT=100001;
 
 CREATE TABLE IF NOT EXISTS Inventory (
-	SKU INT PRIMARY KEY,
+	SKU INT PRIMARY KEY AUTO_INCREMENT,
     ProductID INT,
     VendingMachineID INT,
     Price DOUBLE,	
@@ -36,6 +36,8 @@ CREATE TABLE IF NOT EXISTS Inventory (
     FOREIGN KEY(ProductID) REFERENCES Product(ProductID) ON DELETE CASCADE,
     FOREIGN KEY(VendingMachineID) REFERENCES VendingMachine(VendingMachineID) ON DELETE CASCADE
 );
+
+ALTER TABLE Inventory AUTO_INCREMENT=1000;
 
 
 CREATE TABLE IF NOT EXISTS OrderDetails (	
@@ -164,12 +166,12 @@ add type varchar(50);
 insert into vendingmachine values(1000,"santa clara","active","school");
 insert into vendingmachine values(2000,"santa clara","active","school");
 
-insert into inventory(SKU,ProductID,VendingMachineID,Price,Quantity,InventoryStatus) values(1001,100,1000,12.99,1,"available"),(1011,101,1000,12.99,1,"available"),(1021,102,1000,2.69,1,"available"),(1031,103,1000,2.25,1,"available"),(1041,104,1000,2.00,1,"available");
-insert into inventory(SKU,ProductID,VendingMachineID,Price,Quantity,InventoryStatus) values(10321,103,2000,2.25,1,"available"),(1051,105,2000,3.26,1,"available"),(1061,106,2000,1,1,"available");
-insert into inventory(SKU,ProductID,VendingMachineID,Price,Quantity,InventoryStatus) values(2001,200,1000,1.89,1,"available"),(2011,201,1000,10.00,1,"available"),(2021,202,1000,10.00,1,"available"),(2031,203,1000,2.48,1,"available"),(2041,204,1000,2.36,1,"available");
-insert into inventory(SKU,ProductID,VendingMachineID,Price,Quantity,InventoryStatus) values(2051,205,2000,1.09,1,"available"),(2061,206,2000,10.00,1,"available"),(2071,207,2000,10.00,1,"available"),(2081,208,2000,3.89,1,"available");
-insert into inventory(SKU,ProductID,VendingMachineID,Price,Quantity,InventoryStatus) values(3001,300,1000,2.99,1,"available"),(3011,301,1000,2.29,1,"available"),(3021,302,1000,2.89,1,"available");
-insert into inventory(SKU,ProductID,VendingMachineID,Price,Quantity,InventoryStatus) values(3031,303,2000,2.89,1,"available"),(3041,304,2000,3.09,1,"available"),(3051,305,2000,2.10,1,"available");
+insert into inventory(ProductID,VendingMachineID,Price,Quantity,InventoryStatus) values(100,1000,12.99,1,"available"),(101,1000,12.99,1,"available"),(102,1000,2.69,1,"available"),(103,1000,2.25,1,"available"),(104,1000,2.00,1,"available");
+insert into inventory(ProductID,VendingMachineID,Price,Quantity,InventoryStatus) values(103,2000,2.25,1,"available"),(105,2000,3.26,1,"available"),(106,2000,1,1,"available");
+insert into inventory(ProductID,VendingMachineID,Price,Quantity,InventoryStatus) values(200,1000,1.89,1,"available"),(201,1000,10.00,1,"available"),(202,1000,10.00,1,"available"),(203,1000,2.48,1,"available"),(204,1000,2.36,1,"available");
+insert into inventory(ProductID,VendingMachineID,Price,Quantity,InventoryStatus) values(205,2000,1.09,1,"available"),(206,2000,10.00,1,"available"),(207,2000,10.00,1,"available"),(208,2000,3.89,1,"available");
+insert into inventory(ProductID,VendingMachineID,Price,Quantity,InventoryStatus) values(300,1000,2.99,1,"available"),(301,1000,2.29,1,"available"),(302,1000,2.89,1,"available");
+insert into inventory(ProductID,VendingMachineID,Price,Quantity,InventoryStatus) values(303,2000,2.89,1,"available"),(304,2000,3.09,1,"available"),(305,2000,2.10,1,"available");
 
 alter table product
 add Price double;
