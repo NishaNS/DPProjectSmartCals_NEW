@@ -117,10 +117,18 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 
 	}
 
-	//code change-Aparna -08/24 similar to Add??
+	//code change-Aparna -08/24 similar to Add product
+	
 	@Override
-	public void updateProduct(Product product) {
-		// TODO Auto-generated method stub
+	public void updateProduct(Product product, long productId) throws SQLException {
+		// get from Product and set to ProductModel and send it to DB
+				ProductModel productModel = new ProductModel();
+				productModel.setProductId(productId);
+				productModel.setCategory(ProductCategory.valueOf(product.getProdCategory().toUpperCase()));
+				productModel.setProductName(product.getProductName());
+				productModel.setProductPrice(product.getProductPrice());
+
+				productDao.updateProduct(productModel, productId);
 		
 	}
 
