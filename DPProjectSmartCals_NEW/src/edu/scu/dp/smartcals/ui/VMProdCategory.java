@@ -159,11 +159,9 @@ public class VMProdCategory extends javax.swing.JPanel {
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 1;
-		gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-		gridBagConstraints.ipadx = 20;
-		gridBagConstraints.ipady = 10;
+		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-		gridBagConstraints.weightx = 0.5;
+		gridBagConstraints.weightx = 1;
 
 		add(viewAllProductsPanel, gridBagConstraints);
 
