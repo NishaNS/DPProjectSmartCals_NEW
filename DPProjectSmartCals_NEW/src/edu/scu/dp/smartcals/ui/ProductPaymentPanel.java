@@ -345,6 +345,8 @@ public class ProductPaymentPanel extends javax.swing.JPanel {
 			} catch (OutOfStockException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e.getMessage());
+				return;
 			}
     		parentView.getVMController().updateOrder("Coin",0);
     		this.setVisible(false);
@@ -389,6 +391,8 @@ public class ProductPaymentPanel extends javax.swing.JPanel {
 			} catch (OutOfStockException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e.getMessage());
+				return;
 			}
     		parentView.getVMController().updateOrder("Cash",0);
     		this.setVisible(false);
@@ -431,6 +435,8 @@ public class ProductPaymentPanel extends javax.swing.JPanel {
 			} catch (OutOfStockException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e.getMessage());
+				return;
 			}
     		parentView.getVMController().updateOrder("SmartCard",smct.getSmartCard());
     		this.setVisible(false);
