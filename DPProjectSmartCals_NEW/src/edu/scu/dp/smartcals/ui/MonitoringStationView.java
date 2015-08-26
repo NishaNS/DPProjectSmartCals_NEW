@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -32,6 +34,8 @@ import edu.scu.dp.smartcals.constants.VMLocationType;
 import edu.scu.dp.smartcals.exception.AdminOperationsException;
 import edu.scu.dp.smartcals.exception.DatabaseInitializationException;
 import edu.scu.dp.smartcals.model.InventoryModel;
+import edu.scu.dp.smartcals.model.NutritionalInfoModel;
+import edu.scu.dp.smartcals.model.ProductModel;
 import edu.scu.dp.smartcals.test.TestTable;
 import edu.scu.dp.smartcals.vm.LoginCheckPointStrategy;
 import edu.scu.dp.smartcals.vm.Beverage;
@@ -47,7 +51,7 @@ import edu.scu.dp.smartcals.vm.VendingMachine;
  */
 
 /**
- *
+ * @author Sharadha Ramaswamy 
  * @author Nisha
  */
 public class MonitoringStationView extends javax.swing.JPanel implements
@@ -61,6 +65,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 	private List<Long> vmIds;
 	// aparna - end
 
+	private List<Alert> alerts;
 	// Variables declaration - do not modify
 	private javax.swing.JButton btnAddInventory;
 	private javax.swing.JButton btnAddNutriInfo;
@@ -110,7 +115,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 	private javax.swing.JRadioButton radioVM1;
 	private javax.swing.JRadioButton radioVM2;
 	private javax.swing.JScrollPane scrollTable;
-	// private javax.swing.JTable tblRevenue;
+	private javax.swing.JTable tblRevenue;
 	private javax.swing.JTextField txtCalories;
 	private javax.swing.JTextField txtCholestrol;
 	private javax.swing.JTextField txtDietaryFiber;
@@ -138,12 +143,16 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 
 	// start - Nisha - 8/23
 	private RevenueTableController revenueTableController;
-
 	// end - Nisha - 8/23
 
 	// code change-Aparna 08/23
 
 	private ProductOperationsActionListener prodOpActionListener;
+	
+	
+	//nisha - 8/24
+	private NutriInfoOperationsActionListener nutriOpActionListener;
+	//end -Nisha
 
 	// End of variables declaration
 	/**
@@ -152,31 +161,19 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 	public MonitoringStationView(VMController vmController) {
 		this.vmController = vmController;
 		// aparna - start 8/22
-		admin = new AdminOperationsImpl();
+		admin = AdminOperationsImpl.getInstance();
+
+		//aparna -08/24
+		admin.addAlertListeners(this);
+		alerts = new ArrayList<>();
+		
 		// aparna - end
 		initComponents();
 
-		// start - Nisha - 8/23
+		// Nisha - 8/24
 		if (revenueTableController == null)
 			revenueTableController = new RevenueTableController(vmController);
 		
-		//testing code
-		
-		try {
-			TestTable table = new TestTable();
-			JButton test = new JButton("test"); 
-			pnlRevenueStat.add(test);
-			pnlRevenueStat.revalidate();
-			pnlRevenueStat.setVisible(true);
-			pnlRevenueStat.setBackground(Color.PINK);
-			
-			
-		} catch (DatabaseInitializationException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		//end testing code
-		// end - Nisha - 8/23
 	}
 
 	/**
@@ -186,7 +183,13 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 	@Override
 	public void update(Alert alert) {
 		// TODO set the label with the alert received
-		lblAlerts.setText(alert.getMessage());
+		alerts.add(alert);
+		StringBuilder strBuilder = new StringBuilder();
+		strBuilder.append("<html>");
+		for(Alert alrt : alerts) {
+			strBuilder.append("<br>" + alrt.getMessage());
+		}
+		lblAlerts.setText(strBuilder.toString());
 		// lblAlerts.setForeground(ColorModel.getRGBdefault().getRed());
 
 	}
@@ -210,7 +213,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		lblAlerts = new javax.swing.JLabel();
 		pnlRevenueStat = new javax.swing.JPanel();
 		scrollTable = new javax.swing.JScrollPane();
-		// tblRevenue = new javax.swing.JTable();
+		tblRevenue = new javax.swing.JTable();
 		pnlOtherStats = new javax.swing.JPanel();
 		lblOtherStats = new javax.swing.JLabel();
 		pnlProduct = new javax.swing.JPanel();
@@ -302,6 +305,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		prodOpActionListener = new ProductOperationsActionListener();
 		btnAddProd.addActionListener(prodOpActionListener);
 		btnDeleteProd.addActionListener(prodOpActionListener);
+		btnSearchProduct.addActionListener(prodOpActionListener);
 		btnAddProd.setActionCommand("ADD_PRODUCT");
 		btnUpdateProd.setActionCommand("UPDATE_PRODUCT");
 		btnDeleteProd.setActionCommand("DELETE_PRODUCT");
@@ -309,6 +313,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		//code change-Aparna 08/23
 
 		// --------------------------------aparna -8/22
+		
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
@@ -359,48 +364,34 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 						153))); // NOI18N
 
 		
-		 scrollTable.setName("scrollTable"); // NOI18N
-		 
-		 /*
-		 * tblRevenue.setModel(new javax.swing.table.DefaultTableModel( new
-		 * Object[][] { { "test", "test", "test", "test" }, { null, null, null,
-		 * null }, { null, null, null, null }, { null, null, null, null } }, new
-		 * String[] { "Rmv table and add through code", "Title 2", "Title 3",
-		 * "Title 4" })); tblRevenue.setName("Revenue"); // NOI18N
-		 * scrollTable.setViewportView(tblRevenue); if
-		 * (tblRevenue.getColumnModel().getColumnCount() > 0) {
-		 * tblRevenue.getColumnModel().getColumn(0).setResizable(false);
-		 * tblRevenue.getColumnModel().getColumn(1).setResizable(false);
-		 * tblRevenue.getColumnModel().getColumn(2).setResizable(false);
-		 * tblRevenue.getColumnModel().getColumn(3).setResizable(false); }
-		 */
+		//start - nisha - 8/24
+		scrollTable.setName("scrollTable"); // NOI18N
+		tblRevenue.setName("Revenue"); // NOI18N
+		scrollTable.setViewportView(tblRevenue);		
+		//end - Nisha - 8/24
 
-		javax.swing.GroupLayout pnlRevenueStatLayout = new javax.swing.GroupLayout(
-				pnlRevenueStat);
-		pnlRevenueStat.setLayout(pnlRevenueStatLayout);
-		pnlRevenueStatLayout.setHorizontalGroup(pnlRevenueStatLayout
-				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(
-						pnlRevenueStatLayout.createSequentialGroup()
-								.addContainerGap()
-								/*
-								 * .addComponent(scrollTable,
-								 * javax.swing.GroupLayout.PREFERRED_SIZE, 660,
-								 * javax.swing.GroupLayout.PREFERRED_SIZE)
-								 */
-								.addContainerGap(114, Short.MAX_VALUE)));
-		pnlRevenueStatLayout.setVerticalGroup(pnlRevenueStatLayout
-				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(
-						javax.swing.GroupLayout.Alignment.TRAILING,
-						pnlRevenueStatLayout.createSequentialGroup()
-								.addContainerGap(16, Short.MAX_VALUE)
-								/*
-								 * .addComponent(scrollTable,
-								 * javax.swing.GroupLayout.PREFERRED_SIZE, 267,
-								 * javax.swing.GroupLayout.PREFERRED_SIZE)
-								 */
-								.addContainerGap()));
+		 javax.swing.GroupLayout pnlRevenueStatLayout = new javax.swing.GroupLayout(
+				 pnlRevenueStat);
+		 pnlRevenueStat.setLayout(pnlRevenueStatLayout);
+		 pnlRevenueStatLayout.setHorizontalGroup(pnlRevenueStatLayout
+				 .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				 .addGroup(
+						 pnlRevenueStatLayout.createSequentialGroup()
+						 .addContainerGap()
+						 .addComponent(scrollTable,
+								 javax.swing.GroupLayout.PREFERRED_SIZE, 660,
+								 javax.swing.GroupLayout.PREFERRED_SIZE)
+								 .addContainerGap(114, Short.MAX_VALUE)));
+		 pnlRevenueStatLayout.setVerticalGroup(pnlRevenueStatLayout
+				 .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				 .addGroup(
+						 javax.swing.GroupLayout.Alignment.TRAILING,
+						 pnlRevenueStatLayout.createSequentialGroup()
+						 .addContainerGap(16, Short.MAX_VALUE)
+						 .addComponent(scrollTable,
+								 javax.swing.GroupLayout.PREFERRED_SIZE, 267,
+								 javax.swing.GroupLayout.PREFERRED_SIZE)
+								 .addContainerGap()));
 
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 1;
@@ -422,7 +413,6 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 				new java.awt.Font("Tahoma", 1, 14))); // NOI18N
 
 		lblOtherStats.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		// lblOtherStats.setText("Show other stats like Best Seller here");
 		lblOtherStats.setName("OtherStats"); // NOI18N
 
 		javax.swing.GroupLayout pnlOtherStatsLayout = new javax.swing.GroupLayout(
@@ -986,7 +976,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.ipady = 5;
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlNutriInfo.add(btnSearchNutriInfo, gridBagConstraints);
-
+		
 		btnAddNutriInfo.setText("Add Nutritional Info");
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridy = 15;
@@ -1013,6 +1003,20 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		gridBagConstraints.ipady = 5;
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		pnlNutriInfo.add(btnDeleteNutriInfo, gridBagConstraints);
+		
+		//start - Nisha - 8/24
+		//add action listeners for Nutri InFo operations
+		nutriOpActionListener = new NutriInfoOperationsActionListener();
+		btnSearchNutriInfo.addActionListener(nutriOpActionListener);
+		btnAddNutriInfo.addActionListener(nutriOpActionListener);
+		btnUpdateNutriInfo.addActionListener(nutriOpActionListener);
+		btnDeleteNutriInfo.addActionListener(nutriOpActionListener);
+		btnSearchNutriInfo.setActionCommand("SEARCH_NUTRI");
+		btnAddNutriInfo.setActionCommand("ADD_NUTRI");
+		btnUpdateNutriInfo.setActionCommand("UPDATE_NUTRI");
+		btnDeleteNutriInfo.setActionCommand("DELETE_NUTRI");
+		//end- nisha
+		
 
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 0;
@@ -1180,36 +1184,35 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 				// machines
 				loadBestSellingPanel(vmIds);
 				
-				//start  - Nisha - 8/23
+				//start  - Nisha - 8/24
 				//load Revenue Stats for all VM for logged in user
 				revenueTableController.selectUserDisplayOption("ALL");	
-				
+				try {
+					tblRevenue.setModel(revenueTableController.getModel().createAndFetchModelData());
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				//end - Nisha
 
 			} else {
 				loadBestSellingPanel(Arrays.asList(new Long(Long
 						.parseLong(actionCommand))));
 				
-				//start  - Nisha - 8/23
+				//nisha - 8/24
 				//load Revenue Stats for particular VM for logged in user
 				revenueTableController.selectUserDisplayOption(actionCommand);	
-				
+				try {
+					
+					tblRevenue.setModel(revenueTableController.getModel().createAndFetchModelData());
+					
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}				
 				//end - Nisha
-
-			}
-			//start - Nisha - 8/23
-			//pnlRevenueStat.removeAll();
-			scrollTable = new JScrollPane(revenueTableController.getView());
-			scrollTable.setBackground(Color.GREEN);
-			scrollTable.setVisible(true);
-			pnlRevenueStat.add(scrollTable);
-			//pnlRevenueStat.revalidate();
-			pnlRevenueStat.setBackground(Color.CYAN);
-			
-			//end - Nisha
-
+			}		
 		}
-
 	}
 
 
@@ -1286,6 +1289,31 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 				}
 
 			}
+	//TODO SEARCH PRODUCT BY ID
+			if(actionCommand.equals("SEARCH_PRODUCT")) {
+				if(!txtProductID.getText().isEmpty()) {
+					long productId = Long.parseLong(txtProductID.getText());
+					try {
+						ProductModel productModel = admin.getProduct(productId);
+						txtProductCategory.setText(productModel.getCategory().toString());
+						txtProductName.setText(productModel.getProductName());
+						txtProductPrice.setText(Double.toString(productModel.getProductPrice()));
+						
+					} catch (AdminOperationsException e1) {
+							e1.printStackTrace();
+							JOptionPane.showMessageDialog(null, "Unable to fetch product id "+productId);
+							return;
+					}
+					
+					
+				}
+				
+				else {
+					JOptionPane.showMessageDialog(null, "Invalid entry");
+				}
+			}
+			
+			
 			
 			if(actionCommand.equals("DELETE_PRODUCT")) {
 				if(!txtProductID.getText().isEmpty()) {
@@ -1318,5 +1346,203 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		}
 	
 	}
+	
+	// start - Nisha - 8/24
+	class NutriInfoOperationsActionListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			String actionCommand = e.getActionCommand();
+
+			if(validateData()){
+
+				if(actionCommand.equals("SEARCH_NUTRI")) {
+
+					try {
+						String allNutriValues = admin.searchNutriInfo(Long.parseLong(txtNutriProdID.getText())).formatData();
+						String[] splitNutriValues = allNutriValues.trim().split(", ");
+						for(String element : splitNutriValues){
+							if(element.startsWith("Product")){
+								int start = element.indexOf(":");
+								txtNutriProdID.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Serving")){
+								int start = element.indexOf(":");
+								txtServingSize.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Calorie")){
+								int start = element.indexOf(":");
+								txtCalories.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Total Fat")){
+								int start = element.indexOf(":");
+								txtTotalFat.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Saturated Fat")){
+								int start = element.indexOf(":");
+								txtSaturatedFat.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Trans Fat")){
+								int start = element.indexOf(":");
+								txtTransFat.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Cholestrol")){
+								int start = element.indexOf(":");
+								txtCholestrol.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Sodium")){
+								int start = element.indexOf(":");
+								txtSodium.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Total Carbs")){
+								int start = element.indexOf(":");
+								txtTotalCarbs.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Dietary Fiber")){
+								int start = element.indexOf(":");
+								txtDietaryFiber.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Sugar")){
+								int start = element.indexOf(":");
+								txtSugars.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Protein")){
+								int start = element.indexOf(":");
+								txtProtein.setText(element.substring(start + 2, element.length()));
+							}
+							else if(element.startsWith("Iron")){
+								int start = element.indexOf(":");
+								txtIron.setText(element.substring(start + 2, element.length()));
+							}							
+							else if(element.startsWith("Smart Tag")){
+								int start = element.indexOf(":");
+								txtSmartTag.setText(element.substring(start + 2, element.length()));
+							}
+
+						}
+
+					} catch (NumberFormatException e1) {
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
+
+				if (actionCommand.equals("ADD_NUTRI")) {
+					NutritionalInfoModel nutriModel = new NutritionalInfoModel.NutriBuilder(
+							Long.parseLong(txtNutriProdID.getText()),
+							txtCalories.getText(), txtSmartTag.getText())
+							.servingSize(txtServingSize.getText())
+							.totalFat(txtTotalFat.getText())
+							.saturatedFat(txtSaturatedFat.getText())
+							.transFat(txtTransFat.getText())
+							.cholestrol(txtCholestrol.getText())
+							.sodium(txtSodium.getText())
+							.totalCarbs(txtTotalCarbs.getText())
+							.dietaryFiber(txtDietaryFiber.getText())
+							.sugars(txtSugars.getText())
+							.protein(txtProtein.getText())
+							.iron(txtIron.getText()).buildNutriInfo();
+
+					try {
+						boolean addStatus = admin.addNewNutriInfo(nutriModel
+								.listAttributeValues());
+						if (addStatus == true) {
+							JOptionPane.showMessageDialog(null,
+									"Nutritional Info Added!");
+							this.clearData();
+						} 
+
+					} catch (SQLException e1) {
+						JOptionPane.showMessageDialog(null,
+								"Unable to add nutritional info for "
+										+ txtNutriProdID.getText() + "\n" + e1.getMessage());
+					}
+				}
+				
+				if (actionCommand.equals("DELETE_NUTRI")) {
+
+					try {
+						boolean addStatus = admin.deleteNutriInfo(Long
+								.parseLong(txtNutriProdID.getText()));
+						if (addStatus == true) {
+							JOptionPane.showMessageDialog(null,
+									"Nutritional Info deleted!");
+							this.clearData();
+						}
+						
+
+					} catch (SQLException e1) {
+						JOptionPane.showMessageDialog(null,
+								"Unable to delete nutritional info for "
+										+ txtNutriProdID.getText() + "\n" + e1.getMessage());
+						
+					}
+				}
+				
+				if(actionCommand.equals("UPDATE_NUTRI")){
+					NutritionalInfoModel nutriModel = new NutritionalInfoModel.
+							NutriBuilder(Long.parseLong(txtNutriProdID.getText()),txtCalories.getText(), txtSmartTag.getText())
+							.servingSize(txtServingSize.getText())
+							.totalFat(txtTotalFat.getText())
+							.saturatedFat(txtSaturatedFat.getText())
+							.transFat(txtTransFat.getText())
+							.cholestrol(txtCholestrol.getText())
+							.sodium(txtSodium.getText())
+							.totalCarbs(txtTotalCarbs.getText())
+							.dietaryFiber(txtDietaryFiber.getText())
+							.sugars(txtSugars.getText())
+							.protein(txtProtein.getText())
+							.iron(txtIron.getText()).buildNutriInfo();
+
+					try {
+						boolean addStatus = admin.updateNewNutriInfo(nutriModel.listAttributeValues());
+						if (addStatus == true) {
+							JOptionPane.showMessageDialog(null,
+									"Nutritional Info updated!");
+							this.clearData();
+						} 
+
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+						JOptionPane.showMessageDialog(null,
+								"Unable to update nutritional info for "
+										+ txtNutriProdID.getText() + "\n" + e1.getMessage());
+					}
+				}
+			}
+
+
+		}
+
+		private boolean validateData(){
+			if(txtNutriProdID.getText().equals("")){
+				txtNutriProdID.setBackground(Color.YELLOW);
+				txtNutriProdID.setToolTipText("Enter ProductID");
+				return false;
+			}
+			
+			return true;
+		}
+		private void clearData(){
+			txtNutriProdID.setText("");
+			txtServingSize.setText("");
+			txtCalories.setText("");
+			txtTotalFat.setText("");
+			txtSaturatedFat.setText("");
+			txtTransFat.setText("");
+			txtCholestrol.setText("");
+			txtSodium.setText("");
+			txtTotalCarbs.setText("");
+			txtDietaryFiber.setText("");
+			txtSugars.setText("");
+			txtProtein.setText("");
+			txtIron.setText("");
+			txtSmartTag.setText("");
+		}
+	}
+
+	//end - nisha - 8/24
 }
 

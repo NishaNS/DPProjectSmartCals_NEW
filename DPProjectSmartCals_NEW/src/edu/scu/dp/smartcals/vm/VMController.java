@@ -17,6 +17,7 @@ import edu.scu.dp.smartcals.dao.interfaces.SmartCardDao;
 import edu.scu.dp.smartcals.dao.interfaces.VendingMachineDao;
 import edu.scu.dp.smartcals.exception.DatabaseInitializationException;
 import edu.scu.dp.smartcals.exception.EmptyResultException;
+import edu.scu.dp.smartcals.exception.OutOfStockException;
 import edu.scu.dp.smartcals.model.AdminLoginModel;
 import edu.scu.dp.smartcals.model.InventoryModel;
 import edu.scu.dp.smartcals.model.NullSmartCardModel;
@@ -39,6 +40,7 @@ import edu.scu.dp.smartcals.ui.VendingMachineView;
 
 /**
  * @author Aparna Ganesh
+ * @author Sharadha Ramaswamy
  * @author Nisha Narayanaswamy VMController class decides the views to be
  *         displayed on user action, delegates the call to required classes
  *         testing
@@ -70,7 +72,6 @@ public class VMController {
 	private ProductModel product;
 	private InventoryModel invProduct;
 	private VendingMachineModel vmModel;
-	//private VendingMachine vendingMachine; 
 	//private long cardNo;
 
 
@@ -207,10 +208,8 @@ public class VMController {
 
 		for (VendingMachineModel vmModel : vendingMachineModels) {
 
-			VendingMachineFactory vendingMachineFactory = VendingMachineFactory
-					.getFactory(vmModel.getType());
-			VendingMachine vendingMachine = vendingMachineFactory
-					.createVendingMachine(vmModel);
+			VendingMachineFactory vendingMachineFactory = VendingMachineFactory.getFactory(vmModel.getType());
+			VendingMachine vendingMachine = vendingMachineFactory.createVendingMachine(vmModel);
 			vendingMachines.add(vendingMachine);
 		}
 		return vendingMachines;
@@ -225,8 +224,6 @@ public class VMController {
 	public VendingMachine getVendingMachine(long vmId) {
 
 		assert (vmId != 0);
-
-		//VendingMachineModel vmModel;
 
 		List<Beverage> beverages = new ArrayList<>();
 
@@ -469,8 +466,17 @@ public class VMController {
 		prodPayPanel.setAmtPayable(invProduct);
 	}
 	
-	public void updateInvQty()
+	public void updateInvQty() throws OutOfStockException
 	{
+		//aparna--08/24
+		int existingQuantity = invProduct.getqty();
+		long productId = invProduct.getProductId();
+		long vmId = invProduct.getVendingMachineId();
+		if(existingQuantity == 0) {
+			//notify outOfStock
+			vendingMachineView.getVendingMachine().notifyOutOfStock(productId,vmId);
+			throw new OutOfStockException(productId,vmId);
+		}
 		invProduct.setqty(invProduct.getqty() - 1); 
 		System.out.println(invProduct.getqty());
 		try {

@@ -57,6 +57,7 @@ public class VMDetails_View extends javax.swing.JPanel {
      */
     public void addDynamicChildPanels (JPanel pnlChild){
 		pnlPayment.add(pnlChild);
+		pnlPayment.repaint();
 		pnlChild.setSize(pnlPayment.getWidth(), pnlPayment.getHeight());
 		pnlPayment.revalidate();
 		pnlChild.setVisible(true);	

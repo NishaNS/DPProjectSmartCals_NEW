@@ -5,9 +5,11 @@
 package edu.scu.dp.smartcals.admin;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.scu.dp.smartcals.exception.AdminOperationsException;
+import edu.scu.dp.smartcals.model.NutritionalInfoModel;
 import edu.scu.dp.smartcals.model.ProductModel;
 import edu.scu.dp.smartcals.vm.Product;
 import edu.scu.dp.smartcals.vm.VendingMachine;
@@ -20,6 +22,17 @@ public interface AdminOperations {
 
 	public void reStockProduct(long vmId,long productId,int quantity);
 	
+	//code change-Aparna 08/24
+	
+	public ProductModel getProduct(long productId) throws AdminOperationsException;
+	
+	
+	//code change-Aparna 08/24
+	
+	 public void addAlertListeners(AlertListener alertListener);
+	 
+	public void updateProduct(Product product);
+	//---------------------------------------------------
 	/**
 	 * code change-Aparna 08/23
 	 * Add new product -By Admin
@@ -33,6 +46,15 @@ public interface AdminOperations {
 	public void deleteProduct(long productId) throws AdminOperationsException;
 	
 	public List<Product> getBestSellingProduct(long vmId) throws AdminOperationsException;
+	
+	//nisha - 8/24
+	public NutritionalInfoModel searchNutriInfo(long productId) throws SQLException;
+	
+	public boolean addNewNutriInfo(ArrayList<String> dataValues) throws SQLException;
+	
+	public boolean updateNewNutriInfo(ArrayList<String> dataValues) throws SQLException;
+	
+	public boolean deleteNutriInfo(long productID) throws SQLException;
 }
 
 

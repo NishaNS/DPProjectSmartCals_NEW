@@ -6,7 +6,6 @@ import java.util.Vector;
 import javax.swing.JPanel;
 
 import edu.scu.dp.smartcals.exception.DatabaseInitializationException;
-import edu.scu.dp.smartcals.ui.RevenueTableView;
 import edu.scu.dp.smartcals.vm.VMController;
 
 /**
@@ -15,7 +14,6 @@ import edu.scu.dp.smartcals.vm.VMController;
  */
 public class RevenueTableController {
 
-	private RevenueTableView revenueTableView;
 	private RevenueTableModel revenueTableModel;
 	private VMController vmController;
 
@@ -24,7 +22,7 @@ public class RevenueTableController {
 		this.vmController = vmController;
 		revenueTableModel = new RevenueTableModel();
 		try {
-			revenueTableModel.getColumnNames();
+			revenueTableModel.setColumnNames();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -32,8 +30,8 @@ public class RevenueTableController {
 
 	}
 
-	public RevenueTableView getView() {
-		return revenueTableView;
+	public RevenueTableModel getModel() {
+		return revenueTableModel;
 	}
 
 	/**
@@ -45,19 +43,17 @@ public class RevenueTableController {
 	public void selectUserDisplayOption(String option) {
 		if (option == "ALL")
 			try {
-				revenueTableModel.getAllSalesStats("admin");				
-				revenueTableView = new RevenueTableView(
-						revenueTableModel.createAndFetchModelData());
-
+				revenueTableModel.resetModel();
+				revenueTableModel.setAllSalesStats("admin");				
+				
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		else
 			try {
+				revenueTableModel.resetModel();
+				revenueTableModel.setVMSalesStats(Long.parseLong(option));
 				
-				revenueTableModel.getVMSalesStats(Long.parseLong(option));
-				revenueTableView = new RevenueTableView(
-						revenueTableModel.createAndFetchModelData());
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

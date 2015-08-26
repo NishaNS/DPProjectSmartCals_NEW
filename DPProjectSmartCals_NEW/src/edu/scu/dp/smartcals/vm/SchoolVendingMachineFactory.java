@@ -4,6 +4,7 @@
  */
 package edu.scu.dp.smartcals.vm;
 
+import edu.scu.dp.smartcals.admin.AdminOperationsImpl;
 import edu.scu.dp.smartcals.model.ProductModel;
 import edu.scu.dp.smartcals.model.VendingMachineModel;
 
@@ -22,6 +23,9 @@ public class SchoolVendingMachineFactory extends VendingMachineFactory {
 		schoolVendingMachine.setLocation(vendingMachineModel.getLocation());
 		schoolVendingMachine.setStatus(vendingMachineModel.getStatus());
 		schoolVendingMachine.setLocationType(vendingMachineModel.getType());
+		
+		//Aparna=08/24
+		schoolVendingMachine.addListener(AdminOperationsImpl.getInstance());
 		return schoolVendingMachine;
 	}
 

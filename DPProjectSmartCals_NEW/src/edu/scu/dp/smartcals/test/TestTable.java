@@ -1,5 +1,5 @@
 package edu.scu.dp.smartcals.test;
-
+/*test*/
 import java.awt.Color;
 import java.awt.Container;
 import java.sql.SQLException;
