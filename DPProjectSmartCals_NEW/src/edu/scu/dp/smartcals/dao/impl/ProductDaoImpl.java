@@ -133,9 +133,30 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public void updateProduct(ProductModel product) {
-		// TODO Auto-generated method stub
+	public void updateProduct(ProductModel productModel,long productId) throws SQLException {
+		PreparedStatement statement = null;
+		Connection connection = databaseFactory.getConnection();
+		
+		try {
+			statement = connection
+					.prepareStatement("update product set ProductName = ?,Category = ?,Price = ? where ProductID = ?");
+			
+			statement.setString(1, productModel.getProductName());
+			statement.setString(2, productModel.getCategory().toString());
+			statement.setDouble(3, productModel.getProductPrice());
+			statement.setLong(4, productId);
+			
+			int rs = statement.executeUpdate();
+			
 
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			DBUtils.closeStatement(statement);
+			databaseFactory.closeConnection();
+
+	}
 	}
 
 	@Override
