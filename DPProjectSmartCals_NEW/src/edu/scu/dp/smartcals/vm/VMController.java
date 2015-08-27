@@ -469,14 +469,11 @@ public class VMController {
 	public void updateInvQty() throws OutOfStockException
 	{
 		//aparna--08/24
-		int existingQuantity = invProduct.getqty();
+		
 		long productId = invProduct.getProductId();
 		long vmId = invProduct.getVendingMachineId();
-		if(existingQuantity == 0) {
-			//notify outOfStock
-			vendingMachineView.getVendingMachine().notifyOutOfStock(productId,vmId);
-			throw new OutOfStockException(productId,vmId);
-		}
+		
+		
 		invProduct.setqty(invProduct.getqty() - 1); 
 		System.out.println(invProduct.getqty());
 		try {
@@ -485,6 +482,13 @@ public class VMController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		int existingQuantity = invProduct.getqty();
+		if(existingQuantity == 0) {
+			//notify outOfStock
+			vendingMachineView.getVendingMachine().notifyOutOfStock(productId,vmId);
+			throw new OutOfStockException(productId,vmId);
+		}
+		
 	}
 
 	public boolean modifyInventory(long prodId,double price,int vendMachId,int qty)
