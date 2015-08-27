@@ -7,7 +7,7 @@ package edu.scu.dp.smartcals.vm;
  * Product Class to hold Product attributes
  *
  */
-public abstract class Product {
+public abstract class Product implements Comparable<Product> {
 	
 	private String prodCategory;
 	private String productName;
@@ -38,6 +38,31 @@ public abstract class Product {
 	}
 	public void setProductPrice(double productPrice) {
 		this.productPrice = productPrice;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (productID ^ (productID >>> 32));
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Product other = (Product) obj;
+		if (productID != other.productID)
+			return false;
+		return true;
+	}
+	@Override
+	public int compareTo(Product p) {
+        return (int) (productID - p.getProductID());
 	}
 	
 	
