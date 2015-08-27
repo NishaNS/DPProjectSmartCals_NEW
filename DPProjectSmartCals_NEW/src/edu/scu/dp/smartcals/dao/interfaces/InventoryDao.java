@@ -14,7 +14,7 @@ public interface InventoryDao {
 
 	public void updateInventoryQty(int qty,long prodId) throws SQLException, EmptyResultException;
 	
-	public boolean removeProductById(long id) throws SQLException,EmptyResultException;
+	public boolean removeProductById(long id,long vmId) throws SQLException,EmptyResultException;
 	
 	public boolean addInvDetails(int id,double price,int vendMachId,int qty) throws SQLException,EmptyResultException;
 	
