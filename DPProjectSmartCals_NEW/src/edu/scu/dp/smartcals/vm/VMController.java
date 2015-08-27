@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import edu.scu.dp.smartcals.constants.ProductCategory;
 import edu.scu.dp.smartcals.constants.VMLocationType;
 import edu.scu.dp.smartcals.dao.impl.DaoFactory;
@@ -81,24 +83,7 @@ public class VMController {
 
 		// code change- Aparna 22/8
 		
-		/*
-		 * // launch in following sequence - JFrame, SelectionView..etc if
-		 * (mainWindow == null) this.mainWindow = new VMClient(); if
-		 * (vmSelectionView == null) this.vmSelectionView = new
-		 * VMSelectionView(this); if (vendingMachineView == null)
-		 * this.vendingMachineView = new VendingMachineView(this); if (loginView
-		 * == null) this.loginView = new LoginView(this); if
-		 * (monitoringStationView == null) this.monitoringStationView = new
-		 * MonitoringStationView(this);
-		 * 
-		 * //start - Nisha - 8/19 if(tabbedView == null) this.tabbedView = new
-		 * TabbedView(this); //end - Nisha - 8/19
-		 * 
-		 * // TODO load Selection View to run-Aparna // load first view from
-		 * this page only
-		 * 
-		 * mainWindow.addPanels(vmSelectionView);
-		 */
+		
 //Code change-Aparna 8/22
 	}
 
@@ -372,6 +357,7 @@ public class VMController {
 		String calorie;
 		
 		for (ProductModel productModel : productModels){
+			System.out.println("product");
 			try {
 				calorie = nutriInfoDao.getCalories(productModel.getProductId());
 				String val = calorie.substring(0,calorie.indexOf("cal"));
@@ -441,8 +427,17 @@ public class VMController {
 			{
 				data = "<html><body>Product ID:" + product.getProductId() + "<br> Product Name:" + product.getProductName() + "<br> Product Price:" + product.getProductPrice() + "</body></html>";
 			}
-			else
+			else {
 				data = "Product Not Available";
+			vendingMachineView.getVendingMachine().notifyOutOfStock(prodId,invProduct.getVendingMachineId());
+			try {
+				throw new OutOfStockException(prodId,invProduct.getVendingMachineId());
+			} catch (OutOfStockException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e.getMessage());
+			}			
+		}
 		} catch (SQLException e) {
 			data = "Product Not Available";
 			e.printStackTrace();
@@ -450,7 +445,7 @@ public class VMController {
 		return data;
 	}
 	
-	public boolean addInventoryData(int prodId,double price,int vendMachId,int qty)
+	/*public boolean addInventoryData(int prodId,double price,int vendMachId,int qty)
 	{
 		boolean res = false;
 		try {
@@ -460,7 +455,7 @@ public class VMController {
 			e.printStackTrace();
 		}
 		return res;
-	}
+	}*/
 	
 	public void setProdPaymentPanel(ProductPaymentPanel prodPayPanel){
 		prodPayPanel.setAmtPayable(invProduct);
@@ -474,6 +469,7 @@ public class VMController {
 		long vmId = invProduct.getVendingMachineId();
 		
 		
+		
 		invProduct.setqty(invProduct.getqty() - 1); 
 		System.out.println(invProduct.getqty());
 		try {
@@ -482,16 +478,17 @@ public class VMController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		int existingQuantity = invProduct.getqty();
+		/*int existingQuantity = invProduct.getqty();
 		if(existingQuantity == 0) {
 			//notify outOfStock
 			vendingMachineView.getVendingMachine().notifyOutOfStock(productId,vmId);
 			throw new OutOfStockException(productId,vmId);
-		}
+		}*/
+		
 		
 	}
 
-	public boolean modifyInventory(long prodId,double price,int vendMachId,int qty)
+	/*public boolean modifyInventory(long prodId,double price,int vendMachId,int qty)
 	{
 		boolean res = false;
 		try {
@@ -501,8 +498,8 @@ public class VMController {
 			e.printStackTrace();
 		}
 		return res;
-	}
-	public InventoryModel searchInventory(long prodId)
+	}*/
+	/*public InventoryModel searchInventory(long prodId)
 	{
 		InventoryModel invProductData = null;
 		try {
@@ -512,9 +509,9 @@ public class VMController {
 			e.printStackTrace();
 		}
 		return invProductData;
-	}
+	}*/
 	
-	public boolean deleteInventory(long prodId){
+	/*public boolean deleteInventory(long prodId){
 		boolean status = false;
 		try {
 			status = invDao.removeProductById(prodId);
@@ -523,7 +520,7 @@ public class VMController {
 			e.printStackTrace();
 		}
 		return status;
-	}
+	}*/
 	public void updateOrder(String PaymentType,long SmartCardNo)
 	{
 		try {
