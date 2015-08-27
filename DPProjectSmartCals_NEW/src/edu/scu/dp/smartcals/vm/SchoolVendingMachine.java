@@ -1,5 +1,8 @@
 package edu.scu.dp.smartcals.vm;
 
+import edu.scu.dp.smartcals.dao.impl.DaoFactory;
+import edu.scu.dp.smartcals.dao.impl.ProductDaoImpl;
+
 
 /**
  * @author Aparna Ganesh
@@ -10,6 +13,7 @@ public class SchoolVendingMachine extends VendingMachine {
 
 	public SchoolVendingMachine() {
 		
+		productDao = DaoFactory.getProductDao();
 	}
 
 	
