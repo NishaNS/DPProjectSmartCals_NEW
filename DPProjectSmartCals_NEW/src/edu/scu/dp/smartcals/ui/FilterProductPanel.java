@@ -1,5 +1,7 @@
 package edu.scu.dp.smartcals.ui;
-
+/**
+ * @author Sharadha Ramaswamy
+ */
 import java.awt.Color;
 import java.awt.GridLayout;
 

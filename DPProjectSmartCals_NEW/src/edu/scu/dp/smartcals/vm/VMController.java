@@ -386,14 +386,12 @@ public class VMController {
 		}
 		}
 				
-       return productModels;	
+       return newProductModels;	
 	}
 
 	public String getSmartCardInfo() throws SQLException, EmptyResultException{
-		System.out.println("getSmartCardInfo");
 	    smct = smctDao.buySmartCard();
-		String text = "Your Smart Card Number is:" +smct.getSmartCard()+ "\n Your Balance is:"+smct.getBalance();
-		System.out.println(text);
+		String text = "<html><body>Your Smart Card Number is:" +smct.getSmartCard()+ "<br> Your Balance is:"+smct.getBalance() + "</body></html>";
 		return text;
 		
 	}
@@ -442,7 +440,7 @@ public class VMController {
 				data = "<html><body>Product ID:" + product.getProductId() + "<br> Product Name:" + product.getProductName() + "<br> Product Price:" + product.getProductPrice() + "</body></html>";
 			}
 			else
-				data = "Product Not Available";
+				data = "Out Of Stock";
 		} catch (SQLException e) {
 			data = "Product Not Available";
 			e.printStackTrace();
@@ -529,8 +527,15 @@ public class VMController {
 			e.printStackTrace();
 		}
 	}
+	
+	//Sharadha-code in progress (Aparna to proceed)
+	public void updateVendingMachineModel(){
+			getVendingMachine(vmModel.getVendingMachineId());
+	}
+	
 	/**
 	 * @param strategy
+	 * 
 	 *            Client to provide the strategy for failed login attempts
 	 */
 	public void setLoginCheckPointStrategy(LoginCheckPointStrategy loginStrategy) {

@@ -5,6 +5,11 @@ package edu.scu.dp.smartcals.payment;
  * @author Sharadha Ramaswamy
  *
  */
+/**
+ * 
+ * Null Object Pattern and Factory method pattern is implemented
+ *
+ */
 public class ConcretePaymentCreator implements PaymentCreator{
     private PaymentProduct pay;
 	@Override

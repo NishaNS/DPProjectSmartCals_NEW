@@ -1284,6 +1284,9 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 					JOptionPane.showMessageDialog(null,
 							"Product Added successfully!");
 					cleanPanelContents();
+					
+					vmController.updateVendingMachineModel();
+					
 				} else {
 					JOptionPane.showMessageDialog(null, "Invalid entry");
 				}

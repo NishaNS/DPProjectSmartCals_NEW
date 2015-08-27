@@ -21,9 +21,7 @@ import edu.scu.dp.smartcals.vm.VMController;
 public class PaymentPanel extends javax.swing.JPanel {
 	private VendingMachineView parentView;
 
-    /**
-     * Creates new form CoinPanel1
-     */
+   
     public PaymentPanel(VendingMachineView parentView) {
     	this.parentView = parentView;
         initComponents();
@@ -298,7 +296,6 @@ public class PaymentPanel extends javax.swing.JPanel {
     			p = pc.makePayment("Cash",0);
     			amtPaying= oneDollar * 1 + fiveDollar * 5 + tenDollar * 10;	
     			p.setValues(amtPayable,amtPaying);
-    			System.out.println("amtPaying"+amtPaying);
     		}
     		else{
     			p = pc.makePayment("NullCash",0);
@@ -308,7 +305,9 @@ public class PaymentPanel extends javax.swing.JPanel {
     	    parentView.getVMController().loadTheSmartCard(p.getAmtPayable());
     	    this.setVisible(false);
     	     parentView.getVMDetails_View().getLblDisplay().setText("Payment Successful");
-    	     parentView.getVMDetails_View().getLblCashDispense().setText("Dispense Cash:" + Double.toString(p.getAmtToReturn()));	
+    	     //String result = String.format("%.2f", p.getAmtToReturn());
+    	     parentView.getVMDetails_View().getLblCashDispense().setText("Dispense Cash:" + String.format("%.2f", p.getAmtToReturn()));
+    	     parentView.getVMDetails_View().getTxtEnterProdID().setText("");
     	}
     	else{
     	    lblCoinUnsucess.setText("Payment Invalid");
@@ -362,7 +361,8 @@ public class PaymentPanel extends javax.swing.JPanel {
 			parentView.getVMController().loadTheSmartCard(p.getAmtPayable()); 
             this.setVisible(false);
     	    parentView.getVMDetails_View().getLblDisplay().setText("Payment Successful");
-    	    parentView.getVMDetails_View().getLblCoinDispense().setText("Dispense Coin:" + Double.toString(p.getAmtToReturn()));	
+    	    parentView.getVMDetails_View().getLblCoinDispense().setText("Dispense Coin:" + String.format("%.2f", p.getAmtToReturn()));
+    	    parentView.getVMDetails_View().getTxtEnterProdID().setText("");
     	}
     	else{
     	    lblCoinUnsucess.setText("Payment Invalid");
