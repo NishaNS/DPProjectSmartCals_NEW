@@ -33,6 +33,7 @@ import edu.scu.dp.smartcals.admin.RevenueTableModel;
 import edu.scu.dp.smartcals.constants.VMLocationType;
 import edu.scu.dp.smartcals.exception.AdminOperationsException;
 import edu.scu.dp.smartcals.exception.DatabaseInitializationException;
+import edu.scu.dp.smartcals.exception.EmptyResultException;
 import edu.scu.dp.smartcals.model.InventoryModel;
 import edu.scu.dp.smartcals.model.NutritionalInfoModel;
 import edu.scu.dp.smartcals.model.ProductModel;
@@ -304,6 +305,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 
 		prodOpActionListener = new ProductOperationsActionListener();
 		btnAddProd.addActionListener(prodOpActionListener);
+		btnUpdateProd.addActionListener(prodOpActionListener);
 		btnDeleteProd.addActionListener(prodOpActionListener);
 		btnSearchProduct.addActionListener(prodOpActionListener);
 		btnAddProd.setActionCommand("ADD_PRODUCT");
@@ -534,11 +536,6 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		pnlProduct.add(btnUpdateProd, gridBagConstraints);
 
 		btnDeleteProd.setText("Delete Product");
-		btnDeleteProd.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				btnDeleteProdActionPerformed(evt);
-			}
-		});
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridy = 10;
 		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -1051,7 +1048,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		vmIds = new ArrayList<>();
 		for (VendingMachine vm : vendingMachines) {
 			vmIds.add(vm.getVendingMachineId());
-			String vmText = vm.getLocationType() + "@" + vm.getLocation();
+			String vmText = vm.getLocationType() + "@" + vm.getLocation() + "(" + vm.getVendingMachineId() + ")";
 			addToVendingMachineRadioGroupPanel(vmText, vm.getVendingMachineId()
 					+ "");
 		}
@@ -1062,11 +1059,11 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		//System.out.println(lblInvenProdID.getText());
 		if(!txtInvenProdID.getText().isEmpty()){
 			long prodId = Long.parseLong(txtInvenProdID.getText());
-			invProduct = vmController.searchInventory(prodId);
+			invProduct = admin.searchInventory(prodId);
 			txtInvenPrice.setText(Double.toString(invProduct.getProductPrice()));
 			txtQuantity.setText(Integer.toString(invProduct.getqty()));
 			txtVendingMachineID.setText(Long.toString(invProduct.getVendingMachineId()));
-			txtInvenProdID.setEditable(false);
+			//txtInvenProdID.setEditable(false);
 		}
 		else
 			JOptionPane.showMessageDialog(null, "Product Id Empty");
@@ -1078,7 +1075,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		double price = Double.parseDouble(txtInvenPrice.getText());
 		int vendMachId = Integer.parseInt(txtVendingMachineID.getText());
 		int qty = Integer.parseInt(txtQuantity.getText());
-		boolean status = vmController.modifyInventory(prodId,price,vendMachId,qty);
+		boolean status = admin.modifyInventory(prodId,price,vendMachId,qty);
 		if(status)
 		{
 			JOptionPane.showMessageDialog(null, "Updated Successfully!");
@@ -1095,7 +1092,8 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 	private void btnDeleteInventoryActionPerformed(java.awt.event.ActionEvent evt){
 		if(!txtInvenProdID.getText().isEmpty()){
 			long prodId = Long.parseLong(txtInvenProdID.getText());
-			boolean status = vmController.deleteInventory(prodId);
+			long vmId = Long.parseLong(txtVendingMachineID.getText());
+			boolean status = admin.deleteInventory(prodId,vmId);
 			if(status)
 			{
 				JOptionPane.showMessageDialog(null, "Deleted Successfully!");
@@ -1115,7 +1113,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 			double price = Double.parseDouble(txtInvenPrice.getText());
 			int vendMachId = Integer.parseInt(txtVendingMachineID.getText());
 			int qty = Integer.parseInt(txtQuantity.getText());
-			boolean result = vmController.addInventoryData(prodId,price,vendMachId,qty);
+			boolean result = admin.addInventoryData(prodId,price,vendMachId,qty);
 			if(result)
 			{
 				JOptionPane.showMessageDialog(null, "Inserted Successfully!");
@@ -1138,10 +1136,7 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 		// TODO add your handling code here:
 	}
 
-	private void btnDeleteProdActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
-	}
-
+	
 	/**
 	 * Loads best selling products for a given VMId
 	 * 
@@ -1299,9 +1294,10 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 						txtProductName.setText(productModel.getProductName());
 						txtProductPrice.setText(Double.toString(productModel.getProductPrice()));
 						
-					} catch (AdminOperationsException e1) {
+					}
+					catch (AdminOperationsException e1) {
 							e1.printStackTrace();
-							JOptionPane.showMessageDialog(null, "Unable to fetch product id "+productId);
+							JOptionPane.showMessageDialog(null, e1.getMessage());
 							return;
 					}
 					
@@ -1313,8 +1309,50 @@ public class MonitoringStationView extends javax.swing.JPanel implements
 				}
 			}
 			
-			
-			
+			if (actionCommand.equals("UPDATE_PRODUCT")) {
+				Product product = null;
+				if (validate()) {
+
+					if (txtProductCategory.getText().equalsIgnoreCase("BEVERAGE")) {
+						product = new Beverage();
+						product.setProdCategory(txtProductCategory.getText());
+						product.setProductID(Long.parseLong(txtProductID.getText()));
+						product.setProductName(txtProductName.getText());
+						product.setProductPrice(Double.parseDouble(txtProductPrice.getText()));
+					} else if (txtProductCategory.getText().equalsIgnoreCase("SNACK")) {
+						product = new Snack();
+						product.setProdCategory(txtProductCategory.getText());
+						product.setProductID(Long.parseLong(txtProductID.getText()));
+						product.setProductName(txtProductName.getText());
+						product.setProductPrice(Double.parseDouble(txtProductPrice.getText()));
+					} else if (txtProductCategory.getText().equalsIgnoreCase("CANDY")) {
+						product = new Beverage();
+						product.setProdCategory(txtProductCategory.getText());
+						product.setProductID(Long.parseLong(txtProductID
+								.getText()));
+						product.setProductName(txtProductName.getText());
+						product.setProductPrice(Double
+								.parseDouble(txtProductPrice.getText()));
+					} else {
+						// do nothing
+					}
+					try {
+						admin.updateProduct(product, Long.parseLong(txtProductID.getText()));
+					} catch (SQLException e1) {
+
+						e1.printStackTrace();
+					}
+
+					JOptionPane.showMessageDialog(null,
+							"Product Updated successfully!");
+					cleanPanelContents();
+					txtProductID.setEditable(true);
+					
+				} else {
+					JOptionPane.showMessageDialog(null, "Invalid entry");
+				}
+			}
+
 			if(actionCommand.equals("DELETE_PRODUCT")) {
 				if(!txtProductID.getText().isEmpty()) {
 					long productId = Long.parseLong(txtProductID.getText());
