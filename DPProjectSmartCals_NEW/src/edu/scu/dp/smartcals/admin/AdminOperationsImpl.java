@@ -5,27 +5,27 @@ package edu.scu.dp.smartcals.admin;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import edu.scu.dp.smartcals.constants.Constants;
 import edu.scu.dp.smartcals.constants.ProductCategory;
 import edu.scu.dp.smartcals.constants.VMLocationType;
 import edu.scu.dp.smartcals.dao.impl.DaoFactory;
-import edu.scu.dp.smartcals.dao.impl.OrderHistoryDaoImpl;
+import edu.scu.dp.smartcals.dao.interfaces.InventoryDao;
 import edu.scu.dp.smartcals.dao.interfaces.NutritionalInfoDao;
 import edu.scu.dp.smartcals.dao.interfaces.OrderHistoryDao;
 import edu.scu.dp.smartcals.dao.interfaces.ProductDao;
 import edu.scu.dp.smartcals.dao.interfaces.VendingMachineDao;
 import edu.scu.dp.smartcals.exception.AdminOperationsException;
-import edu.scu.dp.smartcals.exception.EmptyResultException;
+import edu.scu.dp.smartcals.model.InventoryModel;
 import edu.scu.dp.smartcals.model.NutritionalInfoModel;
 import edu.scu.dp.smartcals.model.ProductModel;
-import edu.scu.dp.smartcals.model.VendingMachineModel;
 import edu.scu.dp.smartcals.vm.Beverage;
 import edu.scu.dp.smartcals.vm.Candy;
 import edu.scu.dp.smartcals.vm.Product;
 import edu.scu.dp.smartcals.vm.Snack;
-import edu.scu.dp.smartcals.vm.VendingMachine;
 import edu.scu.dp.smartcals.vm.VendingMachineFactory;
 
 /**
@@ -37,10 +37,14 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 	 * Code change-Aparna - 8/18 Added Alert to notify Monitoring Station View
 	 */
 	private List<AlertListener> alertListeners;
+	
+	private Set<InventoryUpdateListener> inventoryUpdateListeners;
 
 	private OrderHistoryDao orderHistoryDao;
 
 	private VendingMachineDao vendingMachineDao;
+	
+	private InventoryDao invDao;
 	
 	private static AdminOperationsImpl INSTANCE;
 
@@ -52,9 +56,10 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 
 	private AdminOperationsImpl() {
 		alertListeners = new ArrayList<>();
+		inventoryUpdateListeners = new HashSet<>();
 		orderHistoryDao = DaoFactory.getOrderHistoryDao();
 		vendingMachineDao = DaoFactory.getVendingMachineDao();
-
+		invDao = DaoFactory.getInventoryDao();
 		// code change-Aparna 08/23
 		productDao = DaoFactory.getProductDao();
 		
@@ -90,12 +95,7 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 
 	// -------------code change-Aparna 8/18
 
-	@Override
-	public void reStockProduct(long vmId, long productId, int quantity) {
-		// TODO Auto-generated method stub
-
-	}
-
+	
 	// code change-Aparna 08/23
 	/**
 	 * Add new product-Admin
@@ -114,7 +114,7 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 		productModel.setProductPrice(product.getProductPrice());
 
 		productDao.addProduct(productModel);
-
+		
 	}
 
 	//code change-Aparna -08/24 similar to Add product
@@ -129,6 +129,9 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 				productModel.setProductPrice(product.getProductPrice());
 
 				productDao.updateProduct(productModel, productId);
+				
+				//send notification 
+				notifyInventoryModified(productId);
 		
 	}
 
@@ -146,6 +149,9 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 			throw new AdminOperationsException("Error deleteting product with product ID "+ productId,e);
 		}
 		
+		//send delete notification
+		notifyInventoryDeleted(productId);
+		
 	}
 	
 	//code change-Aparna 08/24
@@ -157,6 +163,7 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new AdminOperationsException("Product "+ productId + " not found",e);
 		}
 		return productModel;
 	}
@@ -249,10 +256,93 @@ public class AdminOperationsImpl implements AdminOperations, VMUpdateListener {
 	}//end - nisha - 8/24
 
 	
+	@Override
+	public void addInventoryUpdateListeners(
+			InventoryUpdateListener invUpdateListener) {
+		inventoryUpdateListeners.add(invUpdateListener);
+		
+	}
 	
+	@Override
+	public InventoryModel searchInventory(long prodId)
+	{
+		InventoryModel invProductData = null;
+		try {
+			invProductData = invDao.getProductById(prodId);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return invProductData;
+	}
 	
+	@Override
+	public boolean addInventoryData(int prodId,double price,int vendMachId,int qty)
+	{
+		boolean res = false;
+		try {
+			res = invDao.addInvDetails(prodId,price,vendMachId,qty);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//send product added notification to all inventory update listeners
+		notifyInventoryAdded(prodId);
+
+		return res;
+	}
+	
+	@Override
+	public boolean modifyInventory(long prodId,double price,int vendMachId,int qty)
+	{
+		boolean res = false;
+		try {
+			res = invDao.modifyInvDetails(prodId,price,vendMachId,qty);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//send product modify notification to all inventory update listeners
+		notifyInventoryModified(prodId);
+		
+		return res;
+	}
 
 	
 	
+	public boolean deleteInventory(long prodId,long vmId){
+		boolean status = false;
+		try {
+			status = invDao.removeProductById(prodId,vmId);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//send product deleted notification to all inventory update listeners
+		notifyInventoryDeleted(prodId);
+		
+		return status;
+	}
+	
+	
+	private void notifyInventoryAdded(final long productId) {
+		for(InventoryUpdateListener listener : inventoryUpdateListeners) {
+			listener.handleAdd(productId);
+		}
+	}
+	
+	private void notifyInventoryModified(final long productId) {
+		for(InventoryUpdateListener listener : inventoryUpdateListeners) {
+			listener.handleModify(productId);
+		}
+	}
+	private void notifyInventoryDeleted(final long productId) {
+		for(InventoryUpdateListener listener : inventoryUpdateListeners) {
+			listener.handleDelete(productId);
+		}
+	}
 
 }
