@@ -103,15 +103,17 @@ public class InventoryDaoImpl implements InventoryDao{
 	}
 
 	@Override
-	public boolean removeProductById(long id) throws SQLException,
+	public boolean removeProductById(long id,long vmId) throws SQLException,
 			EmptyResultException {
 		boolean status = false;
 		int cnt = 0;
 		Connection connection = databaseFactory.getConnection();
 		String query;
 		try{
-			query = "delete from inventory where ProductID = '"+id+"'";
+			query = "delete from inventory where ProductID = ? and VendingMachineID = ?";
 			statement = connection.prepareStatement(query);
+			statement.setLong(1, id);
+			statement.setLong(2,vmId);
 		    cnt = statement.executeUpdate();
 		    if(cnt == 1)
 		    	status =  true;
