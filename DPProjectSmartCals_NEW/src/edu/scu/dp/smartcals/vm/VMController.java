@@ -386,14 +386,12 @@ public class VMController {
 		}
 		}
 				
-       return productModels;	
+       return newProductModels;	
 	}
 
 	public String getSmartCardInfo() throws SQLException, EmptyResultException{
-		System.out.println("getSmartCardInfo");
 	    smct = smctDao.buySmartCard();
-		String text = "Your Smart Card Number is:" +smct.getSmartCard()+ "\n Your Balance is:"+smct.getBalance();
-		System.out.println(text);
+		String text = "<html><body>Your Smart Card Number is:" +smct.getSmartCard()+ "<br> Your Balance is:"+smct.getBalance() + "</body></html>";
 		return text;
 		
 	}
@@ -442,7 +440,7 @@ public class VMController {
 				data = "<html><body>Product ID:" + product.getProductId() + "<br> Product Name:" + product.getProductName() + "<br> Product Price:" + product.getProductPrice() + "</body></html>";
 			}
 			else
-				data = "Product Not Available";
+				data = "Out Of Stock";
 		} catch (SQLException e) {
 			data = "Product Not Available";
 			e.printStackTrace();
@@ -469,14 +467,11 @@ public class VMController {
 	public void updateInvQty() throws OutOfStockException
 	{
 		//aparna--08/24
-		int existingQuantity = invProduct.getqty();
+		
 		long productId = invProduct.getProductId();
 		long vmId = invProduct.getVendingMachineId();
-		if(existingQuantity == 0) {
-			//notify outOfStock
-			vendingMachineView.getVendingMachine().notifyOutOfStock(productId,vmId);
-			throw new OutOfStockException(productId,vmId);
-		}
+		
+		
 		invProduct.setqty(invProduct.getqty() - 1); 
 		System.out.println(invProduct.getqty());
 		try {
@@ -485,6 +480,13 @@ public class VMController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		int existingQuantity = invProduct.getqty();
+		if(existingQuantity == 0) {
+			//notify outOfStock
+			vendingMachineView.getVendingMachine().notifyOutOfStock(productId,vmId);
+			throw new OutOfStockException(productId,vmId);
+		}
+		
 	}
 
 	public boolean modifyInventory(long prodId,double price,int vendMachId,int qty)
@@ -529,8 +531,15 @@ public class VMController {
 			e.printStackTrace();
 		}
 	}
+	
+	//Sharadha-code in progress (Aparna to proceed)
+	public void updateVendingMachineModel(){
+			getVendingMachine(vmModel.getVendingMachineId());
+	}
+	
 	/**
 	 * @param strategy
+	 * 
 	 *            Client to provide the strategy for failed login attempts
 	 */
 	public void setLoginCheckPointStrategy(LoginCheckPointStrategy loginStrategy) {

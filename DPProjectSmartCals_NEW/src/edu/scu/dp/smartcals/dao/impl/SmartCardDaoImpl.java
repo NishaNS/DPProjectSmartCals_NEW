@@ -5,6 +5,9 @@ package edu.scu.dp.smartcals.dao.impl;
  * 16/8
  */
 
+/**
+ * This performs all the database operations for SmartCard
+ */
 
 
 import java.sql.Connection;
@@ -38,7 +41,7 @@ public class SmartCardDaoImpl implements SmartCardDao{
 	
 	/**
 	 * Implementation of Singleton pattern.
-	 * There should be only one ProductDAO instance for the entire application
+	 * There should be only one SmartCardDAO instance for the entire application
 	 * @param databaseFactory
 	 * @return
 	 */

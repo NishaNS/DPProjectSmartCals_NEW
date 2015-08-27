@@ -94,17 +94,6 @@ public abstract class VendingMachine {
 		// TODO Auto-generated method stub
 		
 	}
-
-	public List<Product> searchProductByCalorie() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Product> searchProductBySmartTag() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public void buySmartCard() {
 		// TODO Auto-generated method stub
 		

@@ -582,6 +582,10 @@ public class VMDetails_View extends javax.swing.JPanel {
 		return lblCashDispense;
 	}
 
+	public javax.swing.JTextField getTxtEnterProdID()
+	{
+		return txtEnterProdID;
+	}
 	//Sharadha - end
 
 
