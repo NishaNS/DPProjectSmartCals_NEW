@@ -25,7 +25,12 @@ public class SchoolVendingMachineFactory extends VendingMachineFactory {
 		schoolVendingMachine.setLocationType(vendingMachineModel.getType());
 		
 		//Aparna=08/24
-		schoolVendingMachine.addListener(AdminOperationsImpl.getInstance());
+		AdminOperationsImpl adminOperations = AdminOperationsImpl.getInstance();
+		schoolVendingMachine.addListener(adminOperations);
+		
+		//add the vending machine as Inventory update listener of AdminOperations
+		adminOperations.addInventoryUpdateListeners(schoolVendingMachine);
+		
 		return schoolVendingMachine;
 	}
 
