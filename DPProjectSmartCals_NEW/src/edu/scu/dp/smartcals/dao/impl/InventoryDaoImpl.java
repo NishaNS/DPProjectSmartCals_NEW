@@ -15,6 +15,11 @@ import edu.scu.dp.smartcals.model.InventoryModel;
 import edu.scu.dp.smartcals.model.ProductModel;
 
 
+/**
+ * This code talks to the database and performs all operations
+ *  related to inventory table.
+ *  Uses: Data Access Pattern 
+ */
 public class InventoryDaoImpl implements InventoryDao{
 	
 	private DatabaseFactory databaseFactory;
@@ -27,7 +32,7 @@ public class InventoryDaoImpl implements InventoryDao{
 	}
 
 	/**
-	 * Implementation of Singleton pattern. There should be only one ProductDAO
+	 * Implementation of Singleton pattern. There should be only one InventoryDAO
 	 * instance for the entire application
 	 * 
 	 * @param databaseFactory

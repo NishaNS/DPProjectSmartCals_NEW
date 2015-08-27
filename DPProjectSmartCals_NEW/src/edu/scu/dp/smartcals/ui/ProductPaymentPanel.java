@@ -24,9 +24,7 @@ import edu.scu.dp.smartcals.payment.PaymentProduct;
 public class ProductPaymentPanel extends javax.swing.JPanel {
 
 	private VendingMachineView parentView;
-    /**
-     * Creates new form NewJPanel
-     */
+    
     public ProductPaymentPanel(VendingMachineView parentView) {
     	this.parentView = parentView;
         initComponents();
@@ -331,9 +329,19 @@ public class ProductPaymentPanel extends javax.swing.JPanel {
     	}
     	else{
     		amtPayable = Double.parseDouble(txtAmtPayable.getText());
-    		quarters = Double.parseDouble(txtQuarters.getText());
-			halfDollar = Double.parseDouble(txtHalfDollar.getText());
-			oneDollar = Double.parseDouble(txtOneDollar.getText());
+    		if(txtQuarters.getText().isEmpty())
+				quarters = 0;
+			else
+				quarters = Double.parseDouble(txtQuarters.getText());
+			if(txtHalfDollar.getText().isEmpty())
+				halfDollar = 0;
+		    else
+				halfDollar = Double.parseDouble(txtHalfDollar.getText());
+		    if(txtOneDollar.getText().isEmpty())
+				oneDollar = 0;
+			else
+				oneDollar = Double.parseDouble(txtOneDollar.getText());
+    		
 			amtPaying = quarters * 25 + halfDollar * 50 + oneDollar * 100;
 			amtPaying = amtPaying/100;
     		p = pc.makePayment("Coin",0);
@@ -351,8 +359,9 @@ public class ProductPaymentPanel extends javax.swing.JPanel {
     		parentView.getVMController().updateOrder("Coin",0);
     		this.setVisible(false);
     		parentView.getVMDetails_View().getLblDisplay().setText("Payment Successful");
-    	    parentView.getVMDetails_View().getLblCoinDispense().setText("Dispense Coin:" + Double.toString(p.getAmtToReturn()));
+    	    parentView.getVMDetails_View().getLblCoinDispense().setText("Dispense Coin:" + String.format("%.2f", p.getAmtToReturn()));
     	    parentView.getVMDetails_View().setItemDispenserLabel();
+    	    parentView.getVMDetails_View().getTxtEnterProdID().setText("");
     	}
     	else{
     		lblPayUnsuccess.setText("Not Enough Cash");
@@ -378,9 +387,19 @@ public class ProductPaymentPanel extends javax.swing.JPanel {
     	}
     	else{
     		amtPayable = Double.parseDouble(txtAmtPayable.getText());
-    		oneDollar = Double.parseDouble(txtOneDollarCash.getText());
-			fiveDollar = Double.parseDouble(txtFiveDollar.getText());
-			tenDollar = Double.parseDouble(txtTenDollar.getText());
+    		if(txtOneDollarCash.getText().isEmpty())
+				oneDollar = 0;
+			else
+				oneDollar = Double.parseDouble(txtOneDollarCash.getText());
+			if(txtFiveDollar.getText().isEmpty())
+				fiveDollar = 0;
+			else
+				fiveDollar = Double.parseDouble(txtFiveDollar.getText());
+			if(txtTenDollar.getText().isEmpty())
+				tenDollar = 0;
+			else
+				tenDollar = Double.parseDouble(txtTenDollar.getText());
+    		
 			amtPaying= oneDollar * 1 + fiveDollar * 5 + tenDollar * 10;	
 			p = pc.makePayment("Cash",0);
 			p.setValues(amtPayable,amtPaying);
@@ -397,8 +416,9 @@ public class ProductPaymentPanel extends javax.swing.JPanel {
     		parentView.getVMController().updateOrder("Cash",0);
     		this.setVisible(false);
     		parentView.getVMDetails_View().getLblDisplay().setText("Payment Successful");
-    		parentView.getVMDetails_View().getLblCashDispense().setText("Dispense Cash:" + Double.toString(p.getAmtToReturn()));
+    		parentView.getVMDetails_View().getLblCashDispense().setText("Dispense Cash:" + String.format("%.2f", p.getAmtToReturn()));
     	    parentView.getVMDetails_View().setItemDispenserLabel();
+    	    parentView.getVMDetails_View().getTxtEnterProdID().setText("");
     	}
     	else{
     		lblPayUnsuccess.setText("Not Enough Cash");
@@ -441,8 +461,9 @@ public class ProductPaymentPanel extends javax.swing.JPanel {
     		parentView.getVMController().updateOrder("SmartCard",smct.getSmartCard());
     		this.setVisible(false);
     		parentView.getVMDetails_View().getLblDisplay().setText("Payment Successful");
-    		parentView.getVMDetails_View().getLblCardDispense().setText("Card Balance:" + smct.getBalance());
+    		parentView.getVMDetails_View().getLblCardDispense().setText("Card Balance:" + String.format("%.2f", smct.getBalance()));
     	    parentView.getVMDetails_View().setItemDispenserLabel();
+    	    parentView.getVMDetails_View().getTxtEnterProdID().setText("");
     	}
     	else{
     		lblPayUnsuccess.setText("Not Enough Cash");

@@ -6,6 +6,7 @@ package edu.scu.dp.smartcals.payment;
  *
  */
 
+
 public class CashPayment implements PaymentProduct{
 	double amtPayable;
 	double amtToReturn;

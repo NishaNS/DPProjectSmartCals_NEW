@@ -83,7 +83,24 @@ public class VMController {
 
 		// code change- Aparna 22/8
 		
-		
+		/*
+		 * // launch in following sequence - JFrame, SelectionView..etc if
+		 * (mainWindow == null) this.mainWindow = new VMClient(); if
+		 * (vmSelectionView == null) this.vmSelectionView = new
+		 * VMSelectionView(this); if (vendingMachineView == null)
+		 * this.vendingMachineView = new VendingMachineView(this); if (loginView
+		 * == null) this.loginView = new LoginView(this); if
+		 * (monitoringStationView == null) this.monitoringStationView = new
+		 * MonitoringStationView(this);
+		 * 
+		 * //start - Nisha - 8/19 if(tabbedView == null) this.tabbedView = new
+		 * TabbedView(this); //end - Nisha - 8/19
+		 * 
+		 * // TODO load Selection View to run-Aparna // load first view from
+		 * this page only
+		 * 
+		 * mainWindow.addPanels(vmSelectionView);
+		 */
 //Code change-Aparna 8/22
 	}
 
@@ -357,7 +374,6 @@ public class VMController {
 		String calorie;
 		
 		for (ProductModel productModel : productModels){
-			System.out.println("product");
 			try {
 				calorie = nutriInfoDao.getCalories(productModel.getProductId());
 				String val = calorie.substring(0,calorie.indexOf("cal"));
@@ -372,14 +388,12 @@ public class VMController {
 		}
 		}
 				
-       return productModels;	
+       return newProductModels;	
 	}
 
 	public String getSmartCardInfo() throws SQLException, EmptyResultException{
-		System.out.println("getSmartCardInfo");
 	    smct = smctDao.buySmartCard();
-		String text = "Your Smart Card Number is:" +smct.getSmartCard()+ "\n Your Balance is:"+smct.getBalance();
-		System.out.println(text);
+		String text = "<html><body>Your Smart Card Number is:" +smct.getSmartCard()+ "<br> Your Balance is:"+smct.getBalance() + "</body></html>";
 		return text;
 		
 	}
@@ -469,7 +483,6 @@ public class VMController {
 		long vmId = invProduct.getVendingMachineId();
 		
 		
-		
 		invProduct.setqty(invProduct.getqty() - 1); 
 		System.out.println(invProduct.getqty());
 		try {
@@ -532,6 +545,7 @@ public class VMController {
 	}
 	/**
 	 * @param strategy
+	 * 
 	 *            Client to provide the strategy for failed login attempts
 	 */
 	public void setLoginCheckPointStrategy(LoginCheckPointStrategy loginStrategy) {

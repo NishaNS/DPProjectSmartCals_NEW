@@ -22,9 +22,7 @@ public class SmartCardPanel extends javax.swing.JPanel {
 	private SmartCardModelInterface smct;
 	private PaymentPanel payPan;
 
-    /**
-     * Creates new form SmartCardPanel1
-     */
+    
     public SmartCardPanel(VendingMachineView parentView) {
     	this.parentView = parentView;
         initComponents();
